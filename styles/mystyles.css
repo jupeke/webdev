@@ -1,0 +1,31 @@
+body {
+  background-color: lightblue;
+  font-size: 120%;
+  color: #668;
+  font-family: sans-serif;
+}
+#maincontent {
+  text-align: center;
+}
+#navbar {
+  text-align: center;
+}
+
+#navbar a {
+  background-color: grey;
+  border-radius: 10px;
+  font-size: 120%;
+  font-weight: 550;
+  color: white;
+  padding: 8px 15px;
+  text-align: center;
+  display: inline-block;
+}
+
+#navbar a:link, #navbar a:visited {
+  text-decoration: none;
+}
+
+#navbar a:hover, #navbar a:active {
+  background-color: #66f;
+}
