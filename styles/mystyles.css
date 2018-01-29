@@ -10,6 +10,12 @@ body {
 #navbar {
   text-align: center;
 }
+#navbar_left {
+  text-align: left;
+  float: left;
+  width: 150px;
+  
+}
 
 #navbar a {
   background-color: grey;
