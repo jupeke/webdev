@@ -50,7 +50,7 @@ class MovingObject {
   }
 
   // Makes the HTML element referred by id go one step to the direction and
-  // step length given as parameters. Makes the change in the element 
+  // step length given as parameters. Makes the change in the element
   // coordinates and updates the elem.style.values accordingly.
   makeStep(direction, stepLen) {
     let elem = find(this.id);  // let - variable with a block scope (ES6)
@@ -59,7 +59,7 @@ class MovingObject {
     if(elem){
       let maxWidth = getWindowWidth()-80;
       let minWidth = -50;
-      
+
       if(direction === "right"){
         if(this.x < maxWidth){
           this.x = this.x+stepLen;
@@ -247,7 +247,7 @@ class MainControl{
 
             // Add a point:
             this.addaPoint();
-            
+
             // If the flake is got in the air, double points given:
             if(monster.y < groundLevel-100){
               this.addaPoint();
@@ -274,7 +274,7 @@ class MainControl{
     this.timer = setTimeout(() => {
       // I can access 'this' in here!
       this.letItSnow();
-      
+
       // If game is over:
       if(this.gameOver){
         clearTimeout(this.timer);
@@ -301,7 +301,7 @@ class MainControl{
     }
     if(newAmount === 0){
       this.gameOver();
-    } 
+    }
   }
 
   // Moves all the monsters to the wanted direction (on a click).
@@ -312,15 +312,15 @@ class MainControl{
       let index = 0;
       let step = 0;
       let monsterTimer = setInterval(()=>{
-        
+
         // quadratic function: motion fast first but slowing down towards the end.
         step = Math.round(monsterSpeed-
-            ((monsterSpeed/(maxIndex*maxIndex))*index*index)); 
+            ((monsterSpeed/(maxIndex*maxIndex))*index*index));
         if(index <= maxIndex){
           monster.makeStep(direction, step);
         } else{
           clearTimeout(monsterTimer);
-          
+
           // If direction was up, gravity draws the monsters back down:
           if(direction === "up"){
             this.drawDownMonsters();
@@ -330,23 +330,23 @@ class MainControl{
       }, 40);
     }
   }
-  
+
   // Moves all the monsters to the wanted direction (on a click).
   drawDownMonsters(){
     const g = 2; // "Gravity"
     const feetOnGroundLevel = groundLevel - 100;
-   
+
     for(let i = 0; i < this.monsters.length; i++){
       let monster = this.monsters[i];
       let time = 0;
-      let step = 0; 
+      let step = 0;
       let fallingTimer = setInterval(()=>{
-        
+
         // quadratic function: accelerating motion simulating free fall.
-        step = Math.round(g*time*time); 
+        step = Math.round(g*time*time);
         if(monster.y+step < feetOnGroundLevel){
           monster.makeStep("down", step);
-        } 
+        }
         else {
           if (monster.y < feetOnGroundLevel){
             step = feetOnGroundLevel-monster.y;
@@ -358,7 +358,7 @@ class MainControl{
       }, 40);
     }
   }
-  
+
   // Changes the level of difficulty:
   addLevel(){
   	this.level++;
@@ -371,7 +371,7 @@ class MainControl{
   gameOver(){
     this.gameOver = true;
     //clearTimeout(this.timer); // Ei toimi tämä!
-      
+
   }
 }
 
