@@ -10,8 +10,14 @@ body {
 #navbar {
   text-align: center;
 }
+#navbar_left {
+  text-align: left;
+  float: left;
+  width: 150px;
 
-#navbar a {
+}
+
+#navbar a, #navbar_left a {
   background-color: grey;
   border-radius: 10px;
   font-size: 120%;
@@ -26,6 +32,13 @@ body {
   text-decoration: none;
 }
 
+#navbar_left a:link, #navbar_left a:visited {
+  text-decoration: none;
+}
+
 #navbar a:hover, #navbar a:active {
+  background-color: #66f;
+}
+#navbar_left a:hover, #navbar_left a:active {
   background-color: #66f;
 }
