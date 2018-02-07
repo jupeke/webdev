@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<title>Stars</title>
+<script>
+// Draws one row of stars. Number of stars is given as parameter.
+function drawStarRow(numberOfStars){
+	var result="";
+	var i;
+  for (i=0; i < numberOfStars; i++){
+	  result += "*";
+	}
+	return result;
+}
+
+// Draws one row of stars. Number of stars is given as parameter.
+function drawStars(numberOfRows){
+	var result="";
+	var numberOfStars = 1;
+	var i;
+	
+  for (i=0; i < numberOfRows; i++){
+	  result += drawStarRow(numberOfStars);
+		result += "<br>";
+		numberOfStars++;
+	}
+	
+	return result;
+}
+</script>
+</head>
+<body>
+<h1>Stars with nested loops</h1>
+
+<script>
+document.write(drawStars(10));
+</script>
+
+</body>
+</html>

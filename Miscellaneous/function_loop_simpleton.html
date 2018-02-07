@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Stars</title>
+
+<script>
+function printMyLines(textToRepeat, soManyTimes){
+
+  // Variables: always a good practise to declare them at the beginning.
+  var result = "";
+  var i = 0;	
+	
+  // The loop: repeating itself soManyTimes!
+  for (i = 0; i < soManyTimes; i++){
+  
+    // Adds to result a new textToRepeat and a line brake.
+	  result += textToRepeat + "<br>";
+  }
+	
+  return result;
+}
+</script>
+</head>
+
+<body>
+<h2>To use a function to repeatedly print a text line (a string).</h2>
+
+<script>
+// Here you call the function to make work.
+document.write(printMyLines("This is an example!",20));
+document.write(printMyLines("This is ngt knstgt!",30));
+</script>
+
+</body>
+</html>

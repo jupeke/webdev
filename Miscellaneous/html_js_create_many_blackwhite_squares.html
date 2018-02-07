@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Black-gray squares</title>
+</head>
+
+<body>
+<script>
+
+// Creating of elements and attributes:
+var body1 = document.getElementsByTagName("body")[0];
+var i = 0; j=0;
+var bgcolor;	// Background Color of a square
+var size = 100;
+var sideLen = "6px";
+
+// Rows
+for(i=1; i<=size; i++){
+ 
+  var row = document.createElement("div");
+  row.style.height = sideLen;
+ 
+  // Cells in a row:
+  for(j=1; j<=size; j++){
+ 
+	var cell = document.createElement("span");
+	
+	// Display has to be "inline-block" to set width and height!
+	cell.style.display="inline-block";
+	cell.style.width = sideLen;
+	cell.style.height = sideLen;
+	
+	// color: first even rows:
+	if(i%2===0){
+		
+		// Even cells:
+		if(j%2===0){
+			bgcolor = "gray";
+		} else{
+			bgcolor = "black";
+	  } 
+	} else{	// odd rows:
+	
+	    // Even cells:
+		if(j%2===0){
+			bgcolor = "black";
+		} else{
+			bgcolor = "gray";
+	  } 
+	  
+	}
+	
+	cell.style.backgroundColor=bgcolor;
+	row.appendChild(cell);
+  }	
+  
+  body1.appendChild(row);  
+}
+
+</script>
+
+</body>
+</html>

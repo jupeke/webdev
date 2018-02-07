@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <title>Testing JS timing</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      class Test {
+        constructor(){
+          this.id = 0;
+        }
+        start(){
+          this.id++;
+          document.getElementById("result").innerHTML = this.id;
+
+          // This does not work! Scope thing related to Window.setTimeout() function!
+          //setTimeout(start(), 1000);
+
+          // But this wierdy thing called arrow function (ES6) works! It
+          // preserves the scope of this.
+          setTimeout(() => {
+              // Hey I can access 'this' in here!
+              this.start();
+          }, 1000);
+        }
+
+      }
+      function init() {
+        var test = new Test();
+        test.start();
+      }
+
+      //====================== Test 2 ===================================
+      /**
+      This class is a base class for all moving objects.
+      To add more features extend this class.
+      */
+      class MovingObject {
+        constructor(x,id){
+          this.x = x;
+          this.id = id;
+        }
+      }
+      // SnowEater class (ES6):
+      class SnowEater extends MovingObject{
+        constructor(x,id){
+          super(x,id);
+        }
+
+        // Shows originally a series of images that make the monster swallow:
+        swallow(){
+          let index = 0;
+          let timer = setInterval(showNextImage, 500);
+
+          // This works, when no this keyword inside!
+          function showNextImage(){
+            if(index < 5){
+              document.getElementById("result2").innerHTML = index;
+              index++;
+            } else{
+              clearInterval(timer);
+            }
+          }
+        }
+      }
+      function test2() {
+        let e = new SnowEater(3, "Eater2");
+        e.swallow();
+      }
+    </script>
+  </head>
+  <body>
+    <div id="result">This should be an integer.</div>
+    <div id="result2">This should be an integer.</div>
+    <button onclick="init()">Click me</button>
+    <button onclick="test2()">Test 2</button>
+    <script>
+
+    </script>
+
+  </body>
+</html>

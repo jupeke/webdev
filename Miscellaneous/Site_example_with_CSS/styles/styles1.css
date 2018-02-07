@@ -1,0 +1,15 @@
+body {
+  background-color: pink;
+  font-size: 150%;
+}
+
+h1 {
+  color: #483;
+}
+
+p#first {
+  color: #351;
+  font-weight: bold;
+  background-color: red;
+  padding: 40px;
+}

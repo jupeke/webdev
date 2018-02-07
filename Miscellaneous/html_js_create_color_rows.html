@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Exercise</title>
+</head>
+
+<body>
+<script>
+
+// Creating of elements and attributes:
+var body = document.getElementsByTagName("body")[0];
+var i = 0;
+var r=0, g=0, b=0;	// Color indeces
+
+for(i=0; i<1000; i++){
+ 
+  var div = document.createElement("div");
+  div.style.padding="3px";
+  
+  // Random color:
+  r=Math.floor(Math.random()*256);
+  g=Math.floor(Math.random()*256);
+  b=Math.floor(Math.random()*256);
+  
+  div.style.backgroundColor="rgb("+r+","+g+","+b+")";
+  body.appendChild(div);
+}
+
+</script>
+
+</body>
+</html>

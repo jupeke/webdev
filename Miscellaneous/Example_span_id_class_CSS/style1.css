@@ -1,0 +1,10 @@
+body {
+  background-color: lightblue;
+}
+#intro{
+  color: green;
+}
+.highlight{
+  color: red;
+  font-weight: bold;
+}

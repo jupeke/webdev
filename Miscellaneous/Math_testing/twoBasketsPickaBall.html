@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Balls in baskets</title>
+<script>
+
+// An object of this class represents one final result.
+// It contains the ball color and the id of the original basket.
+class Result {
+  constructor(basket,ballColor){
+    this.basket = basket;
+    this.ballColor = ballColor;
+  }
+}
+
+// An object of this class represents one basket.
+// It contains the basket id (a letter), the number of black
+// balls and the total number of balls in the basket.
+class Basket {
+  constructor(basketId, numbOfBlacks, numbOfAll){
+    this.basketId = basketId;
+    this.numbOfBlacks = numbOfBlacks;
+    this.numbOfAll = numbOfAll;
+  }
+}
+
+// Chooses randomly a basket (of two) and returns
+// either "A" or "B" indicating the chosen basket.
+function pickaBasket(){
+  let basket = "A";
+  if(Math.random() < 0.5){
+    basket = "B";
+  }
+  return basket;
+}
+
+// Returns a random integer in the intervall [1,numbOfAll]
+function getRandBallNumber(numbOfAll){
+  return Math.floor(Math.random()*parseInt(numbOfAll))+1;
+}
+
+// Chooses randomly a ball in the given basket and returns
+// either "black" or "white" indicating the chosen ball.
+
+// An basket object (Basket) is given as parameter.
+
+// It's assumed that the balls in the basket are ordered
+// based on their colors, black ones first. Then a
+// number of a ball is randomly retrieved and the number
+// defines the color.
+function pickaBall(basket){
+  let ballColor = "white";
+
+  // Math.random value belongs to the intervall [0,1[. Flooring
+  // cuts off the decimal part.
+  let randBallNumb = getRandBallNumber(basket.numbOfAll);
+  if(randBallNumb <= basket.numbOfBlacks){
+    ballColor = "black";
+  }
+  return ballColor;
+}
+// Simulates the following: you pick first a basket of two (randomly) and
+// then out of that basket a ball (randomly). You see that the ball is black.
+// Which is the probability that the ball was in the basket "A"?
+//
+// The idea: you pick a ball and save it's color and original basket. Repeat
+// the procedure numbOfRepet times. Then you count all the results with
+// black balls and out of them calculate the ratio of
+// #(blacks out of A) and #(all blacks).
+function simulate(numbOfRepet, ballsInA, ballsInB, blackBallsInA, blackBallsInB){
+  let results = new Array();
+  let numberOfBlacksFromA = 0;    // Number of results (black and from A)
+  let numberOfBlacksTotal = 0;    // Number of results (black)
+  let ratio = 1;        // the ratio of #(blacks out of A) and #(all blacks)
+  let result = 0;       // ratio rounded and given percents.
+  let basketA = new Basket("A", blackBallsInA, ballsInA);
+  let basketB = new Basket("B", blackBallsInB, ballsInB);
+  let currentBasket;
+
+  for (let i=0; i < numbOfRepet; i++){
+    let basketId = pickaBasket();
+
+    if(basketId === "A"){
+      currentBasket = basketA;
+    } else{
+      currentBasket = basketB;
+    }
+
+    let ball = pickaBall(currentBasket);
+    results.push(new Result(basketId, ball));
+  }
+
+  for(let i=0; i < results.length; i++){
+    result = results[i];
+
+    if(result.ballColor === "black"){
+      numberOfBlacksTotal++;
+
+      if(result.basket === "A"){
+        numberOfBlacksFromA++;
+      }
+    }
+  }
+
+  // Avoiding division with zero (can occur if number of balls is small):
+  if(numberOfBlacksTotal === 0){
+    result = 0;
+  } else{
+    ratio = numberOfBlacksFromA/numberOfBlacksTotal;
+    result = Math.round(10000*ratio)/100;
+  }
+  let resultNicely =
+    "<b>Results of "+numbOfRepet+" tries:</b><br><br> "+
+    "Number of black balls out of A: "+numberOfBlacksFromA+"<br>"+
+    "Total number of black balls: "+numberOfBlacksTotal+" <br><br>"+
+    "Probability of the black ball having been in basket A is approximately "+
+    result+
+    " %.<br>";
+
+  return resultNicely;
+}
+
+function doSimulation(){
+  let result = simulate(100000, 10,4,3,2);
+  document.getElementById("simulation").innerHTML = result;
+}
+/*======================================================================
+========================================================================
+======== TESTING TESTING TESTING ======================================
+=======================================================================*/
+
+// Testing pickaBasket function. Returns the results as a string.
+function testPickaBasket(elem){
+  let numbOfRepet = 100000;
+  let resultsA = new Array();
+  let resultsB = new Array();
+  let errors = new Array();
+  for (let i=0; i < numbOfRepet; i++){
+    let basket = pickaBasket();
+    if(basket === "A"){
+      resultsA.push(new Result(basket, "doesntMatter"));
+    } else if(basket === "B") {
+      resultsB.push(new Result(basket, "doesntMatter"));
+    } else{
+      errors.push(basket);
+    }
+  }
+
+  let testResult =
+    "<b>Test results of function 'pickaBasket()':</b><br><br> "+
+    "A: "+resultsA.length+" times <br>"+
+    "B: "+resultsB.length+" times <br>"+
+    "Probability of result A is about "+
+    Math.round(10000*(resultsA.length/(resultsA.length+resultsB.length)))/100+
+    " % <br>"+
+    "Errors: "+errors.length+"<br><br>";
+
+  // Prints the result on the screen:
+  document.getElementById(elem).innerHTML = testResult;
+
+}
+
+// Testing pickaBasket function. Returns the results as a string.
+function testgetRandBallNumber(elem){
+  let numbOfRepet = 100000;
+  let totalOfBalls = 15;
+  let results = new Array();
+  let text = "";
+
+  for (let i=0; i < totalOfBalls; i++){
+    results.push(new Array());
+  }
+
+  for (let i=0; i < numbOfRepet; i++){
+    let rand = getRandBallNumber(totalOfBalls);
+    results[rand-1].push("oneMore");
+  }
+
+  for (let i=0; i < totalOfBalls; i++){
+    let result = results[i].length;
+    text += "Ball "+(i+1)+": "+result+" times - probability about "+
+      Math.round(10000*(result/numbOfRepet))/100+" % <br>";
+  }
+
+  let testResult =
+    "<b>Test results of function 'getRandBallNumber()':</b><br><br> "+ text+"<br><br>";
+
+  // Prints the result on the screen:
+  document.getElementById(elem).innerHTML += testResult;
+}
+
+// Testing pickaBall function. Returns the results as a string.
+function testPickaBall(elem){
+  let numbOfRepet = 100000;
+  let resultsBlack = new Array();
+  let resultsWhite = new Array();
+  let errors = new Array();
+
+  // Testing with this basket:
+  let basket = new Basket("A", 3, 8);
+
+  for (let i=0; i < numbOfRepet; i++){
+    let ball = pickaBall(basket);
+    if(ball === "black"){
+      resultsBlack.push("b");
+    } else if(ball === "white") {
+      resultsWhite.push("w");
+    } else{
+      errors.push("error");
+    }
+  }
+
+  let testResult =
+    "<b>Test results of function 'pickaBall()':</b><br><br> "+
+    "Black: "+resultsBlack.length+" times <br>"+
+    "White: "+resultsWhite.length+" times <br>"+
+    "Probability of a black ball is about "+
+    Math.round(10000*(resultsBlack.length/
+      (resultsBlack.length+resultsWhite.length)))/100+
+    " % (should be near "+100*basket.numbOfBlacks/basket.numbOfAll+" %)<br>"+
+    "Errors: "+errors.length+"<br><br>";
+
+  // Prints the result on the screen:
+  document.getElementById(elem).innerHTML += testResult;
+
+}
+
+function doTesting(){
+  testPickaBasket("test");
+  testgetRandBallNumber("test");
+  testPickaBall('test');
+}
+
+
+
+</script>
+
+</head>
+
+<body>
+<button onclick="doTesting()">Test methods</button>
+<button onclick="doSimulation()">Simulate picking a ball</button>
+<div id='test'></div>
+<div id='simulation'></div>
+<script>
+
+
+
+</script>
+
+</body>
+</html>

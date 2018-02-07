@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Create element </title>
+</head>
+
+<body>
+<script>
+
+// Creating of a div element.
+// Let's first find the body element. Later we append the new element into it.
+var body = document.getElementsByTagName("body")[0];
+
+// Creates
+var div = document.createElement("div");
+div.style.padding="30px";
+div.style.backgroundColor="blue";
+div.style.color="white";
+body.appendChild(div);
+
+</script>
+
+</body>
+</html>

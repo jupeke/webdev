@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Create element </title>
+
+<script>
+function makeSquare(size, color){
+
+	// Creates a new div element:
+	var div = document.createElement("div");
+	div.style.display = "inline-block";
+	div.style.height = size+"px";
+	div.style.width = size+"px";
+	div.style.margin="5px";
+	div.style.backgroundColor=color;
+	
+	return div;
+}
+</script>
+</head>
+
+<body>
+<script>
+var numberOfRep = 500;
+for(var i = 0; i < numberOfRep; i++){
+
+	var square1 = makeSquare(40, "green");
+	document.body.appendChild(square1);
+	var square2 = makeSquare(20, "red");
+	document.body.appendChild(square2);
+}
+
+</script>
+
+</body>
+</html>

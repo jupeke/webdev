@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Big Red Square</title>
+</head>
+
+<body>
+<script>
+var cell = document.createElement("div");
+cell.style.width = "500px";
+cell.style.height = "300px";
+cell.style.backgroundColor = "red";
+cell.style.fontSize = "1400%";
+cell.style.color = "blue";
+
+var text = document.createTextNode("Hello");	
+cell.appendChild(text);
+// Or simply: cell.innerHTML = "Hello";
+
+document.body.appendChild(cell);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Red rows</title>
+</head>
+
+<body>
+<script>
+
+// Creating of elements and attributes:
+var body = document.getElementsByTagName("body")[0];
+var i = 0;
+
+for(i=0; i<256; i++){
+  var div = document.createElement("div");
+  div.style.padding="1px";
+  
+  // Red color:
+  div.style.backgroundColor="rgb("+256+","+i+","+i+")";
+  body.appendChild(div);
+}
+
+</script>
+
+</body>
+</html>

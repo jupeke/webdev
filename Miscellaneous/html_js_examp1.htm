@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+<title>HTML and JS</title>
+</head>
+
+<body>
+<p>The body elements begins.</p>
+<p>div1:</p>
+<div id="div1"></div>
+<p>script:</p>
+
+<script>
+// Prints the text in quotes next to the command:
+document.write("<h2>Hello World by JavaScript! (document.write)</h2>");
+
+//=============================================================================
+// Finds (if it exists) the element by the id:
+var div1 = document.getElementById("div1");
+
+// If the element is found, its content (innerHTML) is set:
+if (div1){
+  div1.innerHTML = "<h2>Hello World by JavaScript! (document.getElementById)</h2>";
+}
+
+//=============================================================================
+// Now a very short introduction to the DOM methods:
+var body = document.getElementsByTagName("body")[0];
+var div2 = document.createElement("div");
+var text = document.createTextNode("Hello World by JavaScript! (DOM methods)"); 
+div2.setAttribute("id", "div2");
+div2.appendChild(text);
+body.appendChild(div2);
+div2.style.color = "red";	
+div2.style.fontSize= "200%";			
+</script>
+
+<p>Read about DOM <a href="http://www.w3schools.com/js/js_htmldom.asp" target="_blank">here</a>.</p>
+
+<p>End of body</p>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Color squares</title>
+</head>
+
+<body>
+<script>
+
+// Creating of elements and attributes:
+var body1 = document.getElementsByTagName("body")[0];
+var i = 0; j=0;
+var r=0, g=0, b=0;	// Color indeces
+var size = 20;
+
+// Rows
+for(i=0; i<size; i++){
+ 
+  var row = document.createElement("div");
+  row.style.height = "30px";
+ 
+  // Cells in a row:
+  for(j=0; j<size; j++){
+ 
+		var cell = document.createElement("span");
+		
+		// Display has to be "inline-block" to set width and height!
+		cell.style.display="inline-block";
+		cell.style.width = "30px";
+		cell.style.height = "30px";
+		
+		// Random color:
+		r=Math.floor(Math.random()*256);
+		g=Math.floor(Math.random()*256);
+		b=Math.floor(Math.random()*256);
+		
+		cell.style.backgroundColor="rgb("+r+","+g+","+b+")";
+		row.appendChild(cell);
+	}
+  
+  body1.appendChild(row);  
+}
+
+</script>
+
+</body>
+</html>

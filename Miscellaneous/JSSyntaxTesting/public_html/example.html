@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <title>Testing ES6 class notation</title>
+    <style>
+      div {font-size: 200%; padding: 30px}
+    </style>
+
+    <script>
+      class Car {
+        constructor (make, model, plateNumber) {
+          this.plateNumber = plateNumber;
+          this.make = make;
+          this.model = model;
+        }
+        changePlateNumber(newNumber){
+          this.plateNumber = newNumber;
+        }
+      }
+
+      // A new class that extends the Car class:
+      class SuperCar extends Car {
+        constructor (make, model, plateNumber, maxSpeed, timeZeroTo100) {
+          super(make, model, plateNumber);
+          this.maxSpeed = maxSpeed;
+          this.timeZeroTo100 = timeZeroTo100;
+        }
+        changeMaxSpeed(newMaxSpeed){
+          this.maxSpeed = newMaxSpeed;
+        }
+      }
+
+    </script>
+  </head>
+  <body>
+    <div id="result">Piip</div>
+    <div id="result2"></div>
+    <script>
+      var myCar = new SuperCar("Toyota", "Corolla", "AAA-111", 120, 15);
+      document.getElementById("result").innerHTML =
+        "My car is " + myCar.make + " " + myCar.model +
+        " with plate number " + myCar.plateNumber + ". " +
+        "It's maximum speed is "+ myCar.maxSpeed + " km/h and "+
+        "acceleration from 0 to 100 km/h " + myCar.timeZeroTo100 + " s.";
+
+      // let's change the plateNumber:
+      myCar.changePlateNumber("BBB-222");
+
+      document.getElementById("result2").innerHTML =
+        "My car's plate number is after the change "+
+        myCar.plateNumber + ".";
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Function</title>
+
+<script>
+function print(carrots, number){
+  var i = 0;
+  var result = "";
+
+  for(i=0; i < number; i++){
+    result += carrots+" HIHIHI<br>";
+  }
+  return result;
+}
+</script>
+</head>
+
+<body>
+<h2>How to use a function:</h2>
+
+<script>
+// Here you call the function to make work.
+document.write(print("I like carrots!", 500));
+
+</script>
+
+</body>
+</html>

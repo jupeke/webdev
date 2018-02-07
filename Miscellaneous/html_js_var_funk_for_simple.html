@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Create element </title>
+
+<script>
+function repeatText(thisManyTimes, text){
+
+	var result = "";
+	var i = 0;
+
+	for(i = 0; i < thisManyTimes; i++){
+		result += text;		// Appends value of text to result.		
+	}	
+	return result;
+}
+</script>
+</head>
+
+<body>
+<script>
+var numberOfRep = 200;
+document.body.innerHTML = repeatText(numberOfRep, "This is awesome! ");
+
+</script>
+
+</body>
+</html>
