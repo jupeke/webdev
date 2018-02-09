@@ -8,15 +8,15 @@ function printMyLines(textToRepeat, soManyTimes){
 
   // Variables: always a good practise to declare them at the beginning.
   var result = "";
-  var i = 0;	
-	
+  var i = 0;
+
+
   // The loop: repeating itself soManyTimes!
   for (i = 0; i < soManyTimes; i++){
-  
     // Adds to result a new textToRepeat and a line brake.
-	  result += textToRepeat + "<br>";
+	  result += textToRepeat+"<br>";
   }
-	
+
   return result;
 }
 </script>
@@ -27,8 +27,7 @@ function printMyLines(textToRepeat, soManyTimes){
 
 <script>
 // Here you call the function to make work.
-document.write(printMyLines("This is an example!",20));
-document.write(printMyLines("This is ngt knstgt!",30));
+document.write(printMyLines("Hi",30));
 </script>
 
 </body>
