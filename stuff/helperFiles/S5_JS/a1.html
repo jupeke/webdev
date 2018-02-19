@@ -3,10 +3,11 @@
 <head>
   <link rel="stylesheet" type="text/css" href="myStyles.css">
   <script>
-    function laugh(times){
+    function makeLines(times, text){
       var result = "";
+
       for (var i=0; i<times;i++){
-        result += "HA";
+        result += text+"<br/>";
       }
       return result;
     }
@@ -18,7 +19,7 @@
 <h1>Assignment 1: Jukka-Pekka Kerkkänen</h1>
 
 <script>
-  document.write(laugh(10));
+  document.write(makeLines(100, "I will never again submit someone else's work as my own"));
 </script>
 </body>
 </html>
