@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+function repeatMe(){
+
+  // Gets the value of the text field:
+  var val = document.getElementById('inputField').value;
+
+  // Writes the comment in the div with id "result":
+  document.getElementById('result').innerHTML = "You typed: "+val;
+}
+</script>
+</head>
+<body>
+
+<h1>Input and output</h1>
+<p> Write something in the text field and click the button.</p>
+
+<input type="text" id="inputField">
+<button onclick="repeatMe()">Click me!</button>
+
+<p> Output:</p>
+
+<div id="result">
+
+
+</div>
+
+</body>
+
+</html>
