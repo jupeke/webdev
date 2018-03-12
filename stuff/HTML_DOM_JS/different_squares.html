@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Create element </title>
+
+<script>
+function makeSquare(size, color){
+
+	// Creates a new div element:
+	var div = document.createElement("div");
+	div.style.display = "inline-block";
+	div.style.height = size+"px";
+	div.style.width = size+"px";
+	div.style.margin="5px";
+	div.style.backgroundColor=color;
+
+	document.body.appendChild(div);
+}
+// Returns a random color in rgb(red,green,blue) form
+function randomColor(){
+	var r=0, g=0, b=0;	// Color indeces
+
+	// Random color:
+	r=Math.floor(Math.random()*256);
+	g=Math.floor(Math.random()*256);
+	b=Math.floor(Math.random()*256);
+
+	return "rgb("+r+","+g+","+b+")";
+}
+</script>
+</head>
+
+<body>
+<script>
+let numberOfRep = 10;
+for(let i = 0; i < numberOfRep; i++){
+	for(let j = 0; j < numberOfRep; j++){
+		makeSquare(2*numberOfRep-(i+j), randomColor());
+	}
+}
+
+</script>
+
+</body>
+</html>
