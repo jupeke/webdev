@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Dynamic pyramide</title>
+
+<script>
+/*
+	Creates a square with the features given as parameters
+	and appends the square to the body element.
+*/
+function makeSquare(size, color){
+
+	// Creates a new div element:
+	var div = document.createElement("div");
+	div.style.display = "inline-block";
+	div.style.height = size+"px";
+	div.style.width = size+"px";
+	div.style.backgroundColor=color;
+	div.style.margin="0px 2px";
+
+	// Appends the new div to the end of the body element.
+	document.getElementById("pyramides").appendChild(div);
+}
+function addLineBreak(){
+	var br = document.createElement("br");
+	document.getElementById("pyramides").appendChild(br);
+}
+function emptyPyramides(){
+	document.getElementById("pyramides").innerHTML = "";
+}
+
+function makePyramide(){
+	var number = document.getElementById("inputNumber").value;
+	var size = document.getElementById("inputSize").value;
+	var color = document.getElementById("inputColor").value;
+
+	// Deletes old ones;
+	emptyPyramides();
+
+	for(var i = 0; i < number; i++){
+		for(var j = 0; j < i; j++){
+			makeSquare(size, color);
+		}
+		addLineBreak();
+	}
+}
+
+</script>
+</head>
+
+<body>
+	<h1>Dynamic pyramide</h1>
+	<p style="font-weight:bold"> Fill in the information and click the button. </p>
+
+	<p>Height in Blocks: <input type="text" id="inputNumber" value=4></p>
+	<p>Block Color: <input type="text" id="inputColor" value=blue></p>
+	<p>Block Size (px): <input type="text" id="inputSize" value=20></p>
+	<button onclick="makePyramide()">Build it</button>
+
+	<div id="pyramides"></div>
+</body>
+</html>
