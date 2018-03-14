@@ -5,6 +5,13 @@
 <head>
 <title>Dynamic pyramide</title>
 
+<style>
+div.row {
+	margin: 4px 2px;
+	padding: 0;
+}
+</style>
+
 <script>
 /*
 	Creates a pyramide with given height, color and block size.
@@ -13,10 +20,11 @@ function makePyramide(){
 	var number = document.getElementById("inputNumber").value;
 	var size = document.getElementById("inputSize").value;
 	var color = document.getElementById("inputColor").value;
+	var pyramide = "";
+	var blocksOfARow = array();
 
 	// Deletes old ones and adds an empty row;
 	emptyPyramides();
-	addLineBreak();
 
 	// This is a bit complicated:
 	for(var i = 0; i < number; i++){
@@ -33,13 +41,16 @@ function makePyramide(){
 		for(var j = 0; j < limit2; j++){
 			makeSquare(size, color);
 		}
-		addLineBreak();
+
 	}
+
+	// Appends the new div to the end of the body element.
+	document.getElementById("pyramides").appendChild(pyramide);
 }
 
 /*
 	Creates a square with the features given as parameters
-	and appends the square to the body element.
+	and returns the html element (div).
 */
 function makeSquare(size, color){
 
@@ -51,18 +62,26 @@ function makeSquare(size, color){
 	div.style.backgroundColor=color;
 	div.style.margin="0px 2px";
 
-	// Appends the new div to the end of the body element.
-	document.getElementById("pyramides").appendChild(div);
+
 }
-function addLineBreak(){
-	var br = document.createElement("br");
-	document.getElementById("pyramides").appendChild(br);
-}
+
 function emptyPyramides(){
 	document.getElementById("pyramides").innerHTML = "";
 }
 
+/*
+	Returns the HTML of one row (div element).
+*/
+function makeRow(blocks){
+	var result = "<div class='row'>";
 
+	for(var i = 0; i < blocks.length; i++){
+		result += blocks[i];
+	}
+
+	result += "</div>";
+	return result;
+}
 
 </script>
 </head>
