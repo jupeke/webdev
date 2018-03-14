@@ -38,9 +38,10 @@ function makePyramide(){
 
 	// Deletes old ones;
 	emptyPyramides();
+	addLineBreak();
 
 	for(var i = 0; i < number; i++){
-		for(var j = 0; j < i; j++){
+		for(var j = 0; j < i+1; j++){
 			makeSquare(size, color);
 		}
 		addLineBreak();
