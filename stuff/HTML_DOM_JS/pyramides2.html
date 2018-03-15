@@ -21,7 +21,7 @@ function makePyramide(){
 	var size = document.getElementById("inputSize").value;
 	var color = document.getElementById("inputColor").value;
 	var pyramide = "";
-	var blocksOfARow = array();
+	var blocksInARow = array();
 
 	// Deletes old ones and adds an empty row;
 	emptyPyramides();
@@ -29,19 +29,23 @@ function makePyramide(){
 	// This is a bit complicated:
 	for(var i = 0; i < number; i++){
 
+		// An empty array needed:
+		blocksInARow = [];
+
 		// Adds white blocks to the beginning of a row to
 		// push the colored ones to their positions.
 		var limit1 = number-i-1; 	// Changes from row to row!
 		for(var j = 0; j < limit1; j++){
-			makeSquare(size, "white");
+			blocksInARow.push(makeSquare(size, "white"));
 		}
 
 		// Colored blocks in one row:
 		var limit2 = 2*i+1; // Changes from row to row!
 		for(var j = 0; j < limit2; j++){
-			makeSquare(size, color);
+			blocksInARow.push(makeSquare(size, color));
 		}
 
+		pyramide += makeRow(blocksInARow);
 	}
 
 	// Appends the new div to the end of the body element.
@@ -62,7 +66,7 @@ function makeSquare(size, color){
 	div.style.backgroundColor=color;
 	div.style.margin="0px 2px";
 
-
+	return div;
 }
 
 function emptyPyramides(){
