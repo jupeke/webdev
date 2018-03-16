@@ -1,54 +1,47 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
 <title>Dynamic pyramide</title>
-
-<style>
-div.row {
-	margin: 4px 2px;
-	padding: 0;
-}
-</style>
 
 <script>
 /*
 	Creates a pyramide with given height, color and block size.
 */
 function makePyramide(){
-	var number = document.getElementById("inputNumber").value;
-	var size = document.getElementById("inputSize").value;
-	var color = document.getElementById("inputColor").value;
-	var pyramide = "";
-	var blocksInARow = array();
+	let number = document.getElementById("inputNumber").value;
+	let size = document.getElementById("inputSize").value;
+	let color = document.getElementById("inputColor").value;
+	let pyramide = document.createElement("div");
 
 	// Deletes old ones and adds an empty row;
 	emptyPyramides();
 
 	// This is a bit complicated:
-	for(var i = 0; i < number; i++){
+	for(let i = 0; i < number; i++){
 
-		// An empty array needed:
-		blocksInARow = [];
+		// An empty row needed:
+		let row = document.createElement("div");
+		row.className = "row";
+		row.style.height = (parseInt(size)+2)+"px";
 
 		// Adds white blocks to the beginning of a row to
 		// push the colored ones to their positions.
-		var limit1 = number-i-1; 	// Changes from row to row!
-		for(var j = 0; j < limit1; j++){
-			blocksInARow.push(makeSquare(size, "white"));
+		let limit1 = number-i-1; 	// Changes from row to row!
+		for(let j = 0; j < limit1; j++){
+			row.appendChild(makeSquare(size, "white"));
 		}
 
 		// Colored blocks in one row:
-		var limit2 = 2*i+1; // Changes from row to row!
-		for(var j = 0; j < limit2; j++){
-			blocksInARow.push(makeSquare(size, color));
+		let limit2 = 2*i+1; // Changes from row to row!
+		for(let j = 0; j < limit2; j++){
+			row.appendChild(makeSquare(size, color));
 		}
 
-		pyramide += makeRow(blocksInARow);
+		pyramide.appendChild(row);
 	}
 
 	// Appends the new div to the end of the body element.
+	//document.getElementById("pyramides").appendChild(pyramide);
 	document.getElementById("pyramides").appendChild(pyramide);
 }
 
@@ -58,33 +51,19 @@ function makePyramide(){
 */
 function makeSquare(size, color){
 
-	// Creates a new div element:
-	var div = document.createElement("div");
-	div.style.display = "inline-block";
-	div.style.height = size+"px";
-	div.style.width = size+"px";
-	div.style.backgroundColor=color;
-	div.style.margin="0px 2px";
+	// Creates a new span element:
+	let sq = document.createElement("span");
+	sq.style.display = "inline-block";
+	sq.style.height = size+"px";
+	sq.style.width = size+"px";
+	sq.style.backgroundColor=color;
+	sq.style.margin="1px 1px";
 
-	return div;
+	return sq;
 }
 
 function emptyPyramides(){
 	document.getElementById("pyramides").innerHTML = "";
-}
-
-/*
-	Returns the HTML of one row (div element).
-*/
-function makeRow(blocks){
-	var result = "<div class='row'>";
-
-	for(var i = 0; i < blocks.length; i++){
-		result += blocks[i];
-	}
-
-	result += "</div>";
-	return result;
 }
 
 </script>
