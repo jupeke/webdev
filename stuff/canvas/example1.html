@@ -50,6 +50,12 @@ var mainContext = mainCanvas.getContext("2d");
 var canvasWidth = mainCanvas.width;
 var canvasHeight = mainCanvas.height;
 
+var requestAnimationFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            window.msRequestAnimationFrame;
+var angle = 0;
+
 function drawCircle() {
   mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -60,13 +66,15 @@ function drawCircle() {
   // draw the circle
   mainContext.beginPath();
 
-  var radius = 300;
+  var radius = 300 * Math.abs(Math.cos(angle));
   mainContext.arc(300, 300, radius, 0, Math.PI * 2, false);
   mainContext.closePath();
 
   // color in the circle
   mainContext.fillStyle = "#006699";
   mainContext.fill();
+  requestAnimationFrame(drawCircle);
+  angle += 0.005;
 }
 drawCircle();
 </script>
