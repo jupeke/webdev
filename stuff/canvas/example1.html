@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Simple Canvas Example</title>
+
+<script>
+/* NOT WORKING HERE
+var mainCanvas = document.querySelector("#myCanvas");
+var mainContext = mainCanvas.getContext("2d");
+
+var canvasWidth = mainCanvas.width;
+var canvasHeight = mainCanvas.height;
+
+function drawCircle() {
+  mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  // color in the background
+  mainContext.fillStyle = "blue";
+  mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  // draw the circle
+  mainContext.beginPath();
+
+  var radius = 175;
+  mainContext.arc(225, 225, radius, 0, Math.PI * 2, false);
+  mainContext.closePath();
+
+  // color in the circle
+  mainContext.fillStyle = "#006699";
+  mainContext.fill();
+}*/
+</script>
+
+<style>
+canvas {
+    border: 3px #CCC solid;
+}
+</style>
+</head>
+
+<body>
+<div id="container">
+    <canvas id="myCanvas" height="600" width="600"></canvas>
+</div>
+<script>
+var mainCanvas = document.querySelector("#myCanvas");
+var mainContext = mainCanvas.getContext("2d");
+
+var canvasWidth = mainCanvas.width;
+var canvasHeight = mainCanvas.height;
+
+var requestAnimationFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            window.msRequestAnimationFrame;
+var angle = 0;
+
+function drawCircle() {
+  mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  // color in the background
+  mainContext.fillStyle = "blue";
+  mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  // draw the circle
+  mainContext.beginPath();
+
+  var radius = 300 * Math.abs(Math.cos(angle));
+  mainContext.arc(300, 300, radius, 0, Math.PI * 2, false);
+  mainContext.closePath();
+
+  // color in the circle
+  mainContext.fillStyle = "#006699";
+  mainContext.fill();
+  requestAnimationFrame(drawCircle);
+  angle += 0.005;
+}
+drawCircle();
+</script>
+</body>
+</html>
+
+see https://www.kirupa.com/html5/creating_simple_html5_canvas_animation.htm

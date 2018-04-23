@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Dynamic pyramide</title>
+<title>Dynamic Triangle</title>
 
 <script>
 /*
@@ -13,21 +13,17 @@ function makePyramide(){
 	let color = document.getElementById("inputColor").value;
 	let pyramide = document.createElement("div");
 
-	// Deletes old ones.
-	removePyramides();
+	// Deletes old ones and adds an empty row;
+	emptyPyramides();
 
 	// This is a bit complicated:
 	for(let i = 0; i < number; i++){
 
 		// An empty row needed:
-<<<<<<< HEAD
-		let row = makeEmptyRow(size);
-=======
 		let row = document.createElement("div");
 
 		// The default row height is not nice. Let's change it:
 		row.style.height = (parseInt(size)+2)+"px";
->>>>>>> 33ab896c92ab90365677d83a93c7ff46bdc0a637
 
 		// Adds white blocks to the beginning of a row to
 		// push the colored ones to their positions.
@@ -50,16 +46,6 @@ function makePyramide(){
 	document.getElementById("pyramides").appendChild(pyramide);
 }
 
-// Returns an HTML element for a row. You can add blocks to the row by calling
-// the function [rowVariableName].appendChild(block).
-function makeEmptyRow(blockSize){
-	// An empty row element (div):
-	let row = document.createElement("div");
-	row.className = "row";
-	row.style.height = (parseInt(blockSize)+2)+"px";
-	return row;
-}
-
 /*
 	Creates a square with the features given as parameters
 	and returns the html element (div).
@@ -76,8 +62,8 @@ function makeSquare(size, color){
 
 	return sq;
 }
-// Removes the pyramide from the screen.
-function removePyramides(){
+
+function emptyPyramides(){
 	document.getElementById("pyramides").innerHTML = "";
 }
 
