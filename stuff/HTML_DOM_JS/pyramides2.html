@@ -20,16 +20,9 @@ function makePyramide(){
 	for(let i = 0; i < number; i++){
 
 		// An empty row needed:
-<<<<<<< HEAD
 		let row = makeEmptyRow(size);
-=======
-		let row = document.createElement("div");
 
-		// The default row height is not nice. Let's change it:
-		row.style.height = (parseInt(size)+2)+"px";
->>>>>>> 33ab896c92ab90365677d83a93c7ff46bdc0a637
-
-		// Adds white blocks to the beginning of a row to
+		// Adds white squares to the beginning of a row to
 		// push the colored ones to their positions.
 		let limit1 = number-i-1; 	// Changes from row to row!
 		for(let j = 0; j < limit1; j++){
@@ -50,8 +43,8 @@ function makePyramide(){
 	document.getElementById("pyramides").appendChild(pyramide);
 }
 
-// Returns an HTML element for a row. You can add blocks to the row by calling
-// the function [rowVariableName].appendChild(block).
+// Returns an HTML element for a row. You can add squares to the row by calling
+// the function [rowVariableName].appendChild(makeSquare([size], [color])).
 function makeEmptyRow(blockSize){
 	// An empty row element (div):
 	let row = document.createElement("div");
@@ -71,8 +64,8 @@ function makeSquare(size, color){
 	sq.style.display = "inline-block";
 	sq.style.height = size+"px";
 	sq.style.width = size+"px";
-	sq.style.backgroundColor=color;
-	sq.style.margin="1px 1px";
+	sq.style.backgroundColor = color;
+	sq.style.margin = "1px 1px";
 
 	return sq;
 }
