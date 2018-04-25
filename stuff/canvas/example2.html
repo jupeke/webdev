@@ -6,31 +6,10 @@ https://www.kirupa.com/html5/creating_simple_html5_canvas_animation.htm -->
 <title>Simple Canvas Example</title>
 
 <script>
-/* NOT WORKING HERE
-var mainCanvas = document.querySelector("#myCanvas");
-var mainContext = mainCanvas.getContext("2d");
+/* NOT WORKING HERE*/
 
-var canvasWidth = mainCanvas.width;
-var canvasHeight = mainCanvas.height;
 
-function drawCircle() {
-  mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
-  // color in the background
-  mainContext.fillStyle = "blue";
-  mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
-
-  // draw the circle
-  mainContext.beginPath();
-
-  var radius = 175;
-  mainContext.arc(225, 225, radius, 0, Math.PI * 2, false);
-  mainContext.closePath();
-
-  // color in the circle
-  mainContext.fillStyle = "#006699";
-  mainContext.fill();
-}*/
 </script>
 
 <style>
@@ -56,25 +35,24 @@ var requestAnimationFrame = window.requestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
                             window.msRequestAnimationFrame;
 var angle = 0;
-
 function drawCircle() {
   mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
   // color in the background
-  mainContext.fillStyle = "blue";
+  mainContext.fillStyle = "pink";
   mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
 
   // draw the circle
   mainContext.beginPath();
 
   //var radius = 30 * Math.abs(Math.sin(angle));
-  var radiusBall = 20;
-  var radiusTrack = 200;
+  var radiusBall = 50;
+  var radiusTrack = 100;
   var centerx = radiusTrack * Math.cos(angle);
   var centery = Math.sqrt(Math.pow(radiusTrack, 2)-Math.pow(centerx, 2));
   var cx_final = 300+centerx;
   var cy_final = 300+centery;
-  if((angle-(floor(angle/(2*Math.pi))*2*Math.pi)) < Math.pi){
+  if((angle-(Math.floor(angle/(2*Math.PI))*2*Math.PI)) < Math.PI){
     cy_final = 300-centery;
   }
 
