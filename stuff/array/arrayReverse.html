@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Reverse</title>
+
+<script>
+/*
+ There is a method reverse() in JavaScript that reverses the order of the
+ elements in an array. It gets an array to be reversed as a parameter and
+ returns the reversed array.
+
+ Your task is to make your own implementation of the reverse() method. It should
+ work in all cases (also of a bad parameter). The function returns a reversed
+ array that doesn't need to be original array. If the given parameter is not an array,
+ the function returns the original parameter value.
+*/
+function reverse(myArray){
+  // This is for you to do...
+}
+
+//==============================================================================
+// Make no changes under this line! ---------------------------------------------
+
+
+
+// Returns a string containing all the elements in the array (provided
+// the elements are printable values like strings or numbers)
+function printMyArray(myArray){
+  var i = 0;
+  var result = "";
+
+  for(i=0; i < myArray.length; i++){
+    result += myArray[i]+"<br>";
+  }
+  return result+"<br><br>";
+}
+</script>
+</head>
+
+<body>
+<h2>How to use an array:</h2>
+
+<script>
+var numberOfErrors = 0;
+
+document.write("Testing the function with no-array-parameter:<br>");
+var myBadArray = "I'm a string!";
+
+
+
+document.write(printMyArray(myArray));
+
+document.write("Testing an array wi:<br><br>");
+var myArray = ["blue", "pink", "white"];
+
+// Adds an element to the end of the array:
+document.write("Adding an element to the end of the array:<br><br>");
+myArray.push("<b>black</b>");
+document.write(printMyArray(myArray));
+
+// Removes the last element:
+document.write("Removing the last element of the array:<br><br>");
+myArray.pop();
+document.write(printMyArray(myArray));
+
+// Change the 2nd element:
+document.write("Changing the 2nd element of the array:<br><br>");
+myArray[1]="<b>a totally new color!</b>";
+document.write(printMyArray(myArray));
+</script>
+
+</body>
+</html>
