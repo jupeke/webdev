@@ -9,43 +9,97 @@
  elements in an array. It gets an array to be reversed as a parameter and
  returns the reversed array.
 
- Your task is to make your own implementation of the reverse() method. It should
- work in all cases (also of a bad parameter). The function returns a reversed
- array that doesn't need to be original array. If the given parameter is not an array,
- the function returns the original parameter value.
+ Your task is to make your own implementation of the reverse() method:
+ -It must work in all cases (also of a bad parameter).
+ -The function returns a new reversed array.
+ -The original array doesn't change.
+ -If the given parameter is not an array, he function returns the original parameter value.
 */
 function reverse(myArray){
-  // This is for you to do...
+  return false;   // To be changed.
 }
 
 //==============================================================================
 // Make no changes under this line! ---------------------------------------------
+function test(){
+  var numberOfErrors = 0;
+  var feedback = "";
 
+  feedback ="Testing the function with different parameters:<br>";
+  var testParam1 = "I'm a string!"; // string
+  var testParam2 = false; // boolean
+  var testParam3 = 12;  // numeric
+  var testParam4;       // undefined
+  var testParam5 = null;       // null
+  var testParam6 = [] ; // empty myArray
+  var testParam7 = [5] ; // Array with 1 element
+  var testParam8 = ["Tom", "Hank", "Ville", "Camilla", "Bella"] ; // Array with 5 elements
 
-
-// Returns a string containing all the elements in the array (provided
-// the elements are printable values like strings or numbers)
-function printMyArray(myArray){
-  var i = 0;
-  var result = "";
-
-  for(i=0; i < myArray.length; i++){
-    result += myArray[i]+"<br>";
+  // String parameter:
+  if(customReverse(testParam1) === testParam1){
+    feedback += "String parameter handled ok <br/>";
+  } else {
+    feedback += "Error with string parameter! <br/>";
+    numberOfErrors++;
   }
-  return result+"<br><br>";
+
+  // Boolean parameter:
+  if(customReverse(testParam2) === testParam2){
+    feedback += "Boolean parameter handled ok <br/>";
+  } else {
+    feedback += "Error with boolean parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Numeric parameter:
+  if(customReverse(testParam3) === testParam3){
+    feedback += "Numeric parameter handled ok <br/>";
+  } else {
+    feedback += "Error with numeric parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Undefined parameter:
+  if(customReverse(testParam4) === undefined){
+    feedback += "Undefined parameter handled ok <br/>";
+  } else {
+    feedback += "Error with undefined parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Null parameter:
+  if(customReverse(testParam5) === null){
+    feedback += "Undefined parameter handled ok <br/>";
+  } else {
+    feedback += "Error with null parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Empty array parameter:
+  if(customReverse(testParam6) === testParam6){
+    feedback += "Empty array handled ok <br/>";
+  } else {
+    feedback += "Error with empty array! <br/>";
+    numberOfErrors++;
+  }
+
+  // One element array parameter:
+  if(customReverse(testParam7) === testParam7){
+    feedback += "One element array handled ok <br/>";
+  } else {
+    feedback += "Error with one element array! <br/>";
+    numberOfErrors++;
+  }
+
+  // Array parameter, several elements:
+  if(customReverse(testParam7) === testParam7.reverse()){
+    feedback += "Array of 5 elements handled ok <br/>";
+  } else {
+    feedback += "Error with array of 5 elements! <br/>";
+    numberOfErrors++;
+  }
+
 }
-</script>
-</head>
-
-<body>
-<h2>How to use an array:</h2>
-
-<script>
-var numberOfErrors = 0;
-
-document.write("Testing the function with no-array-parameter:<br>");
-var myBadArray = "I'm a string!";
-
 
 
 document.write(printMyArray(myArray));
@@ -67,6 +121,26 @@ document.write(printMyArray(myArray));
 document.write("Changing the 2nd element of the array:<br><br>");
 myArray[1]="<b>a totally new color!</b>";
 document.write(printMyArray(myArray));
+
+// Returns a string containing all the elements in the array (provided
+// the elements are printable values like strings or numbers)
+function printMyArray(myArray){
+  var i = 0;
+  var result = "";
+
+  for(i=0; i < myArray.length; i++){
+    result += myArray[i]+"<br>";
+  }
+  return result+"<br><br>";
+}
+</script>
+</head>
+
+<body>
+<h2>How to use an array:</h2>
+
+<script>
+
 </script>
 
 </body>
