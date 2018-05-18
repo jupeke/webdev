@@ -5,29 +5,47 @@
 
 <script>
 /*
- There is a method reverseMe() in JavaScript that reverses the order of the
+ There is a method reverse() in JavaScript that reverses the order of the
  elements in an array. It gets an array to be reversed as a parameter and
  returns the reversed array.
 
- Your task is to make your own implementation of the reverseMe() method:
+ Your task is to make your own implementation of the reverse() method called
+ reverseMe():
  -It must work in all cases (also of a bad parameter).
  -The function returns a new reversed array.
- -The original array must not change.
- -If the given parameter is not an array, he function returns the original parameter value.
+ -The original array must not change. Use the cloneArray(array)-method to clone the
+ original.
+ -If the given parameter is not an array, he function returns the original
+ parameter value.
 */
 function reverseMe(myArray){
-  return false;   // To be changed.
+  var result = "";
+
+  if(Array.isArray(myArray)){
+    var clone = cloneArray(myArray);
+    result = clone;
+  } else{
+    result = myArray;
+  }
+
+  return result;   // To be changed.
 }
 
 //==============================================================================
 // Make no changes under this line! ---------------------------------------------
+
+// Returns a clone of the parameter array that is not affected.
+function cloneArray(arr){
+  return arr.slice(0, arr.length);
+}
+
 function test(){
   var numberOfErrors = 0;
   var feedback = "";
 
-  feedback ="Testing the function with different parameters:<br>";
+  feedback ="<b>Testing the function with different parameters:</b><br>";
   var testParam1 = "I'm a string!"; // string
-  var testParam2 = false; // boolean
+  var testParam2 = true; // boolean
   var testParam3 = 12;  // numeric
   var testParam4;       // undefined
   var testParam5 = null;       // null
@@ -69,7 +87,7 @@ function test(){
 
   // Null parameter:
   if(reverseMe(testParam5) === null){
-    feedback += "Undefined parameter handled ok <br/>";
+    feedback += "Null parameter handled ok <br/>";
   } else {
     feedback += "Error with null parameter! <br/>";
     numberOfErrors++;
@@ -100,12 +118,27 @@ function test(){
   }
 
   // Shows the original and the resulting array:
-  feedback += "Original array:<br/>";
+  feedback += "<br/><br/>Original array:<br/>";
   feedback += printMyArray(testParam7);
   feedback += "Array reversed:<br/>";
   feedback += printMyArray(reverseMe(testParam7));
 
-  document.write(printMyArray(feedback));
+  feedback += "<br/><br/>Errors detected: "+numberOfErrors;
+
+  // If at least 8 errors, nothing has probably been done.
+  if(numberOfErrors >= 8){
+    feedback += "<br/> Looks like you haven't yet begun the work...";
+  } else if(numberOfErrors >= 4){
+    feedback += "<br/> Looks better, only a few things to fix!";
+  } else if(numberOfErrors > 0){
+    feedback += "<br/> Almost there, just one last effort!";
+  }else{
+    feedback += "<br/> Perfect!";
+  }
+
+
+
+  document.write(feedback);
 }
 
 
@@ -124,12 +157,8 @@ function printMyArray(myArray){
 </script>
 </head>
 
-<body>
-<h2>How to use an array:</h2>
-
-<script>
-
-</script>
+<body onload="test()">
+<h2>If you see this, there is an error in your code. Find & fix!</h2>
 
 </body>
 </html>
