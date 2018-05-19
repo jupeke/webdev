@@ -9,17 +9,137 @@
  elements in an array. It gets an array to be reversed as a parameter and
  returns the reversed array.
 
- Your task is to make your own implementation of the reverse() method. It should
- work in all cases (also of a bad parameter). The function returns a reversed
- array that doesn't need to be original array. If the given parameter is not an array,
- the function returns the original parameter value.
+ Your task is to make your own implementation of the reverse() method called
+ reverseMe():
+ -It must work in all cases (also of a bad parameter).
+ -The function returns a new reversed array.
+ -The original array must not change. Use the cloneArray(array)-method to clone the
+ original.
+ -If the given parameter is not an array, he function returns the original
+ parameter value.
 */
-function reverse(myArray){
-  // This is for you to do...
+function reverseMe(myArray){
+  var result = "";
+
+  if(Array.isArray(myArray)){
+    var clone = cloneArray(myArray);
+    result = clone;
+  } else{
+    result = myArray;
+  }
+
+  return result;   // To be changed.
 }
 
 //==============================================================================
 // Make no changes under this line! ---------------------------------------------
+
+// Returns a clone of the parameter array that is not affected.
+function cloneArray(arr){
+  return arr.slice(0, arr.length);
+}
+
+function test(){
+  var numberOfErrors = 0;
+  var feedback = "";
+
+  feedback ="<b>Testing the function with different parameters:</b><br>";
+  var testParam1 = "I'm a string!"; // string
+  var testParam2 = true; // boolean
+  var testParam3 = 12;  // numeric
+  var testParam4;       // undefined
+  var testParam5 = null;       // null
+  var testParam6 = [] ; // empty myArray
+  var testParam7 = [5] ; // Array with 1 element
+  var testParam8 = ["Tom", "Hank", "Ville", "Camilla", "Bella"] ; // Array with 5 elements
+
+  // String parameter:
+  if(reverseMe(testParam1) === testParam1){
+    feedback += "String parameter handled ok <br/>";
+  } else {
+    feedback += "Error with string parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Boolean parameter:
+  if(reverseMe(testParam2) === testParam2){
+    feedback += "Boolean parameter handled ok <br/>";
+  } else {
+    feedback += "Error with boolean parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Numeric parameter:
+  if(reverseMe(testParam3) === testParam3){
+    feedback += "Numeric parameter handled ok <br/>";
+  } else {
+    feedback += "Error with numeric parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Undefined parameter:
+  if(reverseMe(testParam4) === undefined){
+    feedback += "Undefined parameter handled ok <br/>";
+  } else {
+    feedback += "Error with undefined parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Null parameter:
+  if(reverseMe(testParam5) === null){
+    feedback += "Null parameter handled ok <br/>";
+  } else {
+    feedback += "Error with null parameter! <br/>";
+    numberOfErrors++;
+  }
+
+  // Empty array parameter:
+  if(reverseMe(testParam6) === testParam6){
+    feedback += "Empty array handled ok <br/>";
+  } else {
+    feedback += "Error with empty array! <br/>";
+    numberOfErrors++;
+  }
+
+  // One element array parameter:
+  if(reverseMe(testParam7) === testParam7){
+    feedback += "One element array handled ok <br/>";
+  } else {
+    feedback += "Error with one element array! <br/>";
+    numberOfErrors++;
+  }
+
+  // Array parameter, several elements:
+  if(reverseMe(testParam7) === testParam7.reverse()){
+    feedback += "Array of 5 elements handled ok <br/>";
+  } else {
+    feedback += "Error with array of 5 elements! <br/>";
+    numberOfErrors++;
+  }
+
+  // Shows the original and the resulting array:
+  feedback += "<br/><br/>Original array:<br/>";
+  feedback += printMyArray(testParam7);
+  feedback += "Array reversed:<br/>";
+  feedback += printMyArray(reverseMe(testParam7));
+
+  feedback += "<br/><br/>Errors detected: "+numberOfErrors;
+
+  // If at least 8 errors, nothing has probably been done.
+  if(numberOfErrors >= 8){
+    feedback += "<br/> Looks like you haven't yet begun the work...";
+  } else if(numberOfErrors >= 4){
+    feedback += "<br/> Looks better, only a few things to fix!";
+  } else if(numberOfErrors > 0){
+    feedback += "<br/> Almost there, just one last effort!";
+  }else{
+    feedback += "<br/> Perfect!";
+  }
+
+
+
+  document.write(feedback);
+}
 
 
 
@@ -37,37 +157,8 @@ function printMyArray(myArray){
 </script>
 </head>
 
-<body>
-<h2>How to use an array:</h2>
-
-<script>
-var numberOfErrors = 0;
-
-document.write("Testing the function with no-array-parameter:<br>");
-var myBadArray = "I'm a string!";
-
-
-
-document.write(printMyArray(myArray));
-
-document.write("Testing an array wi:<br><br>");
-var myArray = ["blue", "pink", "white"];
-
-// Adds an element to the end of the array:
-document.write("Adding an element to the end of the array:<br><br>");
-myArray.push("<b>black</b>");
-document.write(printMyArray(myArray));
-
-// Removes the last element:
-document.write("Removing the last element of the array:<br><br>");
-myArray.pop();
-document.write(printMyArray(myArray));
-
-// Change the 2nd element:
-document.write("Changing the 2nd element of the array:<br><br>");
-myArray[1]="<b>a totally new color!</b>";
-document.write(printMyArray(myArray));
-</script>
+<body onload="test()">
+<h2>If you see this, there is an error in your code. Find & fix!</h2>
 
 </body>
 </html>
