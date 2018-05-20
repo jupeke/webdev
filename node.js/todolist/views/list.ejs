@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>TODO</title>
+  </head>
+
+  <body>
+    <h1>Ma todolist</h1>
+    <ul>
+      <%
+      var len = list.length;
+      for(var i = 0; i < len; i++){
+        %>
+          <li id = <%= i %>>
+            <span onclick="remove(<%= i %>)"  >X</span>
+            <%=list[i]%>
+          </li>
+        <%
+      }
+      %>
+    </ul>
+
+    <p>Que dois-je faire? </p>
+    <form id="myForm" action="/add">
+      <input id="inputField" type="text" name="todo">
+      <input type="submit" value="Valider">
+    </form>
+
+  </body>
+</html>
