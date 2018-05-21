@@ -31,21 +31,19 @@ app.get('/add', function(req, res) {
   });
 });
 
+app.get('/remove', function(req, res) {
+  var id = req.query.id;  // Note query!
+  console.log("id= "+id);
+  req.session.list.splice(id, 1);
+  res.render('list',{
+    list: req.session.list
+  });
+});
+
 // ... Tout le code de gestion des routes (app.get) se trouve au-dessus
 app.use(function(req, res, next){
     res.setHeader('Content-Type', 'text/html');
     res.status(404).send('Page introuvable !');
 });
-
-// Removes one element with given id from the given array (=list).
-// Removes also the corresponding html element.
-var remove = function(id){
-
-  var elem = document.getElementById(id);
-  var parent = elem.parentNode;
-  parent.removeChild(elem);
-
-  //return list.splice(id,1);
-}
 
 app.listen(8081);

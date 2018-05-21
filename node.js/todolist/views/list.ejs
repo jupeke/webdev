@@ -13,8 +13,14 @@
       for(var i = 0; i < len; i++){
         %>
           <li id = <%= i %>>
-            <span onclick="remove(<%= i %>)"  >X</span>
-            <%=list[i]%>
+            <form style="display: inline-block"
+              action="/remove">
+                <input type="text" style="display:none"
+                  name="id" value=<%= i %>
+                />
+                <input type="submit" value="X"/>
+            </form>
+            <%= list[i] %>
           </li>
         <%
       }
