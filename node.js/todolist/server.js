@@ -9,6 +9,7 @@ app.use(cookieSession({
   nam: 'session',
   keys: ['key1','key2'] // Meaning unsure..
 }));
+//app.use(session({secret: 'todotopsecret'}));
 
 // Set view engine to ejs.
 app.set("view engine", "ejs");
@@ -41,9 +42,14 @@ app.get('/remove', function(req, res) {
 });
 
 // ... Tout le code de gestion des routes (app.get) se trouve au-dessus
-app.use(function(req, res, next){
+/*app.use(function(req, res, next){
     res.setHeader('Content-Type', 'text/html');
     res.status(404).send('Page introuvable !');
+});*/
+
+app.use(function(req, res, next){
+    res.redirect('/');
 });
+
 
 app.listen(8081);

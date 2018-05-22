@@ -12,11 +12,11 @@
       var len = list.length;
       for(var i = 0; i < len; i++){
         %>
-          <li id = <%= i %>>
+          <li id = "<%= i %>">
             <form style="display: inline-block"
               action="/remove">
                 <input type="text" style="display:none"
-                  name="id" value=<%= i %>
+                  name="id" value="<%= i %>"
                 />
                 <input type="submit" value="X"/>
             </form>
