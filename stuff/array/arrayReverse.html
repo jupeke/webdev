@@ -20,9 +20,14 @@
 */
 function reverseMe(myArray){
   var result = "";
+  var clone = [];
 
   if(Array.isArray(myArray)){
-    var clone = cloneArray(myArray);
+    if(myArray.length > 0){
+      alert(myArray.length);
+      clone = cloneArray(myArray);
+    }
+
     result = clone;
   } else{
     result = myArray;
@@ -36,7 +41,7 @@ function reverseMe(myArray){
 
 // Returns a clone of the parameter array that is not affected.
 function cloneArray(arr){
-  return arr.slice(0, arr.length);
+  return arr.splice(0, arr.length);
 }
 
 function test(){
@@ -49,7 +54,7 @@ function test(){
   var testParam3 = 12;  // numeric
   var testParam4;       // undefined
   var testParam5 = null;       // null
-  var testParam6 = [] ; // empty myArray
+  var testParam6 = []; // empty myArray
   var testParam7 = [5] ; // Array with 1 element
   var testParam8 = ["Tom", "Hank", "Ville", "Camilla", "Bella"] ; // Array with 5 elements
 
@@ -94,7 +99,7 @@ function test(){
   }
 
   // Empty array parameter:
-  if(reverseMe(testParam6) === testParam6){
+  if(reverseMe(testParam6) == testParam6){
     feedback += "Empty array handled ok <br/>";
   } else {
     feedback += "Error with empty array! <br/>";
@@ -119,9 +124,9 @@ function test(){
 
   // Shows the original and the resulting array:
   feedback += "<br/><br/>Original array:<br/>";
-  feedback += printMyArray(testParam7);
+  feedback += printMyArray(testParam8);
   feedback += "Array reversed:<br/>";
-  feedback += printMyArray(reverseMe(testParam7));
+  feedback += printMyArray(reverseMe(testParam8));
 
   feedback += "<br/><br/>Errors detected: "+numberOfErrors;
 
@@ -135,8 +140,6 @@ function test(){
   }else{
     feedback += "<br/> Perfect!";
   }
-
-
 
   document.write(feedback);
 }
@@ -152,7 +155,7 @@ function printMyArray(myArray){
   for(i=0; i < myArray.length; i++){
     result += myArray[i]+"<br>";
   }
-  return result+"<br><br>";
+  return result+"<br>";
 }
 </script>
 </head>
