@@ -1,0 +1,13 @@
+{
+    "name": "todolist-mysql",
+    "version": "0.1.0",
+    "dependencies": {
+        "cookie-session": "~1.2.0",
+        "ejs": "^2.6.1",
+        "express": "^4.16.3",
+        "mysql": "^2.15.0",
+        "npm": "^6.1.0"
+    },
+    "author": "Jukka-Pekka",
+    "description": "Un gestionnaire de todolist avec Mysql"
+}
