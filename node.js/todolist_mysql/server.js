@@ -5,6 +5,14 @@ var app = express();
 var list = ["Faire les courses", "Nourrir le chat",
           "Arroser les plantes"];
 
+// Opens database connection:
+var dbc = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "notes"
+});
+
 // Set view engine to ejs.
 .set("view engine", "ejs")
 
@@ -39,3 +47,39 @@ var list = ["Faire les courses", "Nourrir le chat",
 
 
 .listen(8081);
+
+// Makes a DB query and return an array containing all
+// the wanted tasks:
+var getList = function (connection){
+  tasks = [];
+
+  query = "Select * from notes " +
+          " where done = 0 " +
+          " order by modified";
+
+  return tasks;
+}
+
+// Makes a DB query and return an array containing all
+// the wanted tasks:
+var removeTask = function (connection){
+  tasks = [];
+
+  query = "Select * from notes " +
+          " where done = 0 " +
+          " order by modified";
+
+  return tasks;
+}
+
+// Makes a DB query and return an array containing all
+// the wanted tasks:
+var addTask = function (connection){
+  tasks = [];
+
+  query = "Select * from notes " +
+          " where done = 0 " +
+          " order by modified";
+
+  return tasks;
+}
