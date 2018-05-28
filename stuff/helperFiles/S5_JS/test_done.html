@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    function juu(numb, separ, str){
+      var result = "";
+      if(numb < 0){
+        result = "Silly number!";
+      } else{
+        for(var i=2; i<numb-1; i++){
+          result += str+separ;
+        }
+      }
+      return result;
+    }
+  </script>
+</head>
+<body>
+  <script>
+    document.write(juu(-4, " ", "Hihi")+"<br>");
+    document.write(juu(10, "huu", "Hihi")+"<br>");
+    document.write(juu(10, "<br>", "Hihi")+"<br>");
+  </script>
+
+</body>
+</html>
