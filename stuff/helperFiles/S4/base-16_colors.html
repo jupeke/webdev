@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hexacolors</title>
+<style>
+  body{
+    font-size: 140%;
+    text-align: center;
+  }
+  #result{
+    height: 500px;
+    margin: auto;
+    display: block;
+  }
+  .big{
+    font-size: 180%;
+  }
+  #inputField{
+    font-family: "Courier New";
+    font-style: bold;
+  }
+</style>
+<script>
+function showColor(){
+
+  let result = "";
+
+  // Gets the value of the text field:
+  var val = document.getElementById('inputField').value;
+
+  // Writes the comment in the div with id "result":
+  document.getElementById('result').style.backgroundColor = val;
+}
+</script>
+
+<body>
+
+<h1>RGB Colors</h1>
+<p> Type an RGB color in format #XXXXXX and click the button
+  (any other format supported by CSS works as well). </p>
+
+<input type="text" id="inputField" class="big" value="#123456">
+<button onclick="showColor()" class="big">Show Color</button>
+
+<p>The color given above looks like this:</p>
+
+<div id="result"></div>
+
+</body>
+
+</html>
