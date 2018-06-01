@@ -24,8 +24,9 @@ function reverseMe(myArray){
 
   if(Array.isArray(myArray)){
     if(myArray.length > 0){
-      alert(myArray.length);
+      //alert(myArray.length);
       clone = cloneArray(myArray);
+      clone.reverse();
     }
 
     result = clone;
@@ -99,7 +100,8 @@ function test(){
   }
 
   // Empty array parameter:
-  if(reverseMe(testParam6) == testParam6){
+  //if(reverseMe(testParam6) == testParam6) not working!!{
+  if(reverseMe(testParam6).length === 0){
     feedback += "Empty array handled ok <br/>";
   } else {
     feedback += "Error with empty array! <br/>";
@@ -115,7 +117,7 @@ function test(){
   }
 
   // Array parameter, several elements:
-  if(reverseMe(testParam7) === testParam7.reverse()){
+  if(reverseMe(testParam8) === testParam8.reverse()){
     feedback += "Array of 5 elements handled ok <br/>";
   } else {
     feedback += "Error with array of 5 elements! <br/>";
