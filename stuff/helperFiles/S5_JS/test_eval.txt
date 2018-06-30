@@ -1,0 +1,14 @@
+1. Function name - 1p
+2. Parameter names - 1p
+3. Variable to save the return value - 1p
+4. Condition if(number < 0){} - 1p
+5. Content of if: return "Bad number!";  - 1p
+6. Else {}  - 1p
+7. Content of else: for(var i = 0; i<number; i++){} - 1p
+8. Content of for: result += message + separator - 1p
+9. Testing with function calls: - 1p
+
+10. Submitting an HTML file - 1p
+
+
+Total: p 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Socket.io</title>
+    </head>
+
+    <body>
+        <h1>Communication avec socket.io !</h1>
+        <div id="messages"></div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:8082');
+
+            // Quand le serveur renvoie un message de type "messages",
+            // on le montre sur la page:
+            socket.on('messages', function(data){
+              document.getElementById("messages").innerHTML = data;
+            });
+        </script>
+    </body>
+</html>
