@@ -4,24 +4,20 @@
 <title>Function</title>
 
 <script>
-function print(carrots, number){
-  var i = 0;
+function print(message){
   var result = "";
-
-  for(i=0; i < number; i++){
-    result += carrots+" HIHIHI<br>";
-  }
+  result += "This is my message: "+ message;
   return result;
 }
 </script>
 </head>
 
 <body>
-<h2>How to use a function: piip</h2>
+<h2>How to use a function:</h2>
 
 <script>
 // Here you call the function to make work.
-document.write(print("I like carrots!", 500));
+document.write(print("I like carrots!"));
 
 </script>
 
