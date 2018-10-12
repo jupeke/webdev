@@ -6,7 +6,11 @@
 <script>
 function print(message){
   var result = "";
-  var str = "This is my message: "+ message;
+  var str = "";
+  str += "This is my message: "+ message;
+
+  // Replaces all the occurrences. (replace("is","<br>") only the first one!)
+  result = str.replace(/is/g, "<br>");
   return result;
 }
 </script>
