@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Function</title>
+<style>
+  code {font-size: 130%; background-color: lightgreen}
+</style>
+<script>
+// Returns a string containing all the elements in the array (provided
+// the elements are simple values like strings or numbers)
+function printMyArray(myArray){
+  var i = 0;
+  var result = "";
+
+  for(i=0; i < myArray.length; i++){
+    result += myArray[i]+"<br>";
+  }
+  return result+"<br><br>";
+}
+</script>
+</head>
+
+<body>
+<h2>How to use an array:</h2>
+
+<script>
+document.write("<h3>Creating an array with three elements:</h3>");
+
+document.write('<p><code>');
+document.write('var myArray = ["blue", "pink", "white"];');
+document.write('</code></p>');
+
+document.write("<h3>Array printed:</h3>");
+var myArray = ["blue", "pink", "white"];
+document.write(printMyArray(myArray));
+
+// Adds an element to the end of the array:
+document.write("<h3>Adding an element to the end of an array: push() </h3>");
+
+document.write('<p><code>');
+document.write('myArray.push("&lt;b&gt;black&lt;/b&gt;");');
+document.write('</code></p>');
+
+document.write("<h3>Array printed:</h3>");
+
+myArray.push("<b>black</b>");
+document.write(printMyArray(myArray));
+
+// Removes the last element:
+document.write("<h3>Removing the last element of an array: pop() </h3>");
+
+document.write('<p><code>');
+document.write('myArray.pop();');
+document.write('</code></p>');
+
+document.write("<h3>Array printed:</h3>");
+
+myArray.pop();
+document.write(printMyArray(myArray));
+
+// Change the 2nd element:
+document.write("<h3>Changing the 2nd element of an array:</h3>");
+
+document.write('<p><code>');
+document.write('myArray[1]="&lt;b&gt;a totally new color!&lt;/b&gt;";');
+document.write('</code></p>');
+
+document.write("<h3>Array printed:</h3>");
+
+myArray[1]="<b>a totally new color!</b>";
+document.write(printMyArray(myArray));
+
+// Print the array elements:
+document.write("<h3>Printing the elements of an array: for loop</h3>");
+
+document.write('<p><code style="display: block">');
+document.write('var i = 0;<br>');
+document.write('var result = "";<br><br>');
+document.write('for(i = 0; i < myArray.length; i++){<br>');
+document.write('&nbsp;&nbsp; result += myArray[i]+"&lt;br&gt;";<br>');
+document.write('}<br>');
+document.write('return result;<br>');
+document.write('</code></p>');
+
+
+</script>
+
+</body>
+</html>
