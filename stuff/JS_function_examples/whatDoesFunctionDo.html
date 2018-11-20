@@ -2,6 +2,14 @@
 <html>
 <head>
 <title>Stars</title>
+<style>
+.res{
+  color: red
+}
+button {
+  margin: 5px;
+}
+</style>
 
 <script>
 function f1(){
@@ -35,7 +43,7 @@ function f3(){
 function f4(){
   var result = "";
   var i = 0;
-  for (i = 0; i < 10; i=i+2){
+  for (i = 0; i < 7; i=i+2){
 	  result += "HA";
   }
   return result;
@@ -44,25 +52,64 @@ function f4(){
 function f5(){
   var result = "HA";
   var i = 0;
-  for (i = 0; i < 10; i++){
-	  result += result+"<br>";
+  for (i = 0; i < 3; i++){
+	  result += result;
+  }
+  return result;
+}
+
+//=================================================
+function f6(){
+  var result = "";
+  var i,j;
+  for (i = 0; i < 20; i++){
+    for (j = 0; j < 20; j++){
+  	  result ++;
+    }
   }
   return result;
 }
 //=================================================
+
+function showf1(){
+  document.getElementById("result").innerHTML =
+    "<h1>Function f1: <span class='res'>" + f1() + "</span></h1>";
+}
+function showf2(){
+  document.getElementById("result").innerHTML =
+    "<h1>Function f2: <span class='res'>" + f2() + "</span></h1>";
+}
+function showf3(){
+  document.getElementById("result").innerHTML =
+    "<h1>Function f3: <span class='res'>" + f3() + "</span></h1>";
+}
+function showf4(){
+  document.getElementById("result").innerHTML =
+    "<h1>Function f4: <span class='res'>" + f4() + "</span></h1>";
+}
+function showf5(){
+  document.getElementById("result").innerHTML =
+    "<h1>Function f5: <span class='res'>" + f5() + "</span></h1>";
+}
+function showf6(){
+  document.getElementById("result").innerHTML =
+    "<h1>Function f6: <span class='res'>" + f6() + "</span></h1>";
+}
+function clearIt(){
+  document.getElementById("result").innerHTML ="";
+}
 </script>
 </head>
 
 <body>
-<h2>To use a function to repeatedly print a text line (a string).</h2>
 
-<script>
-// Here you call the function to make work.
-document.write("<h1>Function f1:" + f1() + "</h1>");
-document.write("<h1>Function f2:" + f2() + "</h1>");
-document.write("<h1>Function f3:" + f3() + "</h1>");
-document.write("<h1>Function f4:" + f4() + "</h1>");
-</script>
-
+<button onclick="showf1()">Show result of f1</button><br>
+<button onclick="showf2()">Show result of f2</button><br>
+<button onclick="showf3()">Show result of f3</button><br>
+<button onclick="showf4()">Show result of f4</button><br>
+<button onclick="showf5()">Show result of f5</button><br>
+<button onclick="showf6()">Show result of f6</button><br>
+<button onclick="clearIt()">Clear all</button><br>
+<div id="result"></div>
 </body>
 </html>

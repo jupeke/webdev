@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Function</title>
+
+<script>
+// Returns a string containing all the elements in the array (provided
+// the elements are simple values like strings or numbers)
+function printMyArray(myArray){
+  var i = 0;
+  var result = "";
+
+  for(i=0; i < myArray.length; i++){
+    result += myArray[i]+"<br>";
+  }
+  return result+"<br><br>";
+}
+
+// Adds number of random numbers to the myArray and returns it.
+function fillMyArray(number, myArray){
+  var i;
+
+  for(i=0; i < number; i++){
+    result += myArray[i]+"<br>";
+  }
+  return result+"<br><br>";
+}
+
+</script>
+</head>
+
+<body>
+<h2>How to use an array:</h2>
+
+<script>
+document.write("Creating an array with 1000 numbers:<br><br>");
+var myArray = ["blue", "pink", "white"];
+document.write(printMyArray(myArray));
+
+
+</script>
+
+</body>
+</html>
