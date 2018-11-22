@@ -134,13 +134,14 @@ function clearIt(){
   document.getElementById("result").innerHTML ="";
 }
 
-function createButtons(){
+function createCodesAndButtons(){
   var html = "";
   var i;
   for (i=0; i<10; i++){
      var functionNumber = i+1;
-     html += '<button onclick="show('+functionNumber+')">'+
-              'Show result of function f'+functionNumber+'</button>';
+     html += '<div><button onclick="show('+functionNumber+')">'+
+              'Show result of function f'+functionNumber+'</button>';//+
+              //f1.toString()+'</div>';
   }
   document.getElementById("buttons").innerHTML = html;
 }
@@ -148,7 +149,7 @@ function createButtons(){
 </script>
 </head>
 
-<body onload="createButtons()">
+<body onload="createCodesAndButtons()">
 <h1>What does function do?</h1>
 <p>Open the source code of this page (for instance: right-click -> View Page Source)
 and try to figure out the return values of the
