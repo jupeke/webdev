@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Stars</title>
+<title>Logique</title>
 <style>
 .res{
   color: red
@@ -12,6 +12,10 @@ button {
 </style>
 
 <script>
+//============================================================
+//=============== Figure out what function returns =============
+//============================================================
+
 function f1(){
   var result = "";
   var i = 0;
@@ -48,6 +52,7 @@ function f4(){
   }
   return result;
 }
+
 //=================================================
 function f5(){
   var result = "HA";
@@ -70,10 +75,52 @@ function f6(){
   return result;
 }
 //=================================================
-
-function showf1(){
+function f7(){
+  var result = "";
+  var i = 0;
+  for (i = 0; i < 10; i=i+4){
+	  result += "HA";
+  }
+  return result;
+}
+//=========================================================
+function f8(){
+  var result = "";
+  var i = 0;
+  for (i = 0; i === 3 ; i++){
+	  result += "HA";
+  }
+  return result;
+}
+//=========================================================
+function f9(){
+  var result = "";
+  var i = 0;
+  for (i = 5; i > 1; i--){
+	  result += "HA";
+  }
+  return result;
+}
+//=========================================================
+function f10(){
+  var result = "";
+  var asterisk = "*";
+  var i = 0;
+  for (i = 0; i < 20; i++){
+    result += "<br>";
+    for (j = 0; j < i; j++){
+  	  result += asterisk;
+    }
+  }
+  return result;
+}
+//============================================================
+//=============== End of logical tasks ======================
+//============================================================
+var functions = [f1(), f2(), f3(), f4(), f5(), f6(), f7(), f8(), f9(), f10()];
+function show(number){
   document.getElementById("result").innerHTML =
-    "<h1>Function f1: <span class='res'>" + f1() + "</span></h1>";
+    "<h1>Function f"+number+": <span class='res'>" + functions[number-1] + "</span></h1>";
 }
 function showf2(){
   document.getElementById("result").innerHTML =
@@ -95,6 +142,10 @@ function showf6(){
   document.getElementById("result").innerHTML =
     "<h1>Function f6: <span class='res'>" + f6() + "</span></h1>";
 }
+function showf6(){
+  document.getElementById("result").innerHTML =
+    "<h1>Function f6: <span class='res'>" + f6() + "</span></h1>";
+}
 function clearIt(){
   document.getElementById("result").innerHTML ="";
 }
@@ -103,7 +154,7 @@ function clearIt(){
 
 <body>
 
-<button onclick="showf1()">Show result of f1</button><br>
+<button onclick="show(1)">Show result of f1</button><br>
 <button onclick="showf2()">Show result of f2</button><br>
 <button onclick="showf3()">Show result of f3</button><br>
 <button onclick="showf4()">Show result of f4</button><br>
