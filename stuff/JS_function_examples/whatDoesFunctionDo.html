@@ -13,8 +13,9 @@ button {
 body{
   line-height: 110%;
 }
-.sourceCode{
-
+code{
+  color: green;
+  font-size: 110%;
 }
 </style>
 
@@ -155,11 +156,18 @@ function createCodesAndButtons(){
   document.getElementById("content").innerHTML = html;
 }
 
+function showSourceCode(func, id){
+  code =
+  '<pre><code id="code'+funcNumb+'">'+
+    encodeURI(functions[i].toString())+
+  '</code></pre>'
+}
+
 </script>
 </head>
 
 <body onload="createCodesAndButtons()">
-<h1>What does function do?</h1>
+<h1>What does the function return?</h1>
 <p>Try to figure out the return value of each function. Check then by
   clicking the show button. </p>
 <button onclick="clearIt()">Clear all results</button>
