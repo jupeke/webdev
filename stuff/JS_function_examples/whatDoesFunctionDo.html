@@ -13,6 +13,9 @@ button {
 body{
   line-height: 110%;
 }
+.sourceCode{
+
+}
 </style>
 
 <script>
@@ -121,13 +124,14 @@ function f10(){
 //============================================================
 //=============== End of logical tasks ======================
 //============================================================
-var functions = [f1(), f2(), f3(), f4(), f5(), f6(), f7(), f8(), f9(), f10()];
+var functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10];
 
 // Shows the return value of the function. Parameter number defines the function.
 function show(number){
-  document.getElementById("result").innerHTML =
+  var idValue = "result"+number;
+  document.getElementById(idValue).innerHTML =
     "<h1>Function f"+number+": <span class='res'>" +
-      functions[number-1] + "</span></h1>";
+      functions[number-1]() + "</span></h1>";
 }
 
 function clearIt(){
@@ -138,12 +142,16 @@ function createCodesAndButtons(){
   var html = "";
   var i;
   for (i=0; i<10; i++){
-     var functionNumber = i+1;
-     html += '<div><button onclick="show('+functionNumber+')">'+
-              'Show result of function f'+functionNumber+'</button>';//+
-              //f1.toString()+'</div>';
+     var funcNumb = i+1;
+     html += '<h2>Function f'+funcNumb+':</h2>'+
+              '<pre><code class="sourceCode" id="code'+funcNumb+'">'+
+                functions[i].toString()+
+              '</code></pre>'+
+              '<div><button onclick="show('+funcNumb+')">'+
+                 'Show result of function f'+funcNumb+'</button></div>'+
+              '<div id="result'+funcNumb+'"></div>';
   }
-  document.getElementById("buttons").innerHTML = html;
+  document.getElementById("content").innerHTML = html;
 }
 
 </script>
@@ -151,11 +159,9 @@ function createCodesAndButtons(){
 
 <body onload="createCodesAndButtons()">
 <h1>What does function do?</h1>
-<p>Open the source code of this page (for instance: right-click -> View Page Source)
-and try to figure out the return values of the
-functions f1-f10. Check then by clicking the corresponding button. </p>
+<p>Try to figure out the return value of the each
+function. Check then by clicking the show button. </p>
 <button onclick="clearIt()">Clear results</button>
-<div id="buttons"></div>
-<div id="result"></div>
+<div id="content"></div>
 </body>
 </html>
