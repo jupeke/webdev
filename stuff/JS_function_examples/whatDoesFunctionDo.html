@@ -27,17 +27,16 @@ function f1(){
   var result = "";
   var i = 0;
   for (i = 0; i < 3; i++){
-	  result += "HA";
+    result += "HA";
   }
   return result;
 }
 //===========================================================
 function f2(){
-
   var result = 0;
   var i = 0;
   for (i = 0; i < 10; i++){
-	  result = i;
+    result = i;
   }
   return result;
 }
@@ -46,7 +45,7 @@ function f3(){
   var result = 0;
   var i = 0;
   for (i = 0; i < 4; i++){
-	  result += i;
+    result += i;
   }
   return result;
 }
@@ -55,7 +54,7 @@ function f4(){
   var result = "";
   var i = 0;
   for (i = 0; i < 7; i=i+2){
-	  result += "HA";
+    result += "HA";
   }
   return result;
 }
@@ -65,7 +64,7 @@ function f5(){
   var result = "HA";
   var i = 0;
   for (i = 0; i < 3; i++){
-	  result += result;
+    result += result;
   }
   return result;
 }
@@ -76,7 +75,7 @@ function f6(){
   var i,j;
   for (i = 0; i < 20; i++){
     for (j = 0; j < 20; j++){
-  	  result ++;
+      result ++;
     }
   }
   return result;
@@ -86,7 +85,7 @@ function f7(){
   var result = "";
   var i = 0;
   for (i = 0; i < 10; i=i+4){
-	  result += "HA";
+    result += "HA";
   }
   return result;
 }
@@ -95,7 +94,7 @@ function f8(){
   var result = "";
   var i = 0;
   for (i = 0; i != 3 ; i++){    // != means "not equal"
-	  result += "HA";
+    result += "HA";
   }
   return result;
 }
@@ -104,7 +103,7 @@ function f9(){
   var result = "";
   var i;
   for (i = 5; i > 1; i--){
-	  result += "HA";
+    result += "HA";
   }
   return result;
 }
@@ -116,7 +115,7 @@ function f10(){
   for (i = 0; i < 20; i++){
     result += "<br>";
     for (j = 0; j < i; j++){  // i changes, too!
-  	  result += asterisk;
+      result += asterisk;
     }
   }
   return result;
@@ -130,12 +129,14 @@ var functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10];
 function show(number){
   var idValue = "result"+number;
   document.getElementById(idValue).innerHTML =
-    "<h1>Function f"+number+": <span class='res'>" +
-      functions[number-1]() + "</span></h1>";
+    "<h2><span class='res'>" +
+      functions[number-1]() + "</span></h2>";
 }
 
 function clearIt(){
-  document.getElementById("result").innerHTML ="";
+  for (i=0; i<functions.length; i++){
+     document.getElementById("result"+(i+1)).innerHTML ="";
+   }
 }
 
 function createCodesAndButtons(){
@@ -143,8 +144,8 @@ function createCodesAndButtons(){
   var i;
   for (i=0; i<10; i++){
      var funcNumb = i+1;
-     html += '<h2>Function f'+funcNumb+':</h2>'+
-              '<pre><code class="sourceCode" id="code'+funcNumb+'">'+
+     html += '<hr><h2>Function f'+funcNumb+':</h2>'+
+              '<pre><code id="code'+funcNumb+'">'+
                 functions[i].toString()+
               '</code></pre>'+
               '<div><button onclick="show('+funcNumb+')">'+
@@ -159,9 +160,9 @@ function createCodesAndButtons(){
 
 <body onload="createCodesAndButtons()">
 <h1>What does function do?</h1>
-<p>Try to figure out the return value of the each
-function. Check then by clicking the show button. </p>
-<button onclick="clearIt()">Clear results</button>
+<p>Try to figure out the return value of each function. Check then by
+  clicking the show button. </p>
+<button onclick="clearIt()">Clear all results</button>
 <div id="content"></div>
 </body>
 </html>
