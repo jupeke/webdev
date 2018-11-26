@@ -7,6 +7,8 @@
 </head>
 
 <body>
+	<a href="../../index.html">Home</a>
+
 <script>
 
 // Creating of elements and attributes:
@@ -16,8 +18,8 @@ var bgcolor;	// Background Color of a square
 var size = 100;
 var sideLen = "8px";
 
-// This is otherwise ok but it does not always give a chess-board look. 
-// The look depends on the window width. 
+// This is otherwise ok but it does not always give a chess-board look.
+// The look depends on the window width.
 
 // Cells in a row:
 for(j=1; j<=size*size; j++){
@@ -33,13 +35,13 @@ document.body.style.lineHeight="0";
 
 // color: first even rows:
 if(i%2===0){
-	
+
 	// Even cells:
 	if(j%2===0){
 		bgcolor = "gray";
 	} else{
 		bgcolor = "black";
-  } 
+  }
 } else{	// odd rows:
 
 	// Even cells:
@@ -47,14 +49,14 @@ if(i%2===0){
 		bgcolor = "black";
 	} else{
 		bgcolor = "gray";
-  } 
-  
+  }
+
 }
 
 cell.style.backgroundColor=bgcolor;
 document.body.appendChild(cell);
-}	
-  
+}
+
 
 
 </script>

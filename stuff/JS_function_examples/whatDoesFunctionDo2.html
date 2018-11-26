@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Logique 2</title>
+<style>
+.res{
+  color: red
+}
+#header{
+  position: fixed;
+  top: 0;
+  height: 150px;
+  width: 100%;
+  background-color: white;
+  z-index: 1;
+}
+#content{
+  position: absolute;
+  top: 150px;
+}
+.codePlace{
+  background-color: #dfd;
+}
+button {
+  margin: 5px;
+  display: block;
+}
+body{
+  line-height: 110%;
+}
+code{
+  color: darkbrown;
+  font-size: 110%;
+}
+</style>
+
+<script>
+//===============================================================
+//=============== Functions to understand =======================
+// You can freely change the functions. Source code shown on the page
+// is always up-to-date because it's created dynamically (toString()).
+//===============================================================
+
+function f1(){
+  var result = "";
+  var i = 0;
+  for (i = 0; i < 3; i++){
+    result += "HA";
+  }
+  return result;
+}
+//===========================================================
+function f2(){
+  var result = 0;
+  var i = 0;
+  for (i = 0; i < 10; i++){
+    result = i;
+  }
+  return result;
+}
+//=======================================================
+function f3(){
+  var result = 0;
+  var i = 0;
+  for (i = 0; i < 4; i++){
+    result += i;
+  }
+  return result;
+}
+//=========================================================
+function f4(){
+  var result = "";
+  var i = 0;
+  for (i = 0; i < 7; i=i+2){
+    result += "HA";
+  }
+  return result;
+}
+
+//=================================================
+function f5(){
+  var result = "HA";
+  var i = 0;
+  for (i = 0; i < 3; i++){
+    result += result;
+  }
+  return result;
+}
+
+//=================================================
+function f6(){
+  var result = 0;
+  var i,j;
+  for (i = 0; i < 20; i++){
+    for (j = 0; j < 20; j++){
+      result ++;
+    }
+  }
+  return result;
+}
+//=================================================
+function f7(){
+  var result = "";
+  var i = 0;
+  for (i = 0; i < 10; i=i+4){
+    result += "HA";
+  }
+  return result;
+}
+//=========================================================
+function f8(){
+  var result = "";
+  var i = 0;
+  for (i = 0; i != 3 ; i++){    // != means "not equal"
+    result += "HA";
+  }
+  return result;
+}
+//=========================================================
+function f9(){
+  var result = "";
+  var i;
+  for (i = 5; i > 1; i--){
+    result += "HA";
+  }
+  return result;
+}
+//=========================================================
+function f10(){
+  var result = "";
+  const asterisk = "*";  // const refers to a constant value.
+  var i = 0;
+  for (i = 0; i < 20; i++){
+    result += "<br>";
+    for (j = 0; j < i; j++){  // i changes, too!
+      result += asterisk;
+    }
+  }
+  return result;
+}
+//============================================================
+//============================================================
+//=============== End of logical tasks ======================
+//============================================================
+
+// If you add a new function above, just add its name in the array below. That's it!
+var functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10];
+var headings = ["","","","","","","","","",""];
+
+// Shows the return value of the function. Parameter number defines the function.
+function show(number){
+  var idValue = "result"+number;
+  document.getElementById(idValue).innerHTML =
+    "<h2><span class='res'>" +
+      functions[number-1]() + "</span></h2>";
+}
+
+// Clears all the results.
+function clearIt(){
+  for (i=0; i<functions.length; i++){
+     document.getElementById("result"+(i+1)).innerHTML ="";
+   }
+}
+
+// Creates the html code to show the buttons and source codes.
+function createCodesAndButtons(){
+  var html = "";
+  var i, funcNumb, elemId;
+  for (i=0; i<functions.length; i++){
+     funcNumb = i+1;
+     elemId = "code"+funcNumb;
+     html += '<hr><h2>Function f'+funcNumb+':</h2>'+
+              showSourceCode(functions[i], elemId)+
+              '<button onclick="show('+funcNumb+')">'+
+                 'Show result of function f'+funcNumb+'</button>'+
+              '<div id="result'+funcNumb+'"></div>';
+  }
+  document.getElementById("content").innerHTML = html;
+}
+
+// Returns html with the source code embedded (encoded for special chars):
+function showSourceCode(func, elemId){
+  var code =
+    '<pre class="codePlace"><code id="'+elemId+'">'+
+      func.toString().replace(/</g, "&lt;")+
+    '</code></pre>';
+  return code;
+}
+
+</script>
+</head>
+
+<body onload="createCodesAndButtons()">
+  <div id="header"><h1>What does the function return?</h1>
+    <p>Try to figure out the return value of each function. Check then by
+      clicking the show button. </p>
+    <button onclick="clearIt()">Clear all results</button>
+    <a href="../../index.html">Home</a>
+  </div>
+  <div id="content"></div>
+</body>
+</html>
