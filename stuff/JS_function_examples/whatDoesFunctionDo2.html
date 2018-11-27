@@ -9,14 +9,14 @@
 #header{
   position: fixed;
   top: 0;
-  height: 150px;
+  height: 170px;
   width: 100%;
   background-color: white;
   z-index: 1;
 }
 #content{
   position: absolute;
-  top: 150px;
+  top: 170px;
 }
 .codePlace{
   background-color: #dfd;
@@ -26,7 +26,7 @@ button {
   display: block;
 }
 body{
-  line-height: 110%;
+
 }
 code{
   color: darkbrown;
@@ -132,7 +132,7 @@ function f8(){
   var result = "";
   var i = 1;
   for (i = 1; i < 21; i++){
-    if((i % 2 === 0) && (i % 4 > 0)){   // "||" means "OR"
+    if((i % 2 === 0) && (i % 4 > 0)){   // "&&" means "AND"
       result += " piip ";
     } else{
       result += " "+i+" ";
@@ -143,21 +143,23 @@ function f8(){
 //=========================================================
 function f9(){
   var result = "";
-  var i;
-  for (i = 5; i > 1; i--){
-    result += "HA";
+  var i,j;
+  for (i = 0; i < 10; i++){
+    result += "<br>";
+    for (j = 0; j <= i; j++){
+      result += " "+(i+1)+" ";
+    }
   }
   return result;
 }
 //=========================================================
 function f10(){
   var result = "";
-  const asterisk = "*";  // const refers to a constant value.
-  var i = 0;
-  for (i = 0; i < 20; i++){
+  var i,j;
+  for (i = 0; i < 10; i++){
     result += "<br>";
-    for (j = 0; j < i; j++){  // i changes, too!
-      result += asterisk;
+    for (j = 0; j <= i; j++){
+      result += " "+(j+1)+" ";
     }
   }
   return result;
@@ -215,7 +217,7 @@ function showSourceCode(func, elemId){
 </head>
 
 <body onload="createCodesAndButtons()">
-  <div id="header"><h1>What does the function return (2)?</h1>
+  <div id="header"><h1>Logical Questions 2</h1>
     <p>Try to figure out the return value of each function. Check then by
       clicking the show button. </p>
     <button onclick="clearIt()">Clear all results</button>
