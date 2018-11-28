@@ -3,21 +3,56 @@
     <head>
         <meta charset="utf-8" />
         <title>Socket.io</title>
+        <script src="../helperFunctions.js"></script>
+        <script>
+        // This works (!), but may be clearer have the code
+        // at the end.
+        /*var send = function(){
+          var mess = document.getElementById("text").value;
+
+          // socket is availabe here, surprise!
+          socket.emit('messages',  mess);
+        };*/
+        </script>
+
     </head>
 
     <body>
         <h1>Communication avec socket.io !</h1>
+        <div>
+          <input id="text" type="text"/>
+          <button id="button" type="button" onclick="send()">
+            Renvoie
+          </button>
+        </div>
         <div id="messages"></div>
 
-        <script src="/socket.io/socket.io.js"></script>
+        <script src="socket.io/socket.io.js"></script>
         <script>
             var socket = io.connect('http://localhost:8082');
 
+            socket.on('connect', function(data) {
+              socket.emit('join', 'Hello World from client');
+            });
+
             // Quand le serveur renvoie un message de type "messages",
             // on le montre sur la page:
-            socket.on('messages', function(data){
-              document.getElementById("messages").innerHTML = data;
+            socket.on('message_from_server', function(data){
+              append("messages", data, false);
             });
+
+            // To react to a click (works):
+            /*document.getElementById("button").onclick =
+              function(){
+                var mess = document.getElementById("text").value;
+                socket.emit('messages',  mess);
+              };*/
+            // To react to a click (2nd way)
+            var send = function(){
+              var mess = document.getElementById("text").value;
+              alert("message="+mess);
+              socket.emit('messages',  mess);
+            };
         </script>
     </body>
 </html>

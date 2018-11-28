@@ -5,10 +5,10 @@
     function juu(numb, separ, str){
       var result = "";
       if(numb < 0){
-        result = "Silly number!";
+        result = "You are a silly fellow!";
       } else{
         for(var i=2; i<numb-1; i++){
-          result += str+separ;
+          result += str+separ+"ups";
         }
       }
       return result;
@@ -17,8 +17,8 @@
 </head>
 <body>
   <script>
-    document.write(juu(-4, " ", "Hihi")+"<br>");
-    document.write(juu(10, "huu", "Hihi")+"<br>");
+    document.write(juu(-4, "|", "Hihi")+"<br>");
+    document.write(juu(10, "PiiP", "Hihi")+"<br>");
     document.write(juu(10, "<br>", "Hihi")+"<br>");
   </script>
 
