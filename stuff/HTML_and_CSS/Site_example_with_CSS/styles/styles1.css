@@ -1,5 +1,5 @@
 body {
-  background-color: pink;
+  background-color: lightgreen;
   font-size: 150%;
 }
 
@@ -10,6 +10,9 @@ h1 {
 p#first {
   color: #351;
   font-weight: bold;
-  background-color: red;
-  padding: 40px;
+  background-color: pink;
+  padding: 20px;
+}
+.important{
+  color: red;
 }
