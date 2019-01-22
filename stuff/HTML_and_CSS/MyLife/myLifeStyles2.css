@@ -1,0 +1,49 @@
+* {
+    /* Forces padding and margin inside the element if possible */
+    box-sizing: border-box;
+}
+
+body{
+  background-color: #ada;
+  font-size: 120%;
+}
+
+#titleBar {
+    background-color: #4a4;
+    text-align:center;
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+#linkBar {
+    background-color: #8f8;
+    width: 200px;
+    height: 100%;
+    float: right;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+#mainContent {
+    background-color: #dfd;
+    padding: 10px;
+    margin: 10px;
+    /*width: auto;*/
+    float: right;
+    left: 230px;
+    border-radius: 10px;
+}
+
+#linkBar a:link {text-decoration: none;}
+#linkBar a:visited {text-decoration: none;}
+#linkBar a:hover {background-color: #ada;}
+#linkBar a:active {background-color: gray;}
+#linkBar a {
+  padding: 10px;
+  display: block;
+  border-radius: 10px;
+}
