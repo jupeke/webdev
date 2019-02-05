@@ -1,7 +1,7 @@
-* {
-    /* Forces padding and margin inside the element if possible */
+/** {
+    /* Forces padding and margin inside the element if possible *
     box-sizing: border-box;
-}
+}*/
 
 body{
   background-color: #ada;
@@ -46,9 +46,6 @@ table td{
   text-align: center;
 }
 
-div.class{
-  display: inline-block;
-}
 .center{
   text-align:center;
 }
@@ -65,4 +62,47 @@ div.class{
   padding: 10px;
   display: block;
   border-radius: 10px;
+}
+
+/* These make the image grid: */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+  flex: 25%;
+  max-width: 25%;
+  padding: 0 4px;
+  text-align: center;
+}
+
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+
+.itext{
+  display: inline-block;
+  background-color: #ada;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+  .column {
+    flex: 50%;
+    max-width: 50%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    flex: 100%;
+    max-width: 100%;
+  }
 }
