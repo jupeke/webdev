@@ -1,7 +1,7 @@
-/** {
-    /* Forces padding and margin inside the element if possible *
+* {
+    /* Forces padding and margin inside the element if possible */
     box-sizing: border-box;
-}*/
+}
 
 body{
   background-color: #ada;
@@ -11,7 +11,7 @@ body{
 #titleBar {
     background-color: #4a4;
     text-align:center;
-    width: 100%;
+    width: auto;
     padding: 10px;
     margin: 10px;
     border-radius: 10px;
@@ -19,10 +19,11 @@ body{
 
 #linkBar_bottom {
     background-color: #8f8;
-    width: 100%;
+    /*width: 100%;*/
     padding: 10px;
     margin: 10px;
     border-radius: 10px;
+    text-align:center;
 }
 #linkBar {
     background-color: #8f8;
@@ -41,9 +42,21 @@ body{
     float: left;
     border-radius: 10px;
 }
+#mainContent_wide {
+    background-color: #dfd;
+    padding: 10px;
+    margin: 10px;
+    width: auto;
+    border-radius: 10px;
+    text-align:center;
+}
 
 table td{
   text-align: center;
+}
+table{
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .center{
@@ -61,6 +74,12 @@ table td{
 #linkBar a, #linkBar_bottom a {
   padding: 10px;
   display: block;
+  border-radius: 10px;
+}
+
+#linkBar_bottom a {
+  padding: 10px;
+  display: inline-block;
   border-radius: 10px;
 }
 
