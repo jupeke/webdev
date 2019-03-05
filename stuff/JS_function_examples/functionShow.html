@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Logique</title>
+<title>Function Show</title>
 <style>
 .res{
   color: red
@@ -159,50 +159,75 @@ function f11(){
 // If you add a new function above, just add its name in this array. That's it!
 var functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11];
 
-// Shows the return value of the function. Parameter number defines the function.
-function showResult(number){
-  var idValue = "result"+number;
-  document.getElementById(idValue).innerHTML =
-    "<h2><span class='res'>" +
-      functions[number-1]() + "</span></h2>";
-}
-
-// Clears all the results.
-function clearIt(){
-  for (i=0; i<functions.length; i++){
-     document.getElementById("result"+(i+1)).innerHTML ="";
-   }
-}
-
-// Creates the html code to show the buttons and source codes.
-function createCodesAndButtons(){
-  var html = "";
-  var i, count, elemId;
-  for (i=0; i<functions.length; i++){
-     count = i+1;
-     elemId = "code"+count;
-     html += '<hr><h2>Function number '+count+' ('+functions[i].name+'):</h2>'+
-              showSourceCode(functions[i], elemId)+
-              '<button onclick="showResult('+count+')">'+
-                 'Show result of function '+functions[i].name+'</button>'+
-              '<div id="result'+count+'"></div>';
+/**
+  This class has all the methods for showing function features like code, name
+  or return value.
+*/
+class FunctionShow {
+  constructor(funcArray){
+    this.funcArray = funcArray;
   }
-  document.getElementById("content").innerHTML = html;
+
+  getFuncArray(){
+    return this.funcArray;
+  }
+  setFuncArray(newArr){
+    if(newArr){
+      this.funcArray = newArr;
+    }
+  }
+
+  // Shows the return value of the function. Parameter number defines the function.
+  showResult(number){
+    var idValue = "result"+number;
+    document.getElementById(idValue).innerHTML =
+      "<h2><span class='res'>" +
+        functions[number-1]() + "</span></h2>";
+  }
+
+  // Clears all the results.
+  clearIt(){
+    for (i=0; i<functions.length; i++){
+       document.getElementById("result"+(i+1)).innerHTML ="";
+     }
+  }
+
+  // Creates the html code to show the buttons and source codes.
+  createCodesAndButtons(){
+    var html = "";
+    var i, count, elemId;
+    for (i=0; i<this.getFuncArray().length; i++){
+       count = i+1;
+       elemId = "code"+count;
+       html += '<hr><h2>Function number '+count+' ('+this.funcArray[i].name+'):</h2>'+
+                this.showSourceCode(this.funcArray[i], elemId)+
+                '<button onclick="showResult('+count+')">'+
+                   'Show result of function '+this.funcArray[i].name+'</button>'+
+                '<div id="result'+count+'"></div>';
+    }
+    document.getElementById("content").innerHTML = html;
+  }
+
+  // Returns html with the source code embedded (encoded for special chars):
+  showSourceCode(func, elemId){
+    var code =
+      '<pre class="codePlace"><code id="'+elemId+'">'+
+        func.toString().replace(/</g, "&lt;")+
+      '</code></pre>';
+    return code;
+  }
+
 }
 
-// Returns html with the source code embedded (encoded for special chars):
-function showSourceCode(func, elemId){
-  var code =
-    '<pre class="codePlace"><code id="'+elemId+'">'+
-      func.toString().replace(/</g, "&lt;")+
-    '</code></pre>';
-  return code;
+function init(){
+  let fShow = new FunctionShow(functions);
+  fShow.createCodesAndButtons();
 }
 
 </script>
 </head>
 
-<body onload="createCodesAndButtons()">
+<body onload="init()">
   <div id="header"><h1>Logical Questions 1</h1>
     <p>Try to figure out the return value of each function. Check by
       clicking the button. </p>
