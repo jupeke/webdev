@@ -2,7 +2,9 @@
 <html>
 <head>
 <title>Function Show</title>
+<meta charset="UTF-8"> 
 <script src="../helperFiles/fShow.js"></script>
+<script src="../helperFiles/codeFormatter.js"></script>
 <style>
 .res{
   color: red
@@ -25,8 +27,7 @@
 <script>
 //===============================================================
 //=============== Functions to understand =======================
-// You can freely change the functions. Source code shown on the page
-// is always up-to-date because it's created dynamically.
+// You can freely change the functions.
 //===============================================================
 
 
@@ -103,7 +104,8 @@ var functions = [hihi, huhu, hehe, oho, f11];
 var fShow;
 
 function init(){
-  fShow = new FunctionShow(functions);
+  codeFormatter = new CodeFormatter();
+  fShow = new FunctionShow(functions, codeFormatter);
   fShow.createCodesAndButtons();
 }
 
