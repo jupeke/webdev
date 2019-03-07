@@ -39,4 +39,8 @@ class CodeFormatter {
     }
     return formattedCode;
   }
+
+  getSubstring(){
+    test.match(new RegExp(firstvariable + "(.*)" + secondvariable));
+  }
 }
