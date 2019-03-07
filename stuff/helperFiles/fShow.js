@@ -3,13 +3,16 @@
   or return value.
 */
 class FunctionShow {
-  constructor(funcArray){
+  constructor(funcArray, formatter){
     // The parameter value can be anything but an array only is handled. In any
     // case the funcArray parameter will be an array.
     if(Array.isArray(funcArray)){
       this.funcArray = funcArray;
     } else{
       this.funcArray = [];
+    }
+    if(formatter){
+      this.formatter = formatter;
     }
 
     this.codeStyle =
@@ -26,15 +29,7 @@ class FunctionShow {
     this.resStyle =
       "color: red;";
 
-    this.keywordStyle = "color: blue";
 
-    this.keyWords = [
-      "function",
-      "var",
-      "for",
-      "return",
-      ""
-    ]
   }
 
   getFuncArray(){
@@ -44,13 +39,6 @@ class FunctionShow {
     if(Array.isArray(newArr)){
       this.funcArray = newArr;
     }
-  }
-  // Colors keywords etc to make code nicer.
-  formatCode(codeBlock){
-    return codeBlock.
-      replace(/</g, "&lt;").
-      replace(/function/g,
-        "<span style='"+this.keywordStyle+"'>function</span>");
   }
 
   /* Adds a new function to the collection.  */
@@ -96,7 +84,7 @@ class FunctionShow {
   showSourceCode(func, elemId){
     var code =
       '<pre class="codePlace" style="'+this.codeStyle+'"><code id="'+elemId+'">'+
-        this.formatCode(func.toString())+
+        this.formatter.format(func.toString())+
       '</code></pre>';
     return code;
   }
