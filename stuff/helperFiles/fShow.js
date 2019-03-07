@@ -4,7 +4,6 @@
 */
 class FunctionShow {
   constructor(funcArray){
-
     // The parameter value can be anything but an array only is handled. In any
     // case the funcArray parameter will be an array.
     if(Array.isArray(funcArray)){
@@ -14,12 +13,28 @@ class FunctionShow {
     }
 
     this.codeStyle =
-      "background-color: #dfd; padding: 3px;line-height: 110%; color: brown;"+
-      "font-size: 110%; font-weight: 500" ;
+      "background-color: #eee; "+
+      "padding: 3px; "+
+      "line-height: 110%; "+
+      "color: black;"+
+      "font-size: 110%; "+
+      "font-weight: 400" ;
+
     this.btnStyle =
       "margin: 5px; display: block;";
+
     this.resStyle =
       "color: red;";
+
+    this.keywordStyle = "color: blue";
+
+    this.keyWords = [
+      "function",
+      "var",
+      "for",
+      "return",
+      ""
+    ]
   }
 
   getFuncArray(){
@@ -29,6 +44,13 @@ class FunctionShow {
     if(Array.isArray(newArr)){
       this.funcArray = newArr;
     }
+  }
+  // Colors keywords etc to make code nicer.
+  formatCode(codeBlock){
+    return codeBlock.
+      replace(/</g, "&lt;").
+      replace(/function/g,
+        "<span style='"+this.keywordStyle+"'>function</span>");
   }
 
   /* Adds a new function to the collection.  */
@@ -74,7 +96,7 @@ class FunctionShow {
   showSourceCode(func, elemId){
     var code =
       '<pre class="codePlace" style="'+this.codeStyle+'"><code id="'+elemId+'">'+
-        func.toString().replace(/</g, "&lt;")+
+        this.formatCode(func.toString())+
       '</code></pre>';
     return code;
   }
