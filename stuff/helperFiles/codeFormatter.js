@@ -30,6 +30,16 @@ class CodeFormatter {
       ">=",
       "<="
     ];
+
+    this.types = [
+      "keyword"=> 1,
+      "varname"=> 2,
+      "separator"=> 3,  // ({[]}); jne
+      "operator" => 4,   //= == === - -- + ++ < >= && || jne
+      "value" => 5,
+      "whitespace" => 6,
+      "fname" => 7
+    ];
   }
 
   getCode(){
@@ -98,5 +108,5 @@ class codeBit(){
     this.type = type;
   }
 
-  
+
 }
