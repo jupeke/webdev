@@ -90,3 +90,13 @@ class CodeFormatter {
     test.match(new RegExp(var1 + "(.*)" + var2));
   }
 }
+
+// Contains the atomic part of code and it's type
+class codeBit(){
+  constructor(codeStr, type){
+    this.codeStr = codeStr;
+    this.type = type;
+  }
+
+  
+}
