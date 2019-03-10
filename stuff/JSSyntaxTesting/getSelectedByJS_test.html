@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+  function getSel(){
+    var val = "unknown";
+    var elem = document.getElementById("piip");
+    if(elem){
+    	val = elem.options[elem.selectedIndex].value;
+    }
+    alert(val);
+  }
+  </script>
+</head>
+<body>
+
+
+<select id="piip">
+  <option value="1">Volvo</option>
+  <option value="2">Saab</option>
+  <option value="3">VW</option>
+  <option value="4" selected="selected">Audi</option>
+</select>
+
+<button onclick="getSel()">GetSelectedValue</button>
+
+
+</body>
+</html>
