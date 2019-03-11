@@ -20,17 +20,16 @@
     var text = "";
     var elem = document.getElementById("piip");
     if(elem){
-    	val = elem.options[elem.selectedIndex].value;
+    	val = elem.options[elem.selectedIndex].value; // Recommended (cross-br)
       text = elem.options[elem.selectedIndex].text;
     }
 
     var result =
       "elem.options[elem.selectedIndex].value = "+val+ "\r\n"+
-      "getSelVal functionens return value = "+getSelVal("piip")+ "\r\n"+
+      "getSelVal function's return value = "+getSelVal("piip")+ "\r\n"+
       "elem.value = "+elem.value+ "\r\n"+
-      "elem.text = "+elem.text+ "\r\n"+
+      "elem.text = "+elem.text+ "\r\n"+ // This is undefined in Chrome
       "elem.options[elem.selectedIndex].text = "+text;
-
 
     alert(result);
   }
