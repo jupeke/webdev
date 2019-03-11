@@ -2,13 +2,37 @@
 <html>
 <head>
   <script>
+  function getSelVal(elemID){
+    var val = "undefined";
+    var elem = document.getElementById(elemID);
+    if (elem){
+      for(var i=0; i < elem.options.length; i++){
+        val = elem.options[i];
+        if(val.selected === true){
+          break;
+        }
+      }
+    }
+    return val.value;
+  }
   function getSel(){
     var val = "unknown";
+    var text = "";
     var elem = document.getElementById("piip");
     if(elem){
     	val = elem.options[elem.selectedIndex].value;
+      text = elem.options[elem.selectedIndex].text;
     }
-    alert(val);
+
+    var result =
+      "elem.options[elem.selectedIndex].value = "+val+ "\r\n"+
+      "getSelVal functionens return value = "+getSelVal("piip")+ "\r\n"+
+      "elem.value = "+elem.value+ "\r\n"+
+      "elem.text = "+elem.text+ "\r\n"+
+      "elem.options[elem.selectedIndex].text = "+text;
+
+
+    alert(result);
   }
   </script>
 </head>
@@ -22,7 +46,7 @@
   <option value="4" selected="selected">Audi</option>
 </select>
 
-<button onclick="getSel()">GetSelectedValue</button>
+<button onclick="getSel()">Test</button>
 
 
 </body>
