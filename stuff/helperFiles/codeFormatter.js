@@ -15,6 +15,7 @@ class CodeFormatter {
       "if",
       "else"
     ];
+
     this.operators = [
       "+",
       "++",
