@@ -7,6 +7,7 @@ class CodeFormatter {
     this.operatorStyle ="color: green";
 
     this.keywords = [
+      "const",
       "function",
       "var",
       "for",
