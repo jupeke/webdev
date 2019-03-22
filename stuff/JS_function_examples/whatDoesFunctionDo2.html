@@ -2,7 +2,9 @@
 <html>
 <head>
 <title>Logique 2</title>
+<meta charset="UTF-8">
 <script src="../helperFiles/fShow.js"></script>
+<script src="../helperFiles/codeFormatter.js"></script>
 <style>
 
 #header{
@@ -158,8 +160,11 @@ function f10(){
 
 // If you add a new function above, just add its name in the array below. That's it!
 var functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10];
+var fShow;
+
 function init(){
-  fShow = new FunctionShow(functions);
+  codeFormatter = new CodeFormatter();
+  fShow = new FunctionShow(functions, codeFormatter);
   fShow.createCodesAndButtons();
 }
 
