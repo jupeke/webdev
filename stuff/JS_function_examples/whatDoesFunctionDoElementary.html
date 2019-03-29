@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Logique</title>
+<meta charset="UTF-8">
+<script src="../helperFiles/fShow.js"></script>
+<script src="../helperFiles/codeFormatter.js"></script>
+<style>
+#header{
+  position: fixed;
+  top: 0;
+  height: 150px;
+  width: 100%;
+  background-color: white;
+  z-index: 1;
+}
+#content{
+  position: absolute;
+  top: 150px;
+}
+</style>
+
+<script>
+//===============================================================
+//=============== Functions to understand =======================
+// You can freely change the functions. Source code shown on the page
+// is always up-to-date because it's created dynamically.
+//===============================================================
+
+function f1(){
+  return "Hello world!";
+}
+//===========================================================
+function f2(){
+  var result = "Hello world!";
+  return result;
+}
+//=======================================================
+function f3(){
+  var string1 = "Hello";
+  var string2 = " world!";
+  return string1 + string2;
+}
+//=========================================================
+function f4(){
+  var numb1 = 3;
+  var numb2 = 4;
+  var product = numb1 * numb2;
+  var message = "Product of "+numb1+" and "+numb2+
+                " equals " + product;
+  return message;
+}
+
+//=================================================
+function f5(){
+  var result = "";
+  var max = 10;
+  var i = 0;
+  for (i = 0; i < max; i++){
+    result += i;
+  }
+  return result;
+}
+
+//=================================================
+function f6(){
+  var result = "";
+  var max = 10;
+  var i = 0;
+  for (i = 0; i < max; i++){
+    result += i+"<br>";
+  }
+  return result;
+}
+//=================================================
+function f7(){
+  var result = "";
+  var max = 10;
+  for (var i = 5; i < max; i++){
+    result += i+"<br>";
+  }
+  return result;
+}
+//=========================================================
+function f8(){
+  var result = "";
+  var max = 10;
+  for (var i = max; i > 0; i--){
+    result += i+"<br>";
+  }
+  return result;
+}
+//=========================================================
+function f9(){
+  var result = "";
+  var max = 10;
+  for (var i = max; i > 0; i=i-2){
+    result += i+"<br>";
+  }
+  return result;
+}
+//=========================================================
+function f10(){
+  var result = "";
+  const asterisk = "*";  // const refers to a constant value.
+  var i,j;
+  for (i = 0; i < 20; i++){
+    result += "<br>";
+    for (j = 0; j < 20; j++){  // i changes, too!
+      result += asterisk;
+    }
+  }
+  return result;
+}
+//============================================================
+
+//=============== End of logical tasks ======================
+//============================================================
+
+// If you add a new function above, just add its name in this array. That's it!
+var functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10];
+var fShow;
+
+function init(){
+  codeFormatter = new CodeFormatter();
+  fShow = new FunctionShow(functions, codeFormatter);
+  fShow.createCodesAndButtons();
+}
+
+</script>
+</head>
+
+<body onload="init()">
+  <div id="header"><h1>Logical Questions 1</h1>
+    <p>Try to figure out the return value of each function. Check by
+      clicking the button. </p>
+    <button onclick="fShow.clearIt()">Clear all results</button>
+    <a href="../../index.html">Home</a>
+  </div>
+  <div id="content"></div>
+</body>
+</html>

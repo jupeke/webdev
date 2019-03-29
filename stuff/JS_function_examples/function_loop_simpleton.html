@@ -4,19 +4,19 @@
 <title>Stars</title>
 
 <script>
-function printMyLines(textToRepeat, soManyTimes){
+function test(textToRepeat, soManyTimes){
 
-  // Variables: always a good practise to declare them at the beginning.
+  // Variables: always a good practise to declare
+  // them at the beginning.
   var result = "";
   var i = 0;
 
-
   // The loop: repeating itself soManyTimes!
   for (i = 0; i < soManyTimes; i++){
-    // Adds to result a new textToRepeat and a line brake.
-	  result += textToRepeat+"<br>";
-  }
 
+    // Adds to result a new textToRepeat and a line brake.
+	  result += textToRepeat;
+  }
   return result;
 }
 </script>
@@ -27,7 +27,7 @@ function printMyLines(textToRepeat, soManyTimes){
 
 <script>
 // Here you call the function to make work.
-document.write(printMyLines("Hi",30));
+document.write(test("This is easy!",5));
 </script>
 
 </body>
