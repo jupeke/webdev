@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+function multiply(){
+
+  let result = "";
+
+  // Gets the value of the text field:
+  var numb1 = document.getElementById('number1').value;
+  var numb2 = document.getElementById('number2').value;
+
+  result = numb1 * numb2;
+
+  // Writes the result in the div with id "result":
+  document.getElementById('result').innerHTML = result;
+}
+</script>
+
+<body>
+
+<h1>Multiplicator</h1>
+<p> Write two numbers in the text fields and click the button. </p>
+
+<span>Number 1: </span><input type="text" id="number1"><br>
+<span>Number 2: </span><input type="text" id="number2"><br>
+
+<button onclick="multiply()">Multiply</button>
+
+<p> Product:</p>
+
+<div id="result"> </div>
+
+</body>
+
+</html>
