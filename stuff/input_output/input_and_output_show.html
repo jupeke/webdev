@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+  body { font-size:200%;}
+  input { font-size:100%;}
+  button {font-size: 100%}
 
+</style>
 <script>
 function repeatMe(){
 
   // Gets the value of the text field:
-  var val = document.getElementById('inputField').value;
 
   // Writes the comment in the div with id "result":
-  document.getElementById('result').innerHTML = "You typed: "+val;
+
 }
 </script>
 </head>
@@ -18,10 +22,7 @@ function repeatMe(){
 <h1>Input and output</h1>
 <p> Write something in the text field and click the button.</p>
 
-<input type="text" id="inputField">
-<button onclick="repeatMe()">Click me!</button>
 
-<p> Output:</p>
 
 <div id="result">
 
