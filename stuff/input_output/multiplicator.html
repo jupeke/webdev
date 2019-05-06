@@ -3,15 +3,17 @@
 <head>
 
 <script>
-function multiply(){
+function multiply(a, b){
+  return a * b;
+}
 
-  let result = "";
+function main(){
 
-  // Gets the value of the text field:
+  // The values of the text fields:
   var numb1 = document.getElementById('number1').value;
   var numb2 = document.getElementById('number2').value;
 
-  result = numb1 * numb2;
+  var result = multiply(numb1, numb2);
 
   // Writes the result in the div with id "result":
   document.getElementById('result').innerHTML = result;
@@ -26,12 +28,9 @@ function multiply(){
 <p><span>Number 1: </span><input type="text" id="number1"></p>
 <p><span>Number 2: </span><input type="text" id="number2"></p>
 
-<button onclick="multiply()">Multiply</button>
+<button onclick="main()">Multiply</button>
 
-<p> Product:</p>
-
-<div id="result"> </div>
+<p> Product: <span id="result"> </span></p>
 
 </body>
-
 </html>
