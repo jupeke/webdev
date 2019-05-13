@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Stars</title>
+<script>
+  function activatePencil(){
+
+  }
+  class Point {
+    constructor(x,y,size,color){
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color =color;
+
+      this.createElem();
+    }
+
+    createElem(){
+      // Creates a new div element:
+    	var div = document.createElement("div");
+    	div.style.display = "inline-block";
+    	div.style.height = size+"px";
+    	div.style.width = size+"px";
+    	div.style.margin="5px";
+    	div.style.backgroundColor=color;
+
+      // Appends new element to the end of body:
+    	document.body.appendChild(div);
+    }
+  }
+</script>
+</head>
+
+<body onload="init()" on onclick="newPoint"></body>
+</html>
