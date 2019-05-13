@@ -1,29 +1,63 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Stars</title>
+<title>Drawing</title>
+<style>
+  #myCanvas{
+    position: absolute;
+    left: 0;
+    top:0;
+    height: 100%;
+    width: 100%;
+    background-color: #fcc;
+  }
+  .point{
+    position: absolute;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+  }
+</style>
 <script>
-  function activatePencil(){
-
+  var mousedown = false;
+  function mouseUp(event){
+    mousedown = false;
+    alert("mouse is up");
+  }
+  function mouseDown(event){
+    mousedown = true;
+    alert("mouse is down");
+  }
+  function addPoint(event){
+    var canvas = document.getElementById("myCanvas");
+    if(mousedown){
+      var x = event.clientX;
+      var y = event.clientY;
+      var size = 20;
+      var color = "red";
+      //alert("x="+x+" and y="+y);
+      var point = new Point(x, y, size, color);
+    }
   }
   class Point {
     constructor(x,y,size,color){
-      this.x = x;
-      this.y = y;
+      this.x = x-parseInt(size/2);
+      this.y = y-parseInt(size/2);
       this.size = size;
       this.color =color;
-
       this.createElem();
     }
 
     createElem(){
       // Creates a new div element:
     	var div = document.createElement("div");
-    	div.style.display = "inline-block";
-    	div.style.height = size+"px";
-    	div.style.width = size+"px";
-    	div.style.margin="5px";
-    	div.style.backgroundColor=color;
+      div.className = "point";
+      div.style.left = this.x+"px";
+      div.style.top = this.y+"px";
+    	div.style.height = this.size+"px";
+    	div.style.width = this.size+"px";
+      div.style.borderRadius = parseInt(this.size/2)+"px";
+    	div.style.backgroundColor=this.color;
 
       // Appends new element to the end of body:
     	document.body.appendChild(div);
@@ -32,5 +66,9 @@
 </script>
 </head>
 
-<body onload="init()" on onclick="newPoint"></body>
+<body>
+  <div id="myCanvas" onmousemove="addPoint(event)"
+    onmousedown="mouseDown(event)" onmouseup="mouseUp(event)">
+  </div>
+</body>
 </html>
