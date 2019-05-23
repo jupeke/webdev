@@ -39,14 +39,13 @@ var imageSources =
 
 // Image class (ES6):
 class Anima {
-  var timer;
   constructor(imageSrc){
     this.htmlElem = document.getElementById('animation');
     this.timer = "";
   }
 
   // Shows a series of images that make the monster swallow:
-  swallow(){
+  animate(){
     var index = 0;
     var src = "";
 
@@ -72,20 +71,17 @@ class Anima {
 var anima;
 function show(){
   anima = new Anima();
-  anima.swallow();
+  anima.animate();
 }
 
 </script>
 
 <body>
 
-<h1>Input and output</h1>
-<p> Write something in the text field and click the button.</p>
+<h1>Animation</h1>
 
 <button onclick="show()">Show animation!</button>
 <button onclick="anima.stop()">Stop</button>
-
-<p> Output:</p>
 
 <img src="images/snowEaterSwallow1.png" id="animation"/>
 
