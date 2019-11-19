@@ -1,5 +1,6 @@
 body {
   background-color: lightblue;
+  font-size: 150%;
 }
 #intro{
   color: green;
@@ -7,4 +8,16 @@ body {
 .highlight{
   color: red;
   font-weight: bold;
+}
+
+.highlight:hover {
+  background-color: yellow;
+  font-size: 300%;
+  animation-name: example;
+  animation-duration: 1s;
+}
+
+@keyframes example {
+  from {font-size: 100%}
+  to {font-size: 300%}
 }
