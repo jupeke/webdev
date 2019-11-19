@@ -21,3 +21,13 @@ body {
   from {font-size: 100%}
   to {font-size: 300%}
 }
+
+a {
+  background-color: grey;
+  border-radius: 5px;
+  color: white;
+  padding: 8px 7px;
+  margin: 5px;
+  text-align: center;
+  display: inline-block;
+}
