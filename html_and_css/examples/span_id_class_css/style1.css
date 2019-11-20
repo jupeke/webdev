@@ -2,6 +2,18 @@ body {
   background-color: lightblue;
   font-size: 150%;
 }
+
+a {
+  background-color: grey;
+  border-radius: 5px;
+  color: white;
+  padding: 8px;
+  margin: 5px;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none
+}
+
 #intro{
   color: green;
 }
@@ -22,13 +34,4 @@ body {
   to {font-size: 200%; background-color: yellow;}
 }
 
-a {
-  background-color: grey;
-  border-radius: 5px;
-  color: white;
-  padding: 8px 7px;
-  margin: 5px;
-  text-align: center;
-  display: inline-block;
-  text-decoration: none
-}
+
