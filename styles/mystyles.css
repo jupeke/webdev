@@ -4,6 +4,17 @@ body {
   color: #668;
   font-family: sans-serif;
 }
+
+a.basic_inline {
+  background-color: grey;
+  border-radius: 5px;
+  color: white;
+  padding: 8px 7px;
+  margin: 5px;
+  text-align: center;
+  display: inline-block;
+}
+
 #maincontent {
   text-align: center;
 }

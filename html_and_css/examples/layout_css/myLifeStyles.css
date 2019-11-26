@@ -94,9 +94,10 @@ table{
 .column {
   flex: 25%;
   max-width: 25%;
-  padding: 0 4px;
-  margin: 10px;
+  padding: 0px;
+  margin: 0px;
   text-align: center;
+  background-color: #ada;
 }
 
 .column img {
@@ -111,7 +112,7 @@ table{
 }
 
 /* Responsive layout - makes a two column-layout instead of four columns */
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1000px) {
   .column {
     flex: 50%;
     max-width: 50%;
