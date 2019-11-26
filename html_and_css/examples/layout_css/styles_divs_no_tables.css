@@ -94,8 +94,8 @@ table{
 .column {
   flex: 25%;
   max-width: 25%;
-  padding: 0 4px;
-  margin: 10px;
+  padding: 0px;
+  margin: 0px;
   text-align: center;
 }
 
@@ -103,11 +103,13 @@ table{
   vertical-align: middle;
 }
 
-.itext{
+.myelem{
   display: inline-block;
   background-color: #ada;
-  padding: 5px;
+  margin: 20px;
   border-radius: 3px;
+  width: 200px;
+  height: 200px;
 }
 
 /* Responsive layout - makes a two column-layout instead of four columns */
