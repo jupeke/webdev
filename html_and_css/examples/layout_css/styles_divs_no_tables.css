@@ -17,7 +17,7 @@ body{
     border-radius: 10px;
 }
 
-#linkBar_bottom {
+#linkBar_top {
     background-color: #8f8;
     /*width: 100%;*/
     padding: 10px;
@@ -38,9 +38,11 @@ body{
 #mainContent {
     background-color: #dfd;
     padding: 10px;
-    margin: 10px;
+    width: 100%;
+    margin: 10px, auto;
     float: left;
     border-radius: 10px;
+    text-align: center;
 }
 #mainContent_wide {
     background-color: #dfd;
@@ -67,13 +69,18 @@ table{
 #linkBar a:visited {text-decoration: none;}
 #linkBar a:hover {background-color: #ada;}
 #linkBar a:active {background-color: gray;}
-#linkBar_bottom a:link {text-decoration: none;}
-#linkBar_bottom a:visited {text-decoration: none;}
-#linkBar_bottom a:hover {background-color: #ada;}
-#linkBar_bottom a:active {background-color: gray;}
-#linkBar a, #linkBar_bottom a {
+#linkBar_top a:link {text-decoration: none;}
+#linkBar_top a:visited {text-decoration: none;}
+#linkBar_top a:hover {background-color: #ada;}
+#linkBar_top a:active {background-color: gray;}
+#linkBar a, #linkBar_top a {
   padding: 10px;
   display: block;
+  border-radius: 10px;
+}
+#linkBar_top a {
+  padding: 10px;
+  display: inline-block;
   border-radius: 10px;
 }
 
@@ -92,14 +99,14 @@ table{
 
 /* Create four equal columns next to each other */
 .column {
-  flex: 25%;
-  max-width: 25%;
+  flex: 20%;
+  max-width: 20%;
   padding: 0px;
   margin: 0px;
   text-align: center;
 }
 
-.column img {
+.column div {
   vertical-align: middle;
 }
 
@@ -108,12 +115,26 @@ table{
   background-color: #ada;
   margin: 20px;
   border-radius: 10px;
-  width: 200px;
+  width: 300px;
   height: 200px;
 }
 
+@media screen and (max-width: 1300px) {
+  .column {
+    flex: 25%;
+    max-width: 25%;
+  }
+}
+
 /* Responsive layout - makes a two column-layout instead of four columns */
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1000px) {
+  .column {
+    flex: 33%;
+    max-width: 33%;
+  }
+}
+
+@media screen and (max-width: 700px) {
   .column {
     flex: 50%;
     max-width: 50%;
@@ -121,7 +142,7 @@ table{
 }
 
 /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 400px) {
   .column {
     flex: 100%;
     max-width: 100%;
