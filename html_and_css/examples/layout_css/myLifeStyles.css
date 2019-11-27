@@ -88,6 +88,7 @@ table{
   display: flex;
   flex-wrap: wrap;
   padding: 0 4px;
+  border-radius: 5px;
 }
 
 /* Create four equal columns next to each other */
@@ -102,6 +103,7 @@ table{
 
 .column img {
   vertical-align: middle;
+  padding: 10px;
 }
 
 .itext{

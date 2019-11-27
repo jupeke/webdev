@@ -115,8 +115,8 @@ table{
   background-color: #ada;
   margin: 20px;
   border-radius: 10px;
-  width: 300px;
-  height: 200px;
+  width: 200px;
+  height: 150px;
 }
 
 @media screen and (max-width: 1300px) {
@@ -134,7 +134,7 @@ table{
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   .column {
     flex: 50%;
     max-width: 50%;
@@ -142,7 +142,7 @@ table{
 }
 
 /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 600px) {
   .column {
     flex: 100%;
     max-width: 100%;
