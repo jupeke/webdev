@@ -1,3 +1,8 @@
+* {
+    /* Forces padding and margin inside the element if possible */
+    box-sizing: border-box;
+}
+
 body {
   background-color: lightgreen;
   font-size: 150%;
@@ -16,27 +21,37 @@ p#first {
 .important{
   color: red;
 }
-#header {
-    background-color: lightblue;
+#titleBar {
+    background-color: yellow;
     text-align:center;
-    width: 100%;
-    height: 60px;
+    height: 130px;
     border-radius: 10px;
     padding: 10px;
+    margin: 10px;
 }
 
-#links {
+#linkBar {
     background-color: gray;
     width: 200px;
-    height: 100%;
     float: left;
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px;
+    margin: 10px;
 }
 
 #mainContent {
-    background-color: pink;
+    background-color: #dfd;
     border-radius: 10px;
-    padding: 20px;
-    float:right;
+    padding: 10px;
+    float: left;
+    margin: 10px;
 }
+a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: white;
+  margin: 10px;
+}
+a:hover {background-color: lightgreen;}
