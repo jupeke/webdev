@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
 <title>Balls in baskets</title>
 <style>
-body {
-  background-color: lightgreen;
-  font-size: 110%;
-  color: brown;
-}
-#note{
-  background-color: #dfd;
-  border-radius: 10px;
-  padding:10px;
-}
+  body {
+    background-color: lightgreen;
+    font-size: 110%;
+    color: brown;
+  }
+  #note{
+    background-color: #dfd;
+    border-radius: 10px;
+    padding:10px;
+    margin:10px;
+  }
+  input {
+    maxlength="4";
+  }
 </style>
 
 <script>
@@ -92,6 +94,8 @@ function simulate(numbOfRepet, ballsInA, ballsInB, blackBallsInA, blackBallsInB)
   let basketB = new Basket("B", blackBallsInB, ballsInB);
   let currentBasket;
 
+
+
   for (let i=0; i < numbOfRepet; i++){
     let basketId = pickaBasket();
 
@@ -128,16 +132,37 @@ function simulate(numbOfRepet, ballsInA, ballsInB, blackBallsInA, blackBallsInB)
     "<b>Results of "+numbOfRepet+" tries:</b><br><br> "+
     "Number of black balls out of A: "+numberOfBlacksFromA+"<br>"+
     "Total number of black balls: "+numberOfBlacksTotal+" <br><br>"+
-    "Probability of the black ball having been in basket A is approximately "+
+    "Probability of the black ball having been in basket A is approximately <b>"+
     result+
-    " %.<br>";
+    " %</b>.<br>";
 
   return resultNicely;
 }
 
 function doSimulation(){
-  let result = simulate(100000, 10,2,1,2);
-  document.getElementById("simulation").innerHTML = result;
+  clearAll();
+  var reds_in_A = parseInt(document.getElementById("reds_in_A").value);
+  var whites_in_A = parseInt(document.getElementById("whites_in_A").value);
+  var reds_in_B = parseInt(document.getElementById("reds_in_B").value);
+  var whites_in_B = parseInt(document.getElementById("whites_in_B").value);
+  var numb_of_trials = parseInt(document.getElementById("numb_of_trials").value);
+
+  // Check:
+  if(isNaN(reds_in_A) ||
+    isNaN(reds_in_B) ||
+    isNaN(whites_in_A) ||
+    isNaN(whites_in_B) ||
+    isNaN(numb_of_trials)){
+
+    alert("Some input not good! Only integers are allowed!");
+  } else{
+    let result = simulate(numb_of_trials,
+                        whites_in_A + reds_in_A,
+                        whites_in_B + reds_in_B,
+                        reds_in_A,
+                        reds_in_B);
+    document.getElementById("simulation").innerHTML = result;
+  }
 }
 /*======================================================================
 ========================================================================
@@ -165,9 +190,9 @@ function testPickaBasket(elem){
     "<b>Test results of function 'pickaBasket()':</b><br><br> "+
     "A: "+resultsA.length+" times <br>"+
     "B: "+resultsB.length+" times <br>"+
-    "Probability of result A is about "+
+    "Probability of result A is about <b>"+
     Math.round(10000*(resultsA.length/(resultsA.length+resultsB.length)))/100+
-    " % <br>"+
+    " % </b><br>"+
     "Errors: "+errors.length+"<br><br>";
 
   // Prints the result on the screen:
@@ -241,34 +266,66 @@ function testPickaBall(elem){
 }
 
 function doTesting(){
+  clearAll();
   testPickaBasket("test");
   testgetRandBallNumber("test");
   testPickaBall('test');
 }
 
-
+function clearAll(){
+  document.getElementById("test").innerHTML = "";
+  document.getElementById("simulation").innerHTML = "";
+}
 
 </script>
 
 </head>
 
 <body>
-  <h1>Pick-a-ball Simulation</h1>
-<div id="note">
-  <p>Here we simulate the following situation: you randomly pick first a basket (of two baskets A ja B) and
-  then a ball out of that basket.<p>
-    <p> You see that the ball is black.<p>
-  <p>Which is the probability that the ball was in the basket A?<p>
+  <button onclick="doTesting()">Test methods</button>
+  <button onclick="clearAll()">Clear</button>
+  <div id='test'></div>
 
-  <p>The simulation idea: you pick a ball and save it's color and original basket. Repeat
-  the procedure numbOfRepet times. Then you count all the results with
-  black balls and out of them calculate the ratio of
-  #(blacks out of A) and #(all blacks).<p>
+  <h1>Pick-a-Ball Simulation</h1>
+<div id="note">
+  <p>Here we simulate the following situation: you randomly <b>select first
+    a basket</b> (of two baskets A ja B) and
+  <b>then pick a ball</b> out of that basket. In the baskets there are a certain number
+  of red balls and white balls.<p>
+    <p> You see that the ball you got is red.<p>
+  <p><b>Question:</b> which is the probability that the ball was
+    in the basket A?<p>
+
+  <p>The simulation idea: you pick a random ball from a random basket and save
+    the color and original basket of the ball. Repeat
+  the procedure a certain number of times. Then you count all
+  the results with red balls and calculate the ratio of
+  #(red balls out of A) and #(all red ones).<p>
 </div>
 
-<button onclick="doTesting()">Test methods</button>
-<button onclick="doSimulation()">Simulate picking a ball</button>
-<div id='test'></div>
+
+<p>Type values of your choice to the text fields below:</p>
+
+<table>
+<tr><td>Number of <b>red</b> balls in basket <b>A</b>:</td>
+  <td><input id="reds_in_A" type="text" size="9" maxlength="7"></td>
+</tr>
+<tr><td>Number of <b>white</b> balls in basket <b>A</b>:</td>
+  <td><input id="whites_in_A" type="text" size="9" maxlength="7"></td>
+</tr>
+<tr><td>Number of <b>red</b> balls in basket <b>B</b>:</td>
+  <td><input id="reds_in_B" type="text" size="9" maxlength="7"></td>
+</tr>
+<tr><td>Number of <b>white</b> balls in basket <b>B</b>:</td>
+  <td><input id="whites_in_B" type="text" size="9" maxlength="7"></td>
+</tr>
+<tr><td>Number of <b>trials</b>:</td>
+  <td><input id="numb_of_trials" type="text" size="9" maxlength="8"></td>
+</tr>
+</table>
+<p><button onclick="doSimulation()">Simulate picking a ball</button></p>
+
+
 <div id='simulation'></div>
 <script>
 
