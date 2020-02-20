@@ -4,6 +4,19 @@
 
 <head>
 <title>Balls in baskets</title>
+<style>
+body {
+  background-color: lightgreen;
+  font-size: 110%;
+  color: brown;
+}
+#note{
+  background-color: #dfd;
+  border-radius: 10px;
+  padding:10px;
+}
+</style>
+
 <script>
 
 // An object of this class represents one final result.
@@ -123,7 +136,7 @@ function simulate(numbOfRepet, ballsInA, ballsInB, blackBallsInA, blackBallsInB)
 }
 
 function doSimulation(){
-  let result = simulate(100000, 10,4,3,2);
+  let result = simulate(100000, 10,2,1,2);
   document.getElementById("simulation").innerHTML = result;
 }
 /*======================================================================
@@ -240,6 +253,19 @@ function doTesting(){
 </head>
 
 <body>
+  <h1>Pick-a-ball Simulation</h1>
+<div id="note">
+  <p>Here we simulate the following situation: you randomly pick first a basket (of two baskets A ja B) and
+  then a ball out of that basket.<p>
+    <p> You see that the ball is black.<p>
+  <p>Which is the probability that the ball was in the basket A?<p>
+
+  <p>The simulation idea: you pick a ball and save it's color and original basket. Repeat
+  the procedure numbOfRepet times. Then you count all the results with
+  black balls and out of them calculate the ratio of
+  #(blacks out of A) and #(all blacks).<p>
+</div>
+
 <button onclick="doTesting()">Test methods</button>
 <button onclick="doSimulation()">Simulate picking a ball</button>
 <div id='test'></div>
