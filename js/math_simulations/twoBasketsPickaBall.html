@@ -5,17 +5,37 @@
 <style>
   body {
     background-color: lightgreen;
-    font-size: 110%;
+    font-size: 120%;
     color: brown;
   }
   #note{
     background-color: #dfd;
     border-radius: 10px;
-    padding:10px;
+    padding:1px 10px;
     margin:10px;
+    font-size: 90%;
+    color: black;
   }
   input {
     maxlength="4";
+    font-size: 100%;
+  }
+  button{
+    font-size: 100%;
+  }
+  #answer {
+    padding:5px;
+    background-color: #ff8;
+    font-size: 120%;
+    margin-top:10px;
+    border-radius: 10px;
+  }
+  table {
+    color: black;
+    margin: 5px auto;
+  }
+  h1, .center {
+    text-align: center;
   }
 </style>
 
@@ -129,12 +149,13 @@ function simulate(numbOfRepet, ballsInA, ballsInB, blackBallsInA, blackBallsInB)
     result = Math.round(10000*ratio)/100;
   }
   let resultNicely =
-    "<b>Results of "+numbOfRepet+" tries:</b><br><br> "+
-    "Number of black balls out of A: "+numberOfBlacksFromA+"<br>"+
-    "Total number of black balls: "+numberOfBlacksTotal+" <br><br>"+
-    "Probability of the black ball having been in basket A is approximately <b>"+
+    "<b>Results of "+numbOfRepet+" trials:</b><br><br> "+
+    "Number of red balls out of A: "+numberOfBlacksFromA+"<br>"+
+    "Total number of red balls: "+numberOfBlacksTotal+" <br>"+
+    "<div id='answer'>Statistical probability of the red ball having "+
+    "been in basket <b>A</b> is approximately <b>"+
     result+
-    " %</b>.<br>";
+    " %</b></div>.<br>";
 
   return resultNicely;
 }
@@ -190,7 +211,7 @@ function testPickaBasket(elem){
     "<b>Test results of function 'pickaBasket()':</b><br><br> "+
     "A: "+resultsA.length+" times <br>"+
     "B: "+resultsB.length+" times <br>"+
-    "Probability of result A is about <b>"+
+    "Statistical probability of result A is about <b>"+
     Math.round(10000*(resultsA.length/(resultsA.length+resultsB.length)))/100+
     " % </b><br>"+
     "Errors: "+errors.length+"<br><br>";
@@ -252,9 +273,9 @@ function testPickaBall(elem){
 
   let testResult =
     "<b>Test results of function 'pickaBall()':</b><br><br> "+
-    "Black: "+resultsBlack.length+" times <br>"+
+    "Red: "+resultsBlack.length+" times <br>"+
     "White: "+resultsWhite.length+" times <br>"+
-    "Probability of a black ball is about "+
+    "Probability of a red ball is about "+
     Math.round(10000*(resultsBlack.length/
       (resultsBlack.length+resultsWhite.length)))/100+
     " % (should be near "+100*basket.numbOfBlacks/basket.numbOfAll+" %)<br>"+
@@ -282,9 +303,9 @@ function clearAll(){
 </head>
 
 <body>
-  <button onclick="doTesting()">Test methods</button>
+  <div class="center"><button onclick="doTesting()">Test methods</button>
   <button onclick="clearAll()">Clear</button>
-  <div id='test'></div>
+  <div id='test'></div></div>
 
   <h1>Pick-a-Ball Simulation</h1>
 <div id="note">
@@ -304,29 +325,45 @@ function clearAll(){
 </div>
 
 
-<p>Type values of your choice to the text fields below:</p>
+
 
 <table>
+<tr>
+  <td colspan="2" class="center">
+    <p><b>Type values of your choice to the text fields below:</b></p>
+  </td>
+</tr>
 <tr><td>Number of <b>red</b> balls in basket <b>A</b>:</td>
-  <td><input id="reds_in_A" type="text" size="9" maxlength="7"></td>
+  <td><input id="reds_in_A" type="text"
+                size="9" maxlength="7" value="1"></td>
 </tr>
 <tr><td>Number of <b>white</b> balls in basket <b>A</b>:</td>
-  <td><input id="whites_in_A" type="text" size="9" maxlength="7"></td>
+  <td><input id="whites_in_A" type="text"
+                size="9" maxlength="7" value="1"></td>
 </tr>
 <tr><td>Number of <b>red</b> balls in basket <b>B</b>:</td>
-  <td><input id="reds_in_B" type="text" size="9" maxlength="7"></td>
+  <td><input id="reds_in_B" type="text"
+            size="9" maxlength="7" value="2"></td>
 </tr>
 <tr><td>Number of <b>white</b> balls in basket <b>B</b>:</td>
-  <td><input id="whites_in_B" type="text" size="9" maxlength="7"></td>
+  <td><input id="whites_in_B" type="text"
+              size="9" maxlength="7" value="0"></td>
 </tr>
 <tr><td>Number of <b>trials</b>:</td>
-  <td><input id="numb_of_trials" type="text" size="9" maxlength="8"></td>
+  <td><input id="numb_of_trials" type="text"
+            size="9" maxlength="9" value="10000"></td>
+</tr>
+
+<tr>
+  <td colspan="2" class="center">
+    <button onclick="doSimulation()">Simulate picking a ball</button>
+  </td>
 </tr>
 </table>
-<p><button onclick="doSimulation()">Simulate picking a ball</button></p>
 
 
-<div id='simulation'></div>
+
+<div class="center" id='simulation'></div>
 <script>
 
 
