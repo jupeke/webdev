@@ -37,6 +37,12 @@
   h1, .center {
     text-align: center;
   }
+  .bold{
+    font-weight: bold;
+  }
+  .red{
+    color: red
+  }
 </style>
 
 <script>
@@ -149,7 +155,7 @@ function simulate(numbOfRepet, ballsInA, ballsInB, blackBallsInA, blackBallsInB)
     result = Math.round(10000*ratio)/100;
   }
   let resultNicely =
-    "<b>Results of "+numbOfRepet+" trials:</b><br><br> "+
+    "<h2>Results of "+numbOfRepet+" trials:</h2> "+
     "Number of red balls out of A: "+numberOfBlacksFromA+"<br>"+
     "Total number of red balls: "+numberOfBlacksTotal+" <br>"+
     "<div id='answer'>Statistical probability of the red ball having "+
@@ -313,9 +319,9 @@ function clearAll(){
     a basket</b> (of two baskets A ja B) and
   <b>then pick a ball</b> out of that basket. In the baskets there are a certain number
   of red balls and white balls.<p>
-    <p> You see that <i>the ball you got is red</i>.<p>
+    <p> You see that <i>the ball you got is <span class="red bold"> red</i>.<p>
   <p><b>Question:</b> which is the probability that the ball was
-    in basket A? Calculate first, then simulate below to see if
+    in basket <span class="bold">A</span>? Calculate first, then simulate below to see if
     your result seems good.<p>
 
   <p>The simulation idea: you pick a random ball from a random basket and save
