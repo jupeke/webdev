@@ -10,11 +10,16 @@
   <script>
     // This is javascript:
     function repeatMe(number){
+
+      // This is what the function does:
       var text = "Hello my friend!";
+      var result = "";
       for(var i = 0; i < number; i++){
-        document.write(i+1+": "+text+"<br>");
+        result += (i+1)+": "+text+"<br>";
       }
+      return result;
     }
+    document.write(repeatMe(5));
   </script>
 
 </body>
