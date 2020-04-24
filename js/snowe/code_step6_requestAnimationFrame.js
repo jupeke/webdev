@@ -10,8 +10,30 @@ const snowFallSpeed = 10; // Constant giving the speed to flakes to fall.
 const groundLevel = getWindowHeight()-100; // from the roof!
 const monsterImageSrc = "images/snowEater.png";
 const flakeImageSrc = "images/snowFlake.png";
-
 var main = "";  // Instance of MainControl class
+
+// Images that make the monster look like swallowing:
+var swallowImageSources =
+  [
+    "images/snowEaterSwallow1.png",
+    "images/snowEaterSwallow2.png",
+    "images/snowEaterSwallow3.png",
+    "images/snowEaterSwallow4.png",
+    "images/snowEaterSwallow5.png",
+    "images/snowEaterSwallow6.png",
+    "images/snowEaterSwallow7.png",
+    "images/snowEaterSwallow8.png",
+    "images/snowEaterSwallow7.png",
+    "images/snowEaterSwallow6.png",
+    "images/snowEaterSwallow5.png",
+    "images/snowEaterSwallow4.png",
+    "images/snowEaterSwallow3.png",
+    "images/snowEaterSwallow2.png",
+    "images/snowEaterSwallow1.png",
+    "images/snowEater.png"
+  ];
+
+
 
 // Classes:
 /**
@@ -35,19 +57,23 @@ class MovingObject {
 
     // Unless the HTML element is found, there is no idea to go on.
     if(elem){
+      let maxWidth = getWindowWidth()-80;
+      let minWidth = -50;
+
       if(direction === "right"){
-        this.x = this.x+stepLen;
-        elem.style.left=this.x+"px";
-      }
-      else if (direction === "left"){
-        this.x = this.x-stepLen;
-        elem.style.left=this.x+"px";
-      }
-      else if (direction === "up"){
+        if(this.x < maxWidth){
+          this.x = this.x+stepLen;
+          elem.style.left=this.x+"px";
+        }
+      } else if (direction === "left"){
+        if(this.x > minWidth){
+          this.x = this.x-stepLen;
+          elem.style.left=this.x+"px";
+        }
+      } else if (direction === "up"){
         this.y = this.y-stepLen;
         elem.style.top=this.y+"px";
-      }
-      else if (direction === "down"){
+      } else if (direction === "down"){
         this.y = this.y+stepLen;
         elem.style.top=this.y+"px";
       }
@@ -92,9 +118,30 @@ class MovingObject {
 
 // SnowEater class (ES6):
 class SnowEater extends MovingObject{
+
   constructor(x,y,id,imageSrc){
     super(x,y,id,monsterSpeed);
     super.createImgHtmlElem(imageSrc, "snowEater");
+  }
+
+  // Shows a series of images that make the monster swallow:
+  swallow(){
+    var index = 0;
+    var src = "";
+
+    // This one works with 'this' preserving the local reference!
+    // Note so called "arrow function".
+    let timer2 = setInterval(()=>{
+      if(index < swallowImageSources.length){
+        src = swallowImageSources[index];
+        this.htmlElem.src = src;
+
+        index++;
+      } else{
+        clearInterval(timer2);
+      }
+    }, 60);
+
   }
 }
 
@@ -113,7 +160,6 @@ class SnowFlake extends MovingObject{
     this.x = rand_x;
   }
 }
-
 /**
  * Controls the program flow: creates the monsters and flakes and
  * monitors their progress.
@@ -121,16 +167,21 @@ class SnowFlake extends MovingObject{
  */
 class MainControl{
   constructor(){
+	  this.level = 1;
+
+    // Monsters and snowflakes:
     this.timer = "";
     this.monsters = [];
-    this.createMonsters(1);
     this.snowFlakes = [];
+    this.gameOver = false;
+    this.createMonsters(1);
     this.createFlakes(1);
     this.letItSnow();
   }
   /**
    * Creates number new monsters and adds them to the monsters array.
    * @param int number
+   * @returns {undefined}
    */
   createMonsters(number){
     // Random x value for the "new" flake:
@@ -142,25 +193,16 @@ class MainControl{
       this.monsters.push(monster);
     }
   }
-
-  // Moves all the monsters to the wanted direction (on a click).
-  moveMonsters(direction){
-    const maxIndex = 15;
-    for(let i = 0; i < this.monsters.length; i++){
-      let monster = this.monsters[i];
-      monster.makeStep(direction, monster.defaultStepLen);
-    }
-  }
-
   /**
-   * Creates 'number' new snow flakes and adds them to the monsters array.
+   * Creates number new snow flakes and adds them to the monsters array.
    * @param {type} number
+   * @returns {undefined}
    */
   createFlakes(number){
     // Random x value for the "new" flake:
     let random_x = 0;
     let random_y = 0;
-    for(let i=0; i < number; i++){
+    for(let i=0; i<number; i++){
       random_x = Math.floor((Math.random() * getWindowWidth()));
       random_y = -Math.floor((Math.random() * getWindowHeight()));
       let id = "snowFlake"+(this.snowFlakes.length+1);  // Should be unique
@@ -169,35 +211,166 @@ class MainControl{
     }
   }
 
- /**
+  /**
    * Manages the movements of the snowflakes.
+   * @returns {undefined}
    */
   letItSnow(){
+
     let i, j, flakeElem, flake;
     let fallingStep = snowFallSpeed;
-    for(i=0; i < this.snowFlakes.length; i++){
+
+    for(i=0; i<this.snowFlakes.length; i++){
       flake = this.snowFlakes[i];
       flakeElem = find(flake.id);
 
       if(flakeElem){
-        if(flake.y > getWindowHeight()-100){
-          flake.y = 0;
-        } else{
-          flake.makeStep("down", fallingStep);
+        flake.makeStep("down", fallingStep);
+
+        // Checks all the monsters and their mouths:
+        for(j=0; j<this.monsters.length; j++){
+          let monster = this.monsters[j];
+          let monsterMouthLeft = monster.x+10;	// Left part of mouth.
+          let monsterMouthRight = monster.x+130;	// Right part of mouth.
+          let monsterMouthLevel = monster.y;
+
+          // Random x value for the "new" flake:
+          let random_x = Math.floor((Math.random() * getWindowWidth()));
+
+          // Test first if flake is inside the mouth:
+          if(flake.x > monsterMouthLeft &&
+            flake.x < monsterMouthRight &&
+            flake.y > monsterMouthLevel){
+
+            // If the flake hits a mouth, it's sent back:
+            flake.sendFlakeUp(random_x);
+
+            // Add a point:
+            this.addaPoint();
+
+            // If the flake is got in the air, double points given:
+            if(monster.y < groundLevel-100){
+              this.addaPoint();
+            }
+
+            // Make the monster swallow:
+            monster.swallow();
+          }
+        }
+
+        // When the flake hits the groundLevel, it will be sent back up.
+        if(flake.y > groundLevel){
+          let random_x = Math.floor((Math.random() * getWindowWidth()));
+          flake.sendFlakeUp(random_x);
+          this.changeNumberOfLives(-1);
         }
       }
     }
 
-    this.timer = setTimeout(() => {
-      // I can access 'this' in here!
-      this.letItSnow();
-    }, 40);
+    // Repeat by requestAnimationFrame:
+    if(this.gameOver){
+      alert("Game Over!");
+    }
+    else{
+      requestAnimationFrame(this.letItSnow());
+    }
+  }
+
+  // Adds one to the points:
+  addaPoint(){
+    let currentAmount = parseInt(find("numbOfPoints").innerHTML);
+    let newAmount = currentAmount+1;
+    find("numbOfPoints").innerHTML = newAmount;
+  	if(newAmount % 10 === 0){
+  	  this.addLevel();
+  	}
+  }
+
+  // Adds one to the points:
+  changeNumberOfLives(number){
+    let currentAmount = parseInt(find("numbOfLives").innerHTML);
+    let newAmount = currentAmount+number;
+    if(newAmount >= 0){
+      find("numbOfLives").innerHTML = newAmount;
+    }
+    if(newAmount === 0){
+      this.gameOver();
+    }
+  }
+
+  // Moves all the monsters to the wanted direction (on a click).
+  moveMonsters(direction){
+    const maxIndex = 15;
+    for(let i = 0; i < this.monsters.length; i++){
+      let monster = this.monsters[i];
+      let index = 0;
+      let step = 0;
+      let monsterTimer = setInterval(()=>{
+
+        // quadratic function: motion fast first but slowing down towards the end.
+        step = Math.round(monsterSpeed-
+            ((monsterSpeed/(maxIndex*maxIndex))*index*index));
+        if(index <= maxIndex){
+          monster.makeStep(direction, step);
+        } else{
+          clearTimeout(monsterTimer);
+
+          // If direction was up, gravity draws the monsters back down:
+          if(direction === "up"){
+            this.drawDownMonsters();
+          }
+        }
+        index++;
+      }, 40);
+    }
+  }
+
+  // Moves all the monsters to the wanted direction (on a click).
+  drawDownMonsters(){
+    const g = 2; // "Gravity"
+    const feetOnGroundLevel = groundLevel - 100;
+
+    for(let i = 0; i < this.monsters.length; i++){
+      let monster = this.monsters[i];
+      let time = 0;
+      let step = 0;
+      let fallingTimer = setInterval(()=>{
+
+        // quadratic function: accelerating motion simulating free fall.
+        step = Math.round(g*time*time);
+        if(monster.y+step < feetOnGroundLevel){
+          monster.makeStep("down", step);
+        }
+        else {
+          if (monster.y < feetOnGroundLevel){
+            step = feetOnGroundLevel-monster.y;
+            monster.makeStep("down", step);
+          }
+          clearTimeout(fallingTimer);
+        }
+        time++;
+      }, 40);
+    }
+  }
+
+  // Changes the level of difficulty:
+  addLevel(){
+  	this.level++;
+  	let soManyMore = this.level*2;
+    this.createFlakes(soManyMore);
+  	if(this.level < 5){
+  	  this.createMonsters(1);
+  	}
+  }
+  gameOver(){
+    this.gameOver = true;
   }
 }
 
 // Starts the snowing. Is called in the beginning of body elem (onload).
 function init(){
   main = new MainControl(); //
+  main.changeNumberOfLives(10);
 }
 
 // Checks if the button was an left or right arrow and calls
@@ -209,16 +382,20 @@ function checkKey(e) {
       main.moveMonsters("left");
     break;
     case 38: //up;
-      //main.moveMonsters("up");
+      main.moveMonsters("up");
     break;
     case 39: //right;
       main.moveMonsters("right");
     break;
     case 40: //down;
       //main.moveMonsters("down");
+      //main.drawDownMonsters();
     break;
   }
 }
+
+
+
 
 // Looks for and returns the element defined by id.
 // If not found, returns false.

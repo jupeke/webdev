@@ -5,7 +5,7 @@
 // Examples of the new notation: class, constructor, const, let
 
 // Global variables and constants:
-const monsterSpeed = 40;	// Constant giving the speed to move the monster (ES6).
+const monsterSpeed = 40;	// Constant giving the speed to translation the monster (ES6).
 const snowFallSpeed = 10; // Constant giving the speed to flakes to fall.
 const groundLevel = getWindowHeight()-100; // from the roof!
 const monsterImageSrc = "images/snowEater.png";
@@ -34,10 +34,10 @@ var swallowImageSources =
   ];
 
 // =============================================================================
-// ==== Help for smooth movement found on the internet =======
+// ==== Help for smooth translationment found on the internet =======
 // Thanks to Kirupa:
-// https://www.kirupa.com/html5/animating_movement_smoothly_using_css.htm
-// https://www.kirupa.com/html5/animating_movement_smoothly_using_css.htm
+// https://www.kirupa.com/html5/animating_translationment_smoothly_using_css.htm
+// https://www.kirupa.com/html5/animating_translationment_smoothly_using_css.htm
 function getSupportedPropertyName(properties) {
     for (var i = 0; i < properties.length; i++) {
         if (typeof document.body.style[properties[i]] != "undefined") {
@@ -56,7 +56,7 @@ var transformProperty = getSupportedPropertyName(transform);
 if (transformProperty) {
     item.style[transformProperty] = translate3d(someValueX, someValueY, 0px);
 }*/
-//=============== End of smooth movement help by Kirupa ========================
+//=============== End of smooth translationment help by Kirupa ========================
 // =============================================================================
 
 // Classes:
@@ -68,17 +68,23 @@ class MovingObject {
   constructor(x,y,id,defaultStepLen){
     this.x = x;
     this.y = y;
+    this.x0 = x;  // The starting point x
+    this.y0 = y;  // The starting point y
     this.id = id;
     this.defaultStepLen = defaultStepLen;
     this.htmlElem = "";
 
-    // By Kirupa
+    // By Kirupa:
     this.transformProperty = getSupportedPropertyName(transform);
   }
 
   // Makes the HTML element referred by id go one step to the direction and
   // step length given as parameters. Makes the change in the element
-  // coordinates and updates the elem.style.values accordingly.
+  // coordinates and uses translate3d property accordingly.
+  // Note: what is confusing here is that elem.x ja elem.y differ from
+  // the css values after the first translationment (css values are not updated).
+  // That's why the new translation only makes the obj translation if the values
+  // are different from the last time. This is not very intuitive, to be honest.
   makeStep(direction, stepLen) {
     let elem = find(this.id);  // let - variable with a block scope (ES6)
 
@@ -86,23 +92,29 @@ class MovingObject {
     if(elem){
       let maxWidth = getWindowWidth()-80;
       let minWidth = -50;
+      let translationX = this.x-this.x0;
+      let translationY = this.y-this.y0;
 
       if(direction === "right"){
         if(this.x < maxWidth){
           this.x = this.x+stepLen;
-          elem.style.left=this.x+"px";
+          translationX = this.x-this.x0;
         }
       } else if (direction === "left"){
         if(this.x > minWidth){
           this.x = this.x-stepLen;
-          elem.style.left=this.x+"px";
+          translationX = this.x-this.x0;
         }
       } else if (direction === "up"){
         this.y = this.y-stepLen;
-        elem.style.top=this.y+"px";
+        translationY = this.y-this.y0
       } else if (direction === "down"){
         this.y = this.y+stepLen;
-        elem.style.top=this.y+"px";
+        translationY = this.y-this.y0;
+      }
+      if (this.transformProperty) {
+        elem.style[this.transformProperty] =
+          "translate3d("+translationX+"px,"+translationY+"px,0px)";
       }
     }
   }
@@ -183,8 +195,10 @@ class SnowFlake extends MovingObject{
   sendFlakeUp(rand_x){
     this.htmlElem.style.top = "0px";
     this.y = 0;
+    this.y0 = 0;
     this.htmlElem.style.left = rand_x+"px";
     this.x = rand_x;
+    this.x0 = rand_x;
   }
 }
 /**
@@ -239,7 +253,7 @@ class MainControl{
   }
 
   /**
-   * Manages the movements of the snowflakes.
+   * Manages the translationments of the snowflakes.
    * @returns {undefined}
    */
   letItSnow(){
@@ -331,8 +345,8 @@ class MainControl{
     }
   }
 
-  // Moves all the monsters to the wanted direction (on a click).
-  moveMonsters(direction){
+  // translations all the monsters to the wanted direction (on a click).
+  translationMonsters(direction){
     const maxIndex = 15;
     for(let i = 0; i < this.monsters.length; i++){
       let monster = this.monsters[i];
@@ -358,7 +372,7 @@ class MainControl{
     }
   }
 
-  // Moves all the monsters to the wanted direction (on a click).
+  // translations all the monsters to the wanted direction (on a click).
   drawDownMonsters(){
     const g = 2; // "Gravity"
     const feetOnGroundLevel = groundLevel - 100;
@@ -409,21 +423,21 @@ function init(){
 }
 
 // Checks if the button was an left or right arrow and calls
-// in that case the move methode:
+// in that case the translation methode:
 function checkKey(e) {
   var event = e.which || e.keyCode;
   switch (event) {
     case 37: //left;
-      main.moveMonsters("left");
+      main.translationMonsters("left");
     break;
     case 38: //up;
-      main.moveMonsters("up");
+      main.translationMonsters("up");
     break;
     case 39: //right;
-      main.moveMonsters("right");
+      main.translationMonsters("right");
     break;
     case 40: //down;
-      //main.moveMonsters("down");
+      //main.translationMonsters("down");
       //main.drawDownMonsters();
     break;
   }
