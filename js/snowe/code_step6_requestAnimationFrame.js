@@ -6,7 +6,7 @@
 
 // Global variables and constants:
 const monsterSpeed = 40;	// Constant giving the speed to move the monster (ES6).
-const snowFallSpeed = 10; // Constant giving the speed to flakes to fall.
+const snowFallSpeed = 2; // Constant giving the speed to flakes to fall.
 const groundLevel = getWindowHeight()-100; // from the roof!
 const monsterImageSrc = "images/snowEater.png";
 const flakeImageSrc = "images/snowFlake.png";
@@ -122,26 +122,26 @@ class SnowEater extends MovingObject{
   constructor(x,y,id,imageSrc){
     super(x,y,id,monsterSpeed);
     super.createImgHtmlElem(imageSrc, "snowEater");
+    this.imgIndex = 0;
+    this.frameCounter = 0;  // slow down animation
   }
 
   // Shows a series of images that make the monster swallow:
   swallow(){
-    var index = 0;
     var src = "";
+    if(this.imgIndex < swallowImageSources.length){
+      src = swallowImageSources[this.imgIndex];
+      this.htmlElem.src = src;
 
-    // This one works with 'this' preserving the local reference!
-    // Note so called "arrow function".
-    let timer2 = setInterval(()=>{
-      if(index < swallowImageSources.length){
-        src = swallowImageSources[index];
-        this.htmlElem.src = src;
-
-        index++;
-      } else{
-        clearInterval(timer2);
+      // Image is changed only every 3rd time:
+      if(this.frameCounter % 3 === 0){
+        this.imgIndex++;
       }
-    }, 60);
-
+      this.frameCounter++;
+      requestAnimationFrame(this.swallow.bind(this));
+    } else{
+      this.imgIndex = 0;
+    }
   }
 }
 
@@ -220,7 +220,7 @@ class MainControl{
     let i, j, flakeElem, flake;
     let fallingStep = snowFallSpeed;
 
-    for(i=0; i<this.snowFlakes.length; i++){
+    for(i=0; i < this.snowFlakes.length; i++){
       flake = this.snowFlakes[i];
       flakeElem = find(flake.id);
 
@@ -272,7 +272,9 @@ class MainControl{
       alert("Game Over!");
     }
     else{
-      requestAnimationFrame(this.letItSnow());
+      // Read this not ideal because you're repeatedly calling .bind and creating a
+      // new function reference over and over, once per frame.
+      requestAnimationFrame(this.letItSnow.bind(this));
     }
   }
 
@@ -305,25 +307,27 @@ class MainControl{
       let monster = this.monsters[i];
       let index = 0;
       let step = 0;
-      let monsterTimer = setInterval(()=>{
 
-        // quadratic function: motion fast first but slowing down towards the end.
-        step = Math.round(monsterSpeed-
-            ((monsterSpeed/(maxIndex*maxIndex))*index*index));
-        if(index <= maxIndex){
-          monster.makeStep(direction, step);
-        } else{
-          clearTimeout(monsterTimer);
-
-          // If direction was up, gravity draws the monsters back down:
-          if(direction === "up"){
-            this.drawDownMonsters();
+      // If direction was up, gravity draws the monsters back down:
+      if(direction === "up"){
+        let jump = function(){
+          // quadratic function: motion fast first but slowing down towards the end.
+          step = Math.round(monsterSpeed-
+              ((monsterSpeed/(maxIndex*maxIndex))*index*index));
+          if(index <= maxIndex){
+            monster.makeStep(direction, step);
+            index++;
+            requestAnimationFrame(jump);
           }
         }
-        index++;
-      }, 40);
+        //requestAnimationFrame(jump); // This works, was in the model.
+        jump(); // Works this way too (more intuitive)
+        this.drawDownMonsters();
+      }
     }
   }
+
+
 
   // Moves all the monsters to the wanted direction (on a click).
   drawDownMonsters(){
