@@ -5,9 +5,10 @@
 // Examples of the new notation: class, constructor, const, let
 
 // Global variables and constants:
-const monsterSpeed = 40;	// Constant giving the speed to move the monster (ES6).
+const monsterSpeed = 15;	// Constant giving the speed to move the monster (ES6).
 const snowFallSpeed = 2; // Constant giving the speed to flakes to fall.
 const groundLevel = getWindowHeight()-100; // from the roof!
+const groundLevelMonster = groundLevel-95; // from the roof!
 const monsterImageSrc = "images/snowEater.png";
 const flakeImageSrc = "images/snowFlake.png";
 var main = "";  // Instance of MainControl class
@@ -32,8 +33,6 @@ var swallowImageSources =
     "images/snowEaterSwallow1.png",
     "images/snowEater.png"
   ];
-
-
 
 // Classes:
 /**
@@ -124,6 +123,9 @@ class SnowEater extends MovingObject{
     super.createImgHtmlElem(imageSrc, "snowEater");
     this.imgIndex = 0;
     this.frameCounter = 0;  // slow down animation
+    this.isMovingLeft = false;
+    this.isMovingRight = false;
+    this.stop = false;  // to stop horizontal movement
   }
 
   // Shows a series of images that make the monster swallow:
@@ -189,7 +191,7 @@ class MainControl{
     for(let i=0; i<number; i++){
       random_x = Math.floor((Math.random() * getWindowWidth()));
       let id = "snowEater"+(this.monsters.length+1);  // Should be unique
-      let monster = new SnowEater(random_x,groundLevel-100,id,monsterImageSrc);
+      let monster = new SnowEater(random_x,groundLevelMonster,id,monsterImageSrc);
       this.monsters.push(monster);
     }
   }
@@ -249,7 +251,7 @@ class MainControl{
             this.addaPoint();
 
             // If the flake is got in the air, double points given:
-            if(monster.y < groundLevel-100){
+            if(monster.y < groundLevelMonster){
               this.addaPoint();
             }
 
@@ -272,7 +274,7 @@ class MainControl{
       alert("Game Over!");
     }
     else{
-      // Read this not ideal because you're repeatedly calling .bind and creating a
+      // Heard: this not ideal because you're repeatedly calling .bind and creating a
       // new function reference over and over, once per frame.
       requestAnimationFrame(this.letItSnow.bind(this));
     }
@@ -296,64 +298,99 @@ class MainControl{
       find("numbOfLives").innerHTML = newAmount;
     }
     if(newAmount === 0){
-      this.gameOver();
+      this.gameOver = true;
     }
   }
 
-  // Moves all the monsters to the wanted direction (on a click).
-  moveMonsters(direction){
-    const maxIndex = 15;
+  // Moves all the monsters left or right at static speed.
+  startHorizontalMovement(direction){
+    for(let i = 0; i < this.monsters.length; i++){
+      let monster = this.monsters[i];
+      let index = 0;
+      let step = 0;
+      let start_allowed = false;
+
+      // If already moving in the same direction, nothing is done.
+      if(direction === "left"){
+        if(monster.isMovingLeft === false){
+          start_allowed = true;
+          monster.isMovingLeft = true;
+          monster.isMovingRight = false;
+        }
+      } else if(direction === "right"){
+        if(monster.isMovingRight === false){
+          start_allowed = true;
+          monster.isMovingLeft = false;
+          monster.isMovingRight = true;
+        }
+      }
+
+      if(start_allowed){
+        monster.stop = false;
+        let go = function(){
+          step = monsterSpeed;
+          monster.makeStep(direction, step);
+          if(!monster.stop){
+            requestAnimationFrame(go);
+          }
+        };
+        //requestAnimationFrame(jump); // This works, was in the model.
+        go(); // Works this way too (more intuitive)
+      }
+    }
+  }
+
+  // Stops the horiz movement of all the monsters.
+  stopHorizontalMovement(direction){
+    for(let i = 0; i < this.monsters.length; i++){
+      let monster = this.monsters[i];
+
+      // Only stop the movement to the right direction (In principle this
+      // way a better user experience when pressing keys at the same time).
+      // In practice no difference.
+      if((direction === "right" && monster.isMovingRight) ||
+        (direction === "left" && monster.isMovingLeft)){
+
+        monster.stop = true;
+        monster.isMovingLeft = false;
+        monster.isMovingRight = false;
+      }
+    }
+  }
+
+  // Makes all the monsters jump in unison.
+  makeMonstersJump(){
+    const maxIndex = Math.round(getWindowHeight()/15);
     for(let i = 0; i < this.monsters.length; i++){
       let monster = this.monsters[i];
       let index = 0;
       let step = 0;
 
-      // If direction was up, gravity draws the monsters back down:
-      if(direction === "up"){
-        let jump = function(){
-          // quadratic function: motion fast first but slowing down towards the end.
-          step = Math.round(monsterSpeed-
-              ((monsterSpeed/(maxIndex*maxIndex))*index*index));
-          if(index <= maxIndex){
-            monster.makeStep(direction, step);
-            index++;
+      let jump = function(){
+        // quadratic function: motion fast first but slowing down towards the end.
+        // After that it falls back down (step < 0).
+        step = monsterSpeed-
+            ((monsterSpeed/(maxIndex*maxIndex))*index*index);
+
+        // Going up:
+        if(step >= 0){
+          monster.makeStep("up", step);
+          requestAnimationFrame(jump);
+        }
+        // Falling down:
+        else if(step < 0){
+          if(monster.y-step < groundLevelMonster){
+            monster.makeStep("up", step);
             requestAnimationFrame(jump);
-          }
-        }
-        //requestAnimationFrame(jump); // This works, was in the model.
-        jump(); // Works this way too (more intuitive)
-        this.drawDownMonsters();
-      }
-    }
-  }
-
-
-
-  // Moves all the monsters to the wanted direction (on a click).
-  drawDownMonsters(){
-    const g = 2; // "Gravity"
-    const feetOnGroundLevel = groundLevel - 100;
-
-    for(let i = 0; i < this.monsters.length; i++){
-      let monster = this.monsters[i];
-      let time = 0;
-      let step = 0;
-      let fallingTimer = setInterval(()=>{
-
-        // quadratic function: accelerating motion simulating free fall.
-        step = Math.round(g*time*time);
-        if(monster.y+step < feetOnGroundLevel){
-          monster.makeStep("down", step);
-        }
-        else {
-          if (monster.y < feetOnGroundLevel){
-            step = feetOnGroundLevel-monster.y;
+          } else{
+            step = groundLevelMonster - monster.y;
             monster.makeStep("down", step);
           }
-          clearTimeout(fallingTimer);
         }
-        time++;
-      }, 40);
+        index++;
+      };
+      //requestAnimationFrame(jump); // This works, was in the model.
+      jump(); // Works this way too (more intuitive)
     }
   }
 
@@ -380,23 +417,36 @@ function init(){
 // Checks if the button was an left or right arrow and calls
 // in that case the move methode:
 function checkKey(e) {
-  var event = e.which || e.keyCode;
-  switch (event) {
-    case 37: //left;
-      main.moveMonsters("left");
-    break;
+  var key = e.which || e.keyCode;
+  switch (key) {
     case 38: //up;
-      main.moveMonsters("up");
-    break;
-    case 39: //right;
-      main.moveMonsters("right");
-    break;
-    case 40: //down;
-      //main.moveMonsters("down");
-      //main.drawDownMonsters();
+      main.makeMonstersJump();
     break;
   }
 }
+
+document.addEventListener('keydown', function (event) {
+  var key = event.key || event.keyCode;
+  switch (key) {
+    case "ArrowLeft": //left;
+      main.startHorizontalMovement("left");
+    break;
+    case "ArrowRight": //right;
+      main.startHorizontalMovement("right");
+    break;
+  }
+});
+document.addEventListener('keyup', function (event) {
+  var key = event.key || event.keyCode;
+  switch (key) {
+    case "ArrowLeft": //left;
+      main.stopHorizontalMovement("left");
+    break;
+    case "ArrowRight": //right;
+      main.stopHorizontalMovement("right");
+    break;
+  }
+});
 
 
 

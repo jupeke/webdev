@@ -10,8 +10,28 @@ const snowFallSpeed = 10; // Constant giving the speed to flakes to fall.
 const groundLevel = getWindowHeight()-100; // from the roof!
 const monsterImageSrc = "images/snowEater.png";
 const flakeImageSrc = "images/snowFlake.png";
-
 var main = "";  // Instance of MainControl class
+
+// Images that make the monster look like swallowing:
+var swallowImageSources =
+  [
+    "images/snowEaterSwallow1.png",
+    "images/snowEaterSwallow2.png",
+    "images/snowEaterSwallow3.png",
+    "images/snowEaterSwallow4.png",
+    "images/snowEaterSwallow5.png",
+    "images/snowEaterSwallow6.png",
+    "images/snowEaterSwallow7.png",
+    "images/snowEaterSwallow8.png",
+    "images/snowEaterSwallow7.png",
+    "images/snowEaterSwallow6.png",
+    "images/snowEaterSwallow5.png",
+    "images/snowEaterSwallow4.png",
+    "images/snowEaterSwallow3.png",
+    "images/snowEaterSwallow2.png",
+    "images/snowEaterSwallow1.png",
+    "images/snowEater.png"
+  ];
 
 // Classes:
 /**
@@ -95,6 +115,24 @@ class SnowEater extends MovingObject{
   constructor(x,y,id,imageSrc){
     super(x,y,id,monsterSpeed);
     super.createImgHtmlElem(imageSrc, "snowEater");
+  }
+  // Shows a series of images that make the monster swallow:
+  swallow(){
+    var index = 0;
+    var src = "";
+
+    // This one works with 'this' preserving the local reference!
+    // Note so called "arrow function".
+    let timer2 = setInterval(()=>{
+      if(index < swallowImageSources.length){
+        src = swallowImageSources[index];
+        this.htmlElem.src = src;
+
+        index++;
+      } else{
+        clearInterval(timer2);
+      }
+    }, 60);
   }
 }
 
@@ -205,14 +243,14 @@ class MainControl{
 
             // Add a point:
             this.addaPoint();
-            
+
             // If the flake is got in the air, double points given:
             /*if(monster.y < groundLevel-100){
               this.addaPoint();
             }
 
             // Make the monster swallow:
-            monster.swallow();*/
+            monster.swallow();
           }
         }
       }
@@ -223,13 +261,13 @@ class MainControl{
       this.letItSnow();
     }, 40);
   }
-  
+
   // Adds one to the points:
   addaPoint(){
     let pointsElem = find("numbOfPoints");
-    
+
     if(pointsElem){
-      
+
       // Parsing is needed here:
       let currentAmount = parseInt(pointsElem.innerHTML);
       let newAmount = currentAmount+1;

@@ -43,3 +43,16 @@ body{
 .snowFlake {
   position: absolute;
 }
+
+a {
+  display: inline-block;
+  text-decoration: none;
+  background-color: grey;
+  border-radius: 20px;
+  padding: 10px;
+  margin: 5px;
+}
+
+a:hover {
+  background-color: white;
+}
