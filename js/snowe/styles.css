@@ -20,21 +20,22 @@ body{
   position: absolute;
   top: 0;
   left: 0;
-  padding: 10px 20px;
+  padding: 10px 15px;
   background-color: grey;
   border-radius: 15px;
   color: black;
-  font-size: 130%;
+  font-size: 120%;
 }
 #lives{
   position: absolute;
   top: 0;
   left: 120px;
-  padding: 10px 20px;
+  margin-left: 5px;
+  padding: 10px 15px;
   background-color: grey;
   border-radius: 15px;
   color: black;
-  font-size: 130%;
+  font-size: 120%;
 }
 #numbOfPoints, #numbOfLives {
   font-weight: bold;
@@ -55,4 +56,10 @@ a {
 
 a:hover {
   background-color: white;
+}
+
+#goodbyetext {
+  font-size: 500%;
+  text-align: center;
+  margin-top: 20%;
 }
