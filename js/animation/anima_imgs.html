@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+  img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    /*position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);*/
+  }
+  #top-row{
+    text-align: center;
+  }
+  #container{
+    position: absolute;
+    height: auto;
+    width: 100%;
+    bottom: 0;
+    margin: 0;
+  }
+
+
+</style>
+
+<script>
+// NOTE: some features in the code here are from ECMAScript 6 (ES6)
+//(the newest JavaScript standard from 6/2015) that only works
+// in browsers supporting it (practically the most modern
+// browsers do but no version of IE, for instance).
+// Examples of the new notation: class, constructor, const, let
+
+// Global variables and constants:
+var main = "";  // Instance of MainControl class
+
+// Images that make the monster look like swallowing:
+var imageSources =
+  [
+    "images/img1.png",
+    "images/img2.png",
+    "images/img3.png",
+    "images/img4.png",
+    "images/img5.png",
+    "images/img6.png",
+    "images/img7.png",
+    "images/img8.png",
+    "images/img9.png",
+    "images/img10.png",
+    "images/img9.png",
+    "images/img8.png",
+    "images/img7.png",
+    "images/img6.png",
+    "images/img5.png",
+    "images/img4.png",
+    "images/img3.png",
+    "images/img2.png",
+    "images/img1.png",
+
+  ];
+
+// Image class (ES6):
+class Anima {
+  constructor(imageFileNames){
+    this.htmlElem = document.getElementById('animation');
+    this.timer = "";
+    this.imgIndex = 0;
+    this.frameCounter = 0;
+    this.imgFileNames = imageFileNames;
+    this.slowness = 30;
+    this.run = true;
+  }
+  // Shows a series of images creating an illusion of movement:
+  animate(){
+    var src = "";
+    if(this.imgIndex < this.imgFileNames.length){
+      src = this.imgFileNames[this.imgIndex];
+      this.htmlElem.src = src;
+
+      // Image is changed only every this.slowness time:
+      if(this.frameCounter % this.slowness === 0){
+        this.imgIndex++;
+      }
+      this.frameCounter++;
+    } else{
+      this.imgIndex = 0;
+    }
+    if(this.run){
+      requestAnimationFrame(this.animate.bind(this));
+    }
+  }
+
+  stop(){
+    this.run = false;
+  }
+}
+
+var anima="none";
+function show(){
+  if(anima === "none"){
+    anima = new Anima(imageSources);
+    anima.animate();
+  } else{
+    if(!anima.run){
+      anima.run = true;
+      anima.animate();
+    }
+  }
+}
+
+</script>
+
+<body>
+  <div id="top-row">
+    <button onclick="show()">Show animation!</button>
+    <button onclick="anima.stop()">Stop</button>
+  </div>
+  <div id="container">
+    <img src="images/img1.png" id="animation" width="1200" heigth="800" />
+  </div>
+</body>
+</html>
