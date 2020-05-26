@@ -109,6 +109,17 @@ function show(){
     }
   }
 }
+// Reacts to change of speed:
+function setSpeed(){
+  let speed = parseInt(document.querySelector("#speed").value);
+  if(speed > 0 && speed < 11){
+    if (anima !== "none"){
+      anima.slowness = 11-speed;
+    }
+  } else{
+    alert("Bad value!");
+  }
+}
 
 </script>
 
@@ -116,9 +127,16 @@ function show(){
   <div id="top-row">
     <button onclick="show()">Show animation!</button>
     <button onclick="anima.stop()">Stop</button>
+    <label for="speed">Speed: </label>
+      <input type="text" title="Integer between 1 and 10" id="speed" value="8"
+        size="2" maxlength="2">
   </div>
   <div id="container">
-    <img src="images/img1.png" id="animation" width="1200" heigth="800" />
+    <img src="images/img1.png" id="animation" width="1200" heigth="800"/>
   </div>
+  <script>
+    // Event listener and a function to react to change of speed:
+    document.querySelector("#speed").addEventListener("change", setSpeed);
+  </script>
 </body>
 </html>
