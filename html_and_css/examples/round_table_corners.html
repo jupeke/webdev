@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>css</title>
+<style>
+  table {
+    border-spacing: 0;
+  }
+  tr {
+    background-color: #afa;
+  }
+  td, th {
+    padding:10px;
+    margin:0;
+    border: 2px solid blue;
+  }
+  th:first-child{
+    border-radius: 10px 0 0 0;
+  }
+  th:last-child{
+    border-radius: 0 10px 0 0;
+  }
+  tr:last-child td:first-child{
+    border-radius: 0 0 0 10px;
+  }
+  tr:last-child td:last-child{
+    border-radius: 0 0 10px 0;
+  }
+</style>
+</head>
+
+<body>
+<h1> Trying to make round corners to the table below</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Header cell 1</th>
+      <th>Header cell 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Regular cell 1</td>
+      <td>Regular cell 2</td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
