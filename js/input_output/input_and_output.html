@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <style>
+      body {font-size:200%;}
+      input {font-size:100%;}
+      button {font-size: 100%}
+      #result {font-weight: bold; color: red}
+
+    </style>
     <script>
       function repeatMe(){
 
@@ -15,9 +22,9 @@
   <body>
     <h1>Input and output</h1>
     <p> Write something in the text field and click the button.</p>
-    <input type="text" id="inputField">
-    <button onclick="repeatMe()">Click me!</button>
-    <p> Output:</p>
+    <p><input type="text" id="inputField">
+    <button onclick="repeatMe()">Click me!</button></p>
+
     <div id="result"></div>
   </body>
 </html>
