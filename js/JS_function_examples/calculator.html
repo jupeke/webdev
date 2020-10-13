@@ -1,9 +1,34 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Function</title>
+<title>Calculation</title>
 <style>
+<style>
+.item1 { grid-area: message; }
+.item2 { grid-area: screen; }
+.item3 { grid-area: btns1; }
+.item4 { grid-area: btns2; }
 
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'message message'
+    'screen screen'
+    'screen screen'
+    'btns1 btns2';
+
+  grid-gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 100%;
+}
+</style>
 </style>
 <script>
 function print(message){
@@ -14,11 +39,12 @@ function print(message){
 </head>
 
 <body>
-<div id="calculator">
-  <div id="display">
-  </div>
-  <div id="buttons">
-  </div>
+<div class="grid-container">
+  <div class="item1">Message</div>
+  <div class="item2">Display</div>
+  <div class="item3">Numbers</div>
+  <div class="item4">Operations</div>
+</div>
 </div>
 </body>
 </html>

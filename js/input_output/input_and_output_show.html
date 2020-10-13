@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-
     <style>
       body {font-size:200%;}
       input {font-size:100%;}
@@ -13,9 +12,10 @@
       function repeatMe(){
 
         // Gets the value of the text field:
+        var text = document.getElementById('textField').value;
 
-        // Writes the comment in the div with id "result":
-
+        // Writes the comment in the span with id "result":
+        document.getElementById('result').innerHTML = text;
       }
     </script>
   </head>
