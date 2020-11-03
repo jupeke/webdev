@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <style>
+      body {font-size:200%;}
+      input {font-size:100%;}
+      button {font-size: 100%}
+      #result {font-weight: bold; color: red}
+    </style>
 
-<style>
-  body {font-size:200%;}
-  input {font-size:100%;}
-  button {font-size: 100%}
-</style>
+    <script>
+      function repeatMe(){
 
-<script>
-function repeatMe(){
+        // Gets the value of the text field:
+        var text = document.getElementById('textField').value;
 
-  // Gets the value of the text field:
+        // Writes the comment in the span with id "result":
+        document.getElementById('result').innerHTML = text;
+      }
+    </script>
+  </head>
 
-  // Writes the comment in the div with id "result":
-  
-}
-</script>
-</head>
+  <body>
 
-<body>
+    <h1>Input and output</h1>
+    <p> Write something in the text field and click the button.</p>
 
-<h1>Input and output</h1>
-<p> Write something in the text field and click the button.</p>
+    <input type="text" id="textField">
+    <button type="button" onclick="repeatMe()">Click me!</button>
 
-<input type="text" id="textField">
-<button type="button" onclick="repeatMe()">Click me!</button>
-
-<div id="result"></div>
-
-</body>
+    <p>You typed: <span id="result"></span></p>
+  </body>
 </html>
