@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<title>for loops</title>
+
+<script>
+function testLoop1(rows, cols){
+  var numberOfRows = rows;
+  var numberOfCols = cols;
+  var result="";
+  var i, j;
+
+  for (i=0; i < numberOfRows; i++){
+  	for (j=0; j < i+1; j++){
+  	  result += "O";
+    }
+	  result += "<br>";
+  }
+
+  return result;
+}
+
+</script>
+</head>
+<body>
+<h1>Power of Nested For Loops</h1>
+
+<script>
+document.write(testLoop1(5,5));
+</script>
+
+</body>
+</html>

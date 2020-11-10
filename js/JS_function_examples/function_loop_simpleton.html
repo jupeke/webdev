@@ -12,7 +12,7 @@ function test(textToRepeat, soManyTimes){
   var i = 0;
 
   // The loop: repeating itself soManyTimes!
-  for (i = 0; i < soManyTimes; i++){
+  for (i = 0; i < soManyTimes; i=i+2){
 
     // Adds to result a new textToRepeat and a line brake.
 	  result += textToRepeat;
@@ -27,7 +27,7 @@ function test(textToRepeat, soManyTimes){
 
 <script>
 // Here you call the function to make work.
-document.write(test("This is easy!",5));
+document.write(test("This is different!",15));
 </script>
 
 </body>
