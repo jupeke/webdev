@@ -1,15 +1,16 @@
 body {
-  background-color: pink
+  background-color: lightblue;
+  padding: 20px;
 }
 h1 {
   text-align: center;
   font-size: 2cm;
-  color: red;
-  background-color: #555;
+  color: green;
+  background-color: lightgreen;
   border-radius: 30px;
 }
 p  {
   font-family: arial;
-  font-size: 200%;
+  font-size: 130%;
   font-weight: bold;
 }
