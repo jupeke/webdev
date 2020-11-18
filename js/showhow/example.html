@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>JS example</title>
+    <script>
+      function repeatMe(){
+        var text = document.getElementById("myTextField").value;
+        var result = "";
+
+        // Here the text is repeated 10 times:
+        for(var i = 0; i < 10; i++){
+          result += (i+1)+": "+text+"<br>";
+        }
+
+        document.getElementById("resultElement").innerHTML = result;
+      }
+    </script>
+  </head>
+
+  <body>
+    <h1>Ten times more</h1>
+    <p>Write some text in the text field and press the button.</p>
+
+    <input type="text" id="myTextField">
+    <button onclick="repeatMe()">Repeat me!</button>
+
+    <p>Output:</p>
+
+    <p id="resultElement"></p>
+
+  </body>
+</html>
