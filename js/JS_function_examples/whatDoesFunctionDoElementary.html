@@ -38,32 +38,21 @@ function f2(){
 //=======================================================
 function f3(){
   var string1 = "Hello";
-  var string2 = " world!";
-  return string1 + string2;
+  var string2 = "world!";
+  return string1 +" "+string2;
 }
 //=========================================================
 function f4(){
   var numb1 = 3;
   var numb2 = 4;
   var product = numb1 * numb2;
-  var message = "Product of "+numb1+" and "+numb2+
+  var message = numb1+" times "+numb2+
                 " equals " + product;
   return message;
 }
 
 //=================================================
-function for1(){
-  var result = "";
-  var max = 10;
-  var i = 0;
-  for (i = 0; i < max; i++){
-    result += i;
-  }
-  return result;
-}
-
-//=================================================
-function for2(){
+function f5(){
   var result = "";
   var max = 10;
   var i = 0;
@@ -72,67 +61,12 @@ function for2(){
   }
   return result;
 }
-//=================================================
-function for3(){
-  var result = "";
-  var max = 10;
-  for (var i = 5; i < max; i++){
-    result += i+"<br>";
-  }
-  return result;
-}
-//=========================================================
-function for4(){
-  var result = "";
-  var max = 10;
-  for (var i = max; i > 0; i--){
-    result += i+"<br>";
-  }
-  return result;
-}
-//=========================================================
-function for5(){
-  var result = "";
-  var max = 10;
-  for (var i = max; i > 0; i=i-2){
-    result += i+"<br>";
-  }
-  return result;
-}
-//=========================================================
-function for_if_else(){
-  var result = "";
-  var max = 10;
-  var i = 0;
-  for (i = 0; i < max; i++){
-    if(i < max-1){  // If not the last one
-      result += i + ", ";
-    } else{   // Last number - no comma after
-      result += i;
-    }
-  }
-  return result;
-}
-//=========================================================
-function double_for(){
-  var result = "";
-  const asterisk = "*";  // const refers to a constant value.
-  var i,j;
-  for (i = 0; i < 20; i++){
-    result += "<br>";
-    for (j = 0; j < 20; j++){  // i changes, too!
-      result += asterisk;
-    }
-  }
-  return result;
-}
-//============================================================
 
 //=============== End of logical tasks ======================
 //============================================================
 
 // If you add a new function above, just add its name in this array. That's it!
-var functions = [f1, f2, f3, f4, for1, for2, for3, for4, for5, for_if_else, double_for];
+var functions = [f1, f2, f3, f4, f5];
 var fShow;
 
 function init(){

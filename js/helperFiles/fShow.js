@@ -70,7 +70,7 @@ class FunctionShow {
     for (i=0; i<this.getFuncArray().length; i++){
        count = i+1;
        elemId = "code"+count;
-       html += '<hr><h2>Function number '+count+' ('+this.funcArray[i].name+'):</h2>'+
+       html += '<hr><h2>Function '+count+' ('+this.funcArray[i].name+'):</h2>'+
                 this.showSourceCode(this.funcArray[i], elemId)+
                 '<button style="'+this.btnStyle+'" onclick="fShow.showResult('+count+')">'+
                    'Show result of function '+this.funcArray[i].name+
