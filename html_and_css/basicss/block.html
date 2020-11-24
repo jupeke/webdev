@@ -3,23 +3,36 @@
 <head>
 <title>css</title>
 <style>
+  body{
+  }
   .block {
-    text-align: center;
-    font-size: 150%;
-    color: red;
     background-color: pink;
-    height: 200px;
-    width: 200px;
-    padding: 40px;
-    border-radius: 40px;
+    height: 150px;
+    width: 150px;
+    padding: 30px;
+    border-radius: 70px;
     border: 30px solid red;
-    margin: 20%;
-    border-left: blue:
+    border-left: blue;
+  }
+  .centered{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  .text{
+    text-align: center;
+    font-size: 130%;
+    color: red;
   }
 </style>
 </head>
 
 <body>
-<div class="block"> This is a block element.</div>
+<div class="block centered">
+  <div class="text centered">This is a block element.</div>
+</div>
 </body>
 </html>
