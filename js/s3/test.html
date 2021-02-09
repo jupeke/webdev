@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+    <title>JS example</title>
+    <style>
+      body{font-size: 130%; background-color: lightgreen}
+      input, button {font-size: 90%;}
+      #output {font-weight: bold; color: blue}
+    </style>
+
+
+    <script>
+       // Returns the text in the text field with the given id
+      function getText(id){
+        var text = document. getElementById(id). value;
+        return text;
+      }
+      // Replaces the content of the element (id given)
+      // with the value of reply parameter.
+      function ShowReply(id, reply){
+         document.getElementById(id).innerHTML = reply;
+      }
+
+
+
+      // Formats and shows the Reply
+      function reply(){
+        var textFromUser = getText("myTextField");
+        var reply = textFromUser + "";
+        ShowReply("output", reply);
+      }
+    </script>
+    </head>
+ <body>
+    <h1>What does a function say?</h1>
+    <p>Write some text in the texte field and press the button.</p>
+
+
+
+    <input type="text" id="myTextField">
+    <button onclick="reply()">Get a reply</button>
+
+     <p>Reply: <span id="output"></span></p>
+
+
+
+   </body>
+  </html>
