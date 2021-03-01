@@ -7,7 +7,6 @@
       input, button {font-size: 90%;}
       #output {font-weight: bold; color: blue}
     </style>
-
     <script>
       // Returns the text in the text field with the given id.
       function getText(id){
@@ -23,13 +22,13 @@
 
       // Formats and shows the reply.
       function reply(){
-        var textFromUser = getText("myTextField");
-        var reply = "";
-        for(var i=0; i < 5; i++){
-          reply += "Hello number "+(8+i)+": "+textFromUser+"<br>";
-        }
+        var input1 = getText("myTextField");
+        var input2 = getText("myTextField2");
+        var reply = input1+" times "+input2+" = "+ input1*input2;
+
         showReply("output", reply);
       }
+
     </script>
   </head>
   <body>
@@ -37,6 +36,7 @@
     <p>Write some text in the text field and press the button.</p>
 
     <input type="text" id="myTextField">
+    <input type="text" id="myTextField2">
     <button onclick="reply()">Get a reply</button>
 
     <p>Reply: <span id="output"></span></p>

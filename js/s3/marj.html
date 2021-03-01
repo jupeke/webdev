@@ -7,7 +7,6 @@
       input, button {font-size: 90%;}
       #output {font-weight: bold; color: blue}
     </style>
-
     <script>
       // Returns the text in the text field with the given id.
       function getText(id){
@@ -15,18 +14,24 @@
         return text;
       }
 
+
+
+
       // Replaces the content of the element (id given)
       // with the value of reply parameter.
       function showReply(id, reply){
         document.getElementById(id).innerHTML = reply;
       }
 
+
+
+
       // Formats and shows the reply.
       function reply(){
         var textFromUser = getText("myTextField");
         var reply = "";
-        for(var i=0; i < 5; i++){
-          reply += "Hello number "+(8+i)+": "+textFromUser+"<br>";
+        for(var i=0; i<5; i++){
+          reply += textFromUser
         }
         showReply("output", reply);
       }
@@ -36,8 +41,14 @@
     <h1>What does a function say?</h1>
     <p>Write some text in the text field and press the button.</p>
 
+
+
+
     <input type="text" id="myTextField">
-    <button onclick="reply()">Get a reply</button>
+    <button onclick="reply()">Get a sreply</button>
+
+
+
 
     <p>Reply: <span id="output"></span></p>
   </body>

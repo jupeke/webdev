@@ -1,48 +1,45 @@
 <!DOCTYPE HTML>
-<html>
- <head>
-    <title>JS example</title>
-    <style>
-      body{font-size: 130%; background-color: lightgreen}
-      input, button {font-size: 90%;}
-      #output {font-weight: bold; color: blue}
-    </style>
+ <html>
+   <head>
+   <title>JS example</title>
+   <style>
+   body{font-size: 130%; background-color: lightgreen}
+   input, button {font-size: 90%;}
+     #output {font-weight: bold; color: blue}
+  </style>
+  <script>
+    // Gets the text of the input element with id=id.
+  function getText(id){
+    return document.getElementById(id).value;
+  }
+
+  //Prints the value of MyReply to the element with id.
+  function output(id, myReply){
+    document.getElementById(id).innerHTML = myReply;
+  }
 
 
-    <script>
-       // Returns the text in the text field with the given id
-      function getText(id){
-        var text = document. getElementById(id). value;
-        return text;
-      }
-      // Replaces the content of the element (id given)
-      // with the value of reply parameter.
-      function ShowReply(id, reply){
-         document.getElementById(id).innerHTML = reply;
-      }
-
-
-
-      // Formats and shows the Reply
-      function reply(){
-        var textFromUser = getText("myTextField");
-        var reply = textFromUser + "";
-        ShowReply("output", reply);
-      }
+    // This is the main function of this program.
+  function reply(){
+    var text = getText("myTextField");
+    var reply = "piip<br>" + text;
+    output("output",reply);
+    }
     </script>
-    </head>
+  </head>
  <body>
-    <h1>What does a function say?</h1>
-    <p>Write some text in the texte field and press the button.</p>
+  <h1>What does the program say?</h1>
 
 
 
-    <input type="text" id="myTextField">
-    <button onclick="reply()">Get a reply</button>
+  <input type="text" id="myTextField">
+  <button onclick="reply()">Get a response</button>
 
-     <p>Reply: <span id="output"></span></p>
+
+
+  <div>Reply: <span id="output"></span></div>
 
 
 
    </body>
-  </html>
+ </html>
