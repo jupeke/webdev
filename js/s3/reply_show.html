@@ -23,11 +23,11 @@
 
       // Formats and shows the reply.
       function reply(){
-        var textFromUser = getText("myTextField");
-        var reply = "";
-        for(var i=0; i < 5; i++){
-          reply += "Hello number "+(8+i)+": "+textFromUser+"<br>";
-        }
+        var textFromUser1 = getText("myTextField1");
+        var textFromUser2 = getText("myTextField2");
+        var textFromUser3 = getText("myTextField3");
+
+        var reply = textFromUser1*textFromUser2*textFromUser3;
         showReply("output", reply);
       }
     </script>
@@ -36,7 +36,9 @@
     <h1>What does a function say?</h1>
     <p>Write some text in the text field and press the button.</p>
 
-    <input type="text" id="myTextField">
+    <input type="text" id="myTextField1">
+    <input type="text" id="myTextField2">
+    <input type="text" id="myTextField3">
     <button onclick="reply()">Get a reply</button>
 
     <p>Reply: <span id="output"></span></p>
