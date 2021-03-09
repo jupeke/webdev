@@ -16,41 +16,49 @@
       }
 
       // Replaces the content of the element (id given)
-      // with the value of reply parameter.
-      function showReply(id, reply){
-        document.getElementById(id).innerHTML = reply;
+      // with the value of the content parameter.
+      function print(id, content){
+        document.getElementById(id).innerHTML = content;
       }
-
+      // Shows on question:
       function showQuestion(){
         var n1 = parseInt(Math.round(Math.random()*10));
         var n2 = parseInt(Math.round(Math.random()*10));
-        var q = "How much is "+n1+" + "+n2+"?";
-
-        return n1+n2;
+        var q = "<p>How much is "+n1+" + "+n2+"?";
+        q += '<input type="text" id="myTextField">';
+        print("question", q);
+        return (n1+n2)
       }
-      function showEnd(){
-        document.body.innerHTML = "<h1>Byebye!</h1>";
+
+      function check(answer){
+
+      }
+
+      function askOneMore(){
+        return confirm("One more?");
+      }
+
+      // Shows the end view:
+      function showTheEnd(){
+        document.body.innerHTML = "<div id='end'>Byebye!</div>";
       }
 
       // Formats and shows the reply.
-      function reply(){
-        var textFromUser = getText("myTextField");
-        var reply = "";
-        while (textFromUser === "no"){
-          reply ="Ok, byebye";
+      function main(){
+        var goon = true;
+        var correctAnswer = 0;
+        while (goon === true){
+          showQuestion();
+          goon = askOneMore();
         }
-        showReply("output", reply);
+        showTheEnd();
       }
     </script>
   </head>
-  <body>
-    <h1>Once more?</h1>
-    <p id="question">Do you want to continue (yes/no)? </p>
+  <body onload="main()">
+    <h1>Summing up</h1>
+    <p id="question"></p>
 
 
-    <input type="text" id="myTextField">
-    <button onclick="reply()">Get a reply</button>
-
-    <p><span id="output"></span></p>
   </body>
 </html>
