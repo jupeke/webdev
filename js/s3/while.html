@@ -6,6 +6,7 @@
       body{font-size: 130%; background-color: lightgreen}
       input, button {font-size: 90%;}
       #output {font-weight: bold; color: blue}
+      #end {font-size: 600%; background-color: black; color: white}
     </style>
     <script>
       // Returns the text in the text field with the given id.
@@ -14,42 +15,42 @@
         return text;
       }
 
-
-
-
       // Replaces the content of the element (id given)
       // with the value of reply parameter.
       function showReply(id, reply){
         document.getElementById(id).innerHTML = reply;
       }
 
+      function showQuestion(){
+        var n1 = parseInt(Math.round(Math.random()*10));
+        var n2 = parseInt(Math.round(Math.random()*10));
+        var q = "How much is "+n1+" + "+n2+"?";
 
-
+        return n1+n2;
+      }
+      function showEnd(){
+        document.body.innerHTML = "<h1>Byebye!</h1>";
+      }
 
       // Formats and shows the reply.
       function reply(){
         var textFromUser = getText("myTextField");
         var reply = "";
-        for(var i=0; i<5; i++){
-          reply += textFromUser
+        while (textFromUser === "no"){
+          reply ="Ok, byebye";
         }
         showReply("output", reply);
       }
     </script>
   </head>
   <body>
-    <h1>What does a function say?</h1>
-    <p>Write some text in the text field and press the button.</p>
-
-
+    <h1>Once more?</h1>
+    <p id="question">Do you want to continue (yes/no)? </p>
 
 
     <input type="text" id="myTextField">
-    <button onclick="reply()">Get a sreply</button>
+    <button onclick="reply()">Get a reply</button>
 
-
-
-
-    <p>Reply: <span id="output"></span></p>
+    <p><span id="output"></span></p>
   </body>
 </html>
