@@ -37,10 +37,10 @@
         var n2 = parseInt(Math.round(Math.random()*10));
         var q = "<p>How much is "+n1+" + "+n2+"?";
         q +=
-          '<span id="inputandbutton"><input type="text" id="answerfield">'+
+          '<input type="text" id="answerfield">'+
           '<button type="button" onclick="check('+(n1+n2)+')">'+
             'Check'+
-          '</button></span></p>';
+          '</button></p>';
 
         print("question", q);
         return n1+n2;
