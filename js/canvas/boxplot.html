@@ -17,7 +17,10 @@
 <p>Canvas height: <input type="text" id="cheight" value="100"></p>
 <p>Canvas width: <input type="text" id="cwidth" value="200"></p>
 
-<p><button type="button" onclick="draw()">Draw plot</button></p>
+<p>
+  <button type="button" id="draw">Draw plot</button>
+  <button type="button" id="clear">Clear</button>
+</p>
 
 <canvas id="myCanvas" width="200" height="100"
 style="border:1px solid #d3d3d3;">
@@ -25,92 +28,119 @@ Your browser does not support the canvas element.
 </canvas>
 
 <script>
-
-function getVal(id){
-  return document.getElementById(id).value;
-}
-
-function draw(){
+  // Global variables to make context available:
   var canvas = document.getElementById("myCanvas");
-  var ctx = canvas.getContext("2d");
 
-  // Values got from the user. The two first ones are in pixels, others not.
-  var cheight = getVal("cheight");
-  var cwidth = getVal("cwidth");
-  var ticklen = getVal("tick");
-  var min = getVal("min");
-  var max = getVal("max");
-  var q1 = getVal("q1");
-  var q2 = getVal("q2");
-  var q3 = getVal("q3");
+  // Bind event handler to clear buttons
+  document.getElementById('draw').addEventListener('click', function() {
+    draw(canvas);
+  }, false);
+  document.getElementById('clear').addEventListener('click', function() {
+    clear(canvas);
+  }, false);
 
-  // Values in pixels:
-  var ymiddle = cheight/2;
-  var xmin = 10;
-  var xmax = cwidth-10;
-  var unitstep = (xmax-xmin)/(max-min)
-  var xtick = ticklen*unitstep;
-  var xq1 = xmin+(q1-min)*unitstep;
-  var xq2 = xmin+(q2-min)*unitstep;
-  var xq3 = xmin+(q3-min)*unitstep;
-
-  var ytickline = cheight-20;
-  ctx.moveTo(xmin,ytickline);
-  ctx.lineTo(xmax,ytickline);
-  ctx.stroke();
-
-  var numbofticks = (max-min)/ticklen+1;
-  for(var i = 0; i < numbofticks; i++){
-    ctx.moveTo(xmin+i*xtick,ytickline-3);
-    ctx.lineTo(xmin+i*xtick,ytickline+3);
-    ctx.stroke();
+  function getVal(id){
+    return document.getElementById(id).value;
+  }
+  function getFloat(id){
+    return parseFloat(document.getElementById(id).value);
   }
 
-  // Left vertical (min)
-  ctx.moveTo(xmin,30);
-  ctx.lineTo(xmin,70);
-  ctx.stroke();
+  function clear(cnvs){
+    var ctx = cnvs.getContext("2d");
+    // Clears the canvas:
+    ctx.beginPath();  // Important! Otherwise draws the old ones again next time.
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 
-  // Right vertical (max)
-  ctx.moveTo(180,30);
-  ctx.lineTo(180,70);
-  ctx.stroke();
+  function draw(cnvs){
+    clear(cnvs);
+    var ctx = cnvs.getContext("2d");
 
-  // Left horizontal (min-q1)
-  ctx.moveTo(20,50);
-  ctx.lineTo(50,50);
-  ctx.stroke();
+    // Values got from the user. The two first ones are in pixels, others not.
+    var cheight = getFloat("cheight");
+    var cwidth = getFloat("cwidth");
+    var ticklen = getFloat("tick");
+    var min = getFloat("min");
+    var max = getFloat("max");
+    var q1 = getFloat("q1");
+    var q2 = getFloat("q2");
+    var q3 = getFloat("q3");
 
-  // Top horizontal (q1-q3)
-  ctx.moveTo(50,30);
-  ctx.lineTo(140,30);
-  ctx.stroke();
+    // Formatting
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'blue';
+    ctx.fillStyle = '#00f';
+    ctx.font = 'italic 10px sans-serif';
 
-  // Bottom horizontal (q1-q3)
-  ctx.moveTo(50,70);
-  ctx.lineTo(140,70);
-  ctx.stroke();
+    // Values in pixels:
+    var ymiddle = cheight/2;
+    var xmin = 10;
+    var xmax = cwidth-10;
+    var unitstep = (xmax-xmin)/(max-min)
+    var xtick = ticklen*unitstep;
+    var xq1 = xmin+(q1-min)*unitstep;
+    var xq2 = xmin+(q2-min)*unitstep;
+    var xq3 = xmin+(q3-min)*unitstep;
 
-  // Right horizontal (q3-max)
-  ctx.moveTo(140,50);
-  ctx.lineTo(180,50);
-  ctx.stroke();
+    var ytickline = cheight-20;
+    ctx.moveTo(xmin,ytickline);
+    ctx.lineTo(xmax,ytickline);
+    ctx.stroke();
 
-  // Vertical q1
-  ctx.moveTo(50,30);
-  ctx.lineTo(50,70);
-  ctx.stroke();
+    var numbofticks = (max-min)/ticklen+1;
+    for(var i = 0; i < numbofticks; i++){
+      ctx.moveTo(xmin+i*xtick,ytickline-3);
+      ctx.lineTo(xmin+i*xtick,ytickline+3);
+      ctx.stroke();
+      ctx.fillText(min+i*ticklen, xmin+i*xtick-7, ytickline+13);
+    }
 
-  // Vertical q2
-  ctx.moveTo(90,30);
-  ctx.lineTo(90,70);
-  ctx.stroke();
+    // Left vertical (min)
+    ctx.moveTo(xmin,30);
+    ctx.lineTo(xmin,70);
+    ctx.stroke();
 
-  // Vertical q3
-  ctx.moveTo(140,30);
-  ctx.lineTo(140,70);
-  ctx.stroke();
-}
+    // Right vertical (max)
+    ctx.moveTo(xmax,30);
+    ctx.lineTo(xmax,70);
+    ctx.stroke();
+
+    // Left horizontal (min-q1)
+    ctx.moveTo(xmin,50);
+    ctx.lineTo(xq1,50);
+    ctx.stroke();
+
+    // Top horizontal (q1-q3)
+    ctx.moveTo(xq1,30);
+    ctx.lineTo(xq3,30);
+    ctx.stroke();
+
+    // Bottom horizontal (q1-q3)
+    ctx.moveTo(xq1,70);
+    ctx.lineTo(xq3,70);
+    ctx.stroke();
+
+    // Right horizontal (q3-max)
+    ctx.moveTo(xq3,50);
+    ctx.lineTo(xmax,50);
+    ctx.stroke();
+
+    // Vertical q1
+    ctx.moveTo(xq1,30);
+    ctx.lineTo(xq1,70);
+    ctx.stroke();
+
+    // Vertical q2
+    ctx.moveTo(xq2,30);
+    ctx.lineTo(xq2,70);
+    ctx.stroke();
+
+    // Vertical q3
+    ctx.moveTo(xq3,30);
+    ctx.lineTo(xq3,70);
+    ctx.stroke();
+  }
 
 
 
