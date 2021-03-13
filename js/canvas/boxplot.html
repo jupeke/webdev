@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Draw boxplot">
+  <meta name="keywords" content="boxplot">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Drawing Boxplot</h1>
+<p>Min: <input type="text" id="min" value="5"></p>
+<p>Q1: <input type="text" id="q1" value="15"></p>
+<p>Md: <input type="text" id="q2" value="20"></p>
+<p>Q3: <input type="text" id="q3" value="30"></p>
+<p>Max: <input type="text" id="max" value="35"></p>
+<p>Tick length: <input type="text" id="tick" value="5"></p>
+<p>Canvas height: <input type="text" id="cheight" value="100"></p>
+<p>Canvas width: <input type="text" id="cwidth" value="200"></p>
+
+<p><button type="button" onclick="draw()">Draw plot</button></p>
+
+<canvas id="myCanvas" width="200" height="100"
+style="border:1px solid #d3d3d3;">
+Your browser does not support the canvas element.
+</canvas>
+
+<script>
+
+function getVal(id){
+  return document.getElementById(id).value;
+}
+
+function draw(){
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+
+  // Values got from the user. The two first ones are in pixels, others not.
+  var cheight = getVal("cheight");
+  var cwidth = getVal("cwidth");
+  var ticklen = getVal("tick");
+  var min = getVal("min");
+  var max = getVal("max");
+  var q1 = getVal("q1");
+  var q2 = getVal("q2");
+  var q3 = getVal("q3");
+
+  // Values in pixels:
+  var ymiddle = cheight/2;
+  var xmin = 10;
+  var xmax = cwidth-10;
+  var unitstep = (xmax-xmin)/(max-min)
+  var xtick = ticklen*unitstep;
+  var xq1 = xmin+(q1-min)*unitstep;
+  var xq2 = xmin+(q2-min)*unitstep;
+  var xq3 = xmin+(q3-min)*unitstep;
+
+  var ytickline = cheight-20;
+  ctx.moveTo(xmin,ytickline);
+  ctx.lineTo(xmax,ytickline);
+  ctx.stroke();
+
+  var numbofticks = (max-min)/ticklen+1;
+  for(var i = 0; i < numbofticks; i++){
+    ctx.moveTo(xmin+i*xtick,ytickline-3);
+    ctx.lineTo(xmin+i*xtick,ytickline+3);
+    ctx.stroke();
+  }
+
+  // Left vertical (min)
+  ctx.moveTo(xmin,30);
+  ctx.lineTo(xmin,70);
+  ctx.stroke();
+
+  // Right vertical (max)
+  ctx.moveTo(180,30);
+  ctx.lineTo(180,70);
+  ctx.stroke();
+
+  // Left horizontal (min-q1)
+  ctx.moveTo(20,50);
+  ctx.lineTo(50,50);
+  ctx.stroke();
+
+  // Top horizontal (q1-q3)
+  ctx.moveTo(50,30);
+  ctx.lineTo(140,30);
+  ctx.stroke();
+
+  // Bottom horizontal (q1-q3)
+  ctx.moveTo(50,70);
+  ctx.lineTo(140,70);
+  ctx.stroke();
+
+  // Right horizontal (q3-max)
+  ctx.moveTo(140,50);
+  ctx.lineTo(180,50);
+  ctx.stroke();
+
+  // Vertical q1
+  ctx.moveTo(50,30);
+  ctx.lineTo(50,70);
+  ctx.stroke();
+
+  // Vertical q2
+  ctx.moveTo(90,30);
+  ctx.lineTo(90,70);
+  ctx.stroke();
+
+  // Vertical q3
+  ctx.moveTo(140,30);
+  ctx.lineTo(140,70);
+  ctx.stroke();
+}
+
+
+
+</script>
+
+</body>
+</html>
