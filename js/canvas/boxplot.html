@@ -5,29 +5,59 @@
   <meta name="description" content="Draw boxplot">
   <meta name="keywords" content="boxplot">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    input.text { width: 200px}
+    input.number { width: 40px}
+    #allinput {text-align: center;}
+    .center {text-align: center}
+    #fields1 { display: inline-block; text-align: left;}
+    #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
+    body {background-color: lightblue}
+    canvas {background-color: white; display: block; margin: 10px auto 10px auto}
+  </style>
 </head>
 <body>
-<h1>Drawing Boxplot</h1>
-<p>Min: <input type="text" id="min" value="5"></p>
-<p>Q1: <input type="text" id="q1" value="15"></p>
-<p>Md: <input type="text" id="q2" value="20"></p>
-<p>Q3: <input type="text" id="q3" value="30"></p>
-<p>Max: <input type="text" id="max" value="35"></p>
-<p>Tick length: <input type="text" id="tick" value="5"></p>
-<p>Canvas height: <input type="text" id="cheight" value="100"></p>
-<p>Canvas width: <input type="text" id="cwidth" value="200"></p>
-
-<p>
+<h1 class="center">Drawing Boxplot</h1>
+<div id="allinput">
+  <div id="fields1">
+    <p>Main title: <input class="text" type="text" id="title" value="Tree heights in a forest"></p>
+    <p>Min: <input class="number" type="text" id="min" value="5"></p>
+    <p>Q1: <input class="number" type="text" id="q1" value="15"></p>
+    <p>Md: <input class="number" type="text" id="q2" value="20"></p>
+    <p>Q3: <input class="number" type="text" id="q3" value="30"></p>
+    <p>Max: <input class="number" type="text" id="max" value="35"></p>
+  </div>
+  <div id="fields2">
+    <p>Axis title <input class="text" type="text" id="axistitle" value="Height (m)"></p>
+    <p>Tick length: <input class="number" type="text" id="tick" value="5"></p>
+    <p>Axis start: <input class="number" type="text" id="start" value="0"></p>
+    <p>Axis end: <input class="number" type="text" id="end" value="40"></p>
+    <p>Canvas height: <input class="number" type="text" id="cheight" value="200"></p>
+    <p>Canvas width: <input class="number" type="text" id="cwidth" value="400"></p>
+  </div>
+</div>
+<p class="center">
   <button type="button" id="draw">Draw plot</button>
   <button type="button" id="clear">Clear</button>
 </p>
 
-<canvas id="myCanvas" width="200" height="100"
+<canvas id="myCanvas" width="400" height="200"
 style="border:1px solid #d3d3d3;">
 Your browser does not support the canvas element.
 </canvas>
 
 <script>
+
+  // Returns a float number rounded to the given number of figures, or NaN.
+  // The 1st parameter is the number to be rounded (text type ok) and the
+  // 2nd one is the number of figures.
+  function roundTo(orig, numbOfFig){
+    var n = orig*Math.pow(10,numbOfFig);
+    var n_rounded = Math.round(n);
+    var final = n_rounded/Math.pow(10,numbOfFig);
+    return final;
+  }
+
   // Global variables to make context available:
   var canvas = document.getElementById("myCanvas");
 
@@ -66,79 +96,114 @@ Your browser does not support the canvas element.
     var q1 = getFloat("q1");
     var q2 = getFloat("q2");
     var q3 = getFloat("q3");
+    var axisstart = min;
+    if(getFloat("start") < min){
+      axisstart = Math.round(getFloat("start"));
+    }
+    var axisend = max;
+    if(getFloat("end") > max){
+      axisend = Math.round(getFloat("end"));
+    }
+    var title = getVal("title");
+    var axistitle = getVal("axistitle");
+
+    var linew = 2;
+    var basefontsize = 10;
+
+    canvas.width = cwidth;
+    canvas.height = cheight;
 
     // Formatting
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'blue';
-    ctx.fillStyle = '#00f';
-    ctx.font = 'italic 10px sans-serif';
+    ctx.lineWidth = linew;
+    ctx.strokeStyle = 'black';
+    ctx.fillStyle = 'black';
 
-    // Values in pixels:
-    var ymiddle = cheight/2;
-    var xmin = 10;
-    var xmax = cwidth-10;
-    var unitstep = (xmax-xmin)/(max-min)
+    // Values in pixels. Rounded where error does not get repeated.
+    var ymiddle = cheight/2-10;
+    var xmiddle = Math.round(cwidth/2);
+    var boxheight = (ymiddle-40)*2;
+    var yboxtop = Math.round(ymiddle+boxheight/2);
+    var yboxbottom = Math.round(ymiddle-boxheight/2);
+    var xaxisstart = 15;
+    var xaxisend = cwidth-15;
+    var unitstep = (xaxisend-xaxisstart)/(axisend-axisstart);
     var xtick = ticklen*unitstep;
-    var xq1 = xmin+(q1-min)*unitstep;
-    var xq2 = xmin+(q2-min)*unitstep;
-    var xq3 = xmin+(q3-min)*unitstep;
+    var xmin = Math.round(xaxisstart+(min-axisstart)*unitstep);
+    var xmax = Math.round(xaxisstart+(max-axisstart)*unitstep);
+    var xq1 = Math.round(xmin+(q1-min)*unitstep);
+    var xq2 = Math.round(xmin+(q2-min)*unitstep);
+    var xq3 = Math.round(xmin+(q3-min)*unitstep);
 
-    var ytickline = cheight-20;
-    ctx.moveTo(xmin,ytickline);
-    ctx.lineTo(xmax,ytickline);
+    // Titles:
+    ctx.textAlign = "center";
+    ctx.font = 'normal '+(basefontsize+5)+'px sans-serif';
+    ctx.fillText(title, xmiddle, 20);
+    ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
+    ctx.fillText(axistitle, xmiddle, cheight-10);
+
+
+    // Axis:
+    var ytickline = cheight-40;
+    ctx.moveTo(xaxisstart,ytickline);
+    ctx.lineTo(xaxisend,ytickline);
     ctx.stroke();
 
-    var numbofticks = (max-min)/ticklen+1;
+    ctx.font = 'bold '+basefontsize+'px sans-serif';
+    var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
     for(var i = 0; i < numbofticks; i++){
-      ctx.moveTo(xmin+i*xtick,ytickline-3);
-      ctx.lineTo(xmin+i*xtick,ytickline+3);
+      ctx.moveTo(Math.round(xaxisstart+i*xtick),ytickline-3);
+      ctx.lineTo(Math.round(xaxisstart+i*xtick),ytickline+3);
       ctx.stroke();
-      ctx.fillText(min+i*ticklen, xmin+i*xtick-7, ytickline+13);
+      ctx.textAlign = "center";
+      ctx.fillText(
+        roundTo(axisstart+i*ticklen,2),
+          Math.round(xaxisstart+i*xtick), ytickline+13);
     }
+    //ctx.strokeStyle = 'blue';
 
     // Left vertical (min)
-    ctx.moveTo(xmin,30);
-    ctx.lineTo(xmin,70);
+    ctx.moveTo(xmin,yboxtop);
+    ctx.lineTo(xmin,yboxbottom);
     ctx.stroke();
 
     // Right vertical (max)
-    ctx.moveTo(xmax,30);
-    ctx.lineTo(xmax,70);
+    ctx.moveTo(xmax,yboxtop);
+    ctx.lineTo(xmax,yboxbottom);
     ctx.stroke();
 
     // Left horizontal (min-q1)
-    ctx.moveTo(xmin,50);
-    ctx.lineTo(xq1,50);
+    ctx.moveTo(xmin,ymiddle);
+    ctx.lineTo(xq1, ymiddle);
     ctx.stroke();
 
     // Top horizontal (q1-q3)
-    ctx.moveTo(xq1,30);
-    ctx.lineTo(xq3,30);
+    ctx.moveTo(xq1,yboxtop);
+    ctx.lineTo(xq3,yboxtop);
     ctx.stroke();
 
     // Bottom horizontal (q1-q3)
-    ctx.moveTo(xq1,70);
-    ctx.lineTo(xq3,70);
+    ctx.moveTo(xq1,yboxbottom);
+    ctx.lineTo(xq3,yboxbottom);
     ctx.stroke();
 
     // Right horizontal (q3-max)
-    ctx.moveTo(xq3,50);
-    ctx.lineTo(xmax,50);
+    ctx.moveTo(xq3,ymiddle);
+    ctx.lineTo(xmax,ymiddle);
     ctx.stroke();
 
     // Vertical q1
-    ctx.moveTo(xq1,30);
-    ctx.lineTo(xq1,70);
+    ctx.moveTo(xq1,yboxtop);
+    ctx.lineTo(xq1,yboxbottom);
     ctx.stroke();
 
     // Vertical q2
-    ctx.moveTo(xq2,30);
-    ctx.lineTo(xq2,70);
+    ctx.moveTo(xq2,yboxtop);
+    ctx.lineTo(xq2,yboxbottom);
     ctx.stroke();
 
     // Vertical q3
-    ctx.moveTo(xq3,30);
-    ctx.lineTo(xq3,70);
+    ctx.moveTo(xq3,yboxtop);
+    ctx.lineTo(xq3,yboxbottom);
     ctx.stroke();
   }
 
