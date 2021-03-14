@@ -6,17 +6,19 @@
   <meta name="keywords" content="boxplot">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    input.text { width: 200px}
-    input.number { width: 40px}
-    #allinput {text-align: center;}
-    .center {text-align: center}
-    #fields1 { display: inline-block; text-align: left;}
-    #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
     body {background-color: lightblue}
     canvas {background-color: white; display: block; margin: 10px auto 10px auto}
+    input.text { width: 200px}
+    input.number { width: 40px}
+    a {text-align: center; display: block}
+    #allinput {text-align: center;}
+    #fields1 { display: inline-block; text-align: left;}
+    #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
+    .center {text-align: center}
   </style>
 </head>
 <body>
+<a href="../../index.html">Home</a>
 <h1 class="center">Drawing Boxplot</h1>
 <div id="allinput">
   <div id="fields1">
@@ -206,10 +208,6 @@ Your browser does not support the canvas element.
     ctx.lineTo(xq3,yboxbottom);
     ctx.stroke();
   }
-
-
-
 </script>
-
 </body>
 </html>
