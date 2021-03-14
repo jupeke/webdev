@@ -112,8 +112,12 @@ Your browser does not support the canvas element.
     var linew = 2;
     var basefontsize = 10;
 
-    canvas.width = cwidth;
-    canvas.height = cheight;
+    cnvs.width = cwidth;
+    cnvs.height = cheight;
+
+    // White background:
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, cnvs.width, cnvs.height);
 
     // Formatting
     ctx.lineWidth = linew;
