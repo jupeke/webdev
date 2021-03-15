@@ -214,8 +214,8 @@ Your browser does not support the canvas element.
     var showvalues = document.getElementById("showvals").checked;
 
     // These values are not checked. User will see it though if they are not good.
-    var axisstart = Math.round(getFloat("start"));
-    var axisend = Math.round(getFloat("end"));
+    var axisstart = getFloat("start");
+    var axisend = getFloat("end");
 
     var axistitle = getVal("axistitle");
 
@@ -286,7 +286,7 @@ Your browser does not support the canvas element.
       ctx.lineTo(Math.round(xaxisstart+i*xtick),ytickline+3);
       ctx.stroke();
       ctx.fillText(
-        roundTo(axisstart+i*ticklen,2),
+        roundTo(axisstart+i*ticklen,3),
           Math.round(xaxisstart+i*xtick), ytickline+13);
     }
 
