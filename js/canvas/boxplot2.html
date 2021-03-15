@@ -65,6 +65,8 @@
 <p class="center">
   <button type="button" id="draw">Draw plot</button>
   <button type="button" id="clear">Clear</button>
+  <input type="checkbox" id="showvals">
+  <label for="showvals">Show values</label>
 </p>
 
 <canvas id="myCanvas" width="300" height="150"
@@ -115,20 +117,26 @@ Your browser does not support the canvas element.
   var canvas = document.getElementById("myCanvas");
   var numbOfPlots = 1;
 
-  // Bind event handler to clear buttons
+  // Bind event handlers to buttons etc.
   document.getElementById('draw').addEventListener('click', function() {
     draw(canvas);
   }, false);
+
   document.getElementById('clear').addEventListener('click', function() {
     clear(canvas);
   }, false);
+
   document.getElementById('number').addEventListener('change', function() {
     addFieldsForSeveralPlots(this.value);
     numbOfPlots = this.value;
   }, false);
 
+  document.getElementById('showvals').addEventListener('change', function() {
+    draw(canvas);
+  }, false);
+
   function load(){
-    numbOfPlots = document.getElementById('number').value;
+    numbOfPlots = parseInt(document.getElementById('number').value);
     addFieldsForSeveralPlots(numbOfPlots);
   }
 
@@ -197,6 +205,7 @@ Your browser does not support the canvas element.
     var cheight = getFloat("cheight");
     var cwidth = getFloat("cwidth");
     var ticklen = getFloat("tick");
+    var showvalues = document.getElementById("showvals").checked;
 
     // These values are not checked. User will see it though if they are not good.
     var axisstart = Math.round(getFloat("start"));
@@ -228,9 +237,26 @@ Your browser does not support the canvas element.
     ctx.fillStyle = 'black';
 
     // Values in pixels. Rounded where error does not get repeated.
-    var spacebelow = 60;  // Space below the box on the bottom (tick line + title)
-    var spaceabove = 40;  // Space above each box (for title)
-    var boxheight = (cheight-spacebelow-numbOfPlots*spaceabove)/numbOfPlots;
+
+    // Space below/above the box on the bottom (tick line + title)
+    var spacebelow = 40+Math.round(cheight/(7*numbOfPlots));
+    var spaceabove = 30+Math.round(cheight/(7*numbOfPlots));
+
+    // Setting a flexible space below the box title:
+    var titlepaddingbottom = (10+Math.round(cheight/100));
+
+    // Shows main title a bit differently if it's the only one:
+    if(numbOfPlots === 1){
+      titlepaddingbottom = Math.round(spaceabove/2);
+    }
+    else{
+      if(showvalues){
+        titlepaddingbottom += 5;
+      }
+    }
+
+    // Boxheight changes depending on the canvas height and the number of plots.
+    var boxheight =(cheight-spacebelow-numbOfPlots*spaceabove)/numbOfPlots;
     var xmiddle = Math.round(cwidth/2);
     var xaxisstart = 15;
     var xaxisend = cwidth-15;
@@ -262,8 +288,10 @@ Your browser does not support the canvas element.
     for(var n = 0; n < numbOfPlots; n++){
 
       var ymiddle = Math.round(n*(spaceabove+boxheight)+spaceabove+boxheight/2);
-      var yboxtop = Math.round(ymiddle+boxheight/2);
-      var yboxbottom = Math.round(ymiddle-boxheight/2);
+      var yboxbottom = Math.round(ymiddle+boxheight/2);
+      var yboxtop = Math.round(ymiddle-boxheight/2);
+
+      var minititlepaddingbottom = 3;
 
       var title = titles[n];
       var min = mins[n];
@@ -281,19 +309,30 @@ Your browser does not support the canvas element.
       // Titles:
       ctx.textAlign = "center";
       ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
-      ctx.fillText(title, xmiddle, Math.round(ymiddle-boxheight/2-10));
+      if(numbOfPlots === 1){
+        ctx.font = 'normal '+(basefontsize+4+cheight/100)+'px sans-serif';
+      }
+      ctx.fillText(title, xmiddle,
+        Math.round(ymiddle-boxheight/2-titlepaddingbottom));
 
       //ctx.strokeStyle = 'blue';
+      ctx.font = 'normal '+(basefontsize-1)+'px sans-serif';
 
       // Left vertical (min)
       ctx.moveTo(xmin,yboxtop);
       ctx.lineTo(xmin,yboxbottom);
       ctx.stroke();
+      if(showvalues){
+        ctx.fillText(min, xmin, yboxtop-minititlepaddingbottom);
+      }
 
       // Right vertical (max)
       ctx.moveTo(xmax,yboxtop);
       ctx.lineTo(xmax,yboxbottom);
       ctx.stroke();
+      if(showvalues){
+        ctx.fillText(max, xmax, yboxtop-minititlepaddingbottom);
+      }
 
       // Left horizontal (min-q1)
       ctx.moveTo(xmin,ymiddle);
@@ -319,16 +358,25 @@ Your browser does not support the canvas element.
       ctx.moveTo(xq1,yboxtop);
       ctx.lineTo(xq1,yboxbottom);
       ctx.stroke();
+      if(showvalues){
+        ctx.fillText(q1, xq1, yboxtop-minititlepaddingbottom);
+      }
 
       // Vertical q2
       ctx.moveTo(xq2,yboxtop);
       ctx.lineTo(xq2,yboxbottom);
       ctx.stroke();
+      if(showvalues){
+        ctx.fillText(q2, xq2, yboxtop-minititlepaddingbottom);
+      }
 
       // Vertical q3
       ctx.moveTo(xq3,yboxtop);
       ctx.lineTo(xq3,yboxbottom);
       ctx.stroke();
+      if(showvalues){
+        ctx.fillText(q3, xq3, yboxtop-minititlepaddingbottom);
+      }
     }
   }
 </script>
