@@ -5,45 +5,77 @@
   <meta name="description" content="Draw boxplot">
   <meta name="keywords" content="boxplot">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draw boxplots</title>
   <style>
-    body {background-color: lightblue}
+    body {background-color: lightblue; font-size: 100%}
     canvas {background-color: white; display: block; margin: 10px auto 10px auto}
-    input.text { width: 200px}
+    input, button, select{
+      display: inline-block;
+      margin: 2px;
+      padding: 5px;
+      font-size: 95%;
+      border-radius: 5px;
+    }
+    input.text { width: 180px}
     input.number { width: 40px}
     a {text-align: center; display: block}
+    p {margin-left: 0; padding-left: 0}
     #allinput {text-align: center;}
     #fields1 { display: inline-block; text-align: left;}
     #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
     .center {text-align: center}
+    .label {display: inline-block; width: 125px}
   </style>
 </head>
-<body>
+<body onload="load()">
 <a href="../../index.html">Home</a>
 <h1 class="center">Drawing Boxplot</h1>
+
+<div class="center">
+  <label for="number">Number of boxplots: </label>
+  <select id="number">
+   <option selected="selected" value="1">1</option>
+   <option value="2">2</option>
+   <option value="3">3</option>
+   <option value="4">4</option>
+   <option value="5">5</option>
+   <option value="6">6</option>
+   <option value="7">7</option>
+  </select>
+</div>
+
 <div id="allinput">
   <div id="fields1">
-    <p>Main title: <input class="text" type="text" id="title" value="Tree heights in a forest"></p>
-    <p>Min: <input class="number" type="text" id="min" value="5"></p>
-    <p>Q1: <input class="number" type="text" id="q1" value="15"></p>
-    <p>Md: <input class="number" type="text" id="q2" value="20"></p>
-    <p>Q3: <input class="number" type="text" id="q3" value="30"></p>
-    <p>Max: <input class="number" type="text" id="max" value="35"></p>
+    <p><span id="tfields1"></span></p>
+    <p><span class="label">Min:</span><span id="tfields2"></span></p>
+    <p><span class="label">Q1:</span><span id="tfields3"></span></p>
+    <p><span class="label">Md:</span><span id="tfields4"></span></p>
+    <p><span class="label">Q3:</span><span id="tfields5"></span></p>
+    <p><span class="label">Max:</span><span id="tfields6"></span></p>
   </div>
   <div id="fields2">
-    <p>Axis title <input class="text" type="text" id="axistitle" value="Height (m)"></p>
-    <p>Tick length: <input class="number" type="text" id="tick" value="5"></p>
-    <p>Axis start: <input class="number" type="text" id="start" value="0"></p>
-    <p>Axis end: <input class="number" type="text" id="end" value="40"></p>
-    <p>Canvas height: <input class="number" type="text" id="cheight" value="200"></p>
-    <p>Canvas width: <input class="number" type="text" id="cwidth" value="400"></p>
+    <p><span class="label">Axis title:</span>
+      <input class="text" type="text" id="axistitle" value="Height (m)"></p>
+    <p><span class="label">Tick interval:</span>
+      <input class="number" type="text" id="tick" value="5"></p>
+    <p><span class="label">Axis start:</span>
+      <input class="number" type="text" id="start" value="0"></p>
+    <p><span class="label">Axis end:</span>
+      <input class="number" type="text" id="end" value="30"></p>
+    <p><span class="label">Canvas height:</span>
+      <input class="number" type="text" id="cheight" value="150"></p>
+    <p><span class="label">Canvas width:</span>
+      <input class="number" type="text" id="cwidth" value="300"></p>
   </div>
 </div>
 <p class="center">
   <button type="button" id="draw">Draw plot</button>
   <button type="button" id="clear">Clear</button>
+  <input type="checkbox" id="showvals">
+  <label for="showvals">Show values</label>
 </p>
 
-<canvas id="myCanvas" width="400" height="200"
+<canvas id="myCanvas" width="300" height="150"
 style="border:1px solid #d3d3d3;">
 Your browser does not support the canvas element.
 </canvas>
@@ -60,22 +92,108 @@ Your browser does not support the canvas element.
     return final;
   }
 
+  function addFieldsForSeveralPlots(numb){
+
+    clearTextFields();
+
+    var elems_first_parts = [
+      '<input class="text" type="text" id="title',
+      '<input class="number" type="text" id="min',
+      '<input class="number" type="text" id="q1',
+      '<input class="number" type="text" id="q2',
+      '<input class="number" type="text" id="q3',
+      '<input class="number" type="text" id="max'
+    ];
+    var linebreak = "";
+    for(var i = 0; i < numb; i++){
+      for(var j = 0; j < 6; j++){
+        if(j === 0){
+          label = '<span class="label">Plot title '+(i+1)+':</span>';
+          content = label+elems_first_parts[j]+(i+1)+
+            '" value="Trees in forest '+(i+1)+'"><br>';
+        } else{
+          content = elems_first_parts[j]+(i+1)+'" value="'+(5*j+2*i)+'">';
+        }
+        append("tfields"+(j+1), content);
+      }
+    }
+  }
+
   // Global variables to make context available:
   var canvas = document.getElementById("myCanvas");
+  var numbOfPlots = 1;
 
-  // Bind event handler to clear buttons
+  // Bind event handlers to buttons etc.
   document.getElementById('draw').addEventListener('click', function() {
     draw(canvas);
   }, false);
+
   document.getElementById('clear').addEventListener('click', function() {
     clear(canvas);
   }, false);
 
+  document.getElementById('number').addEventListener('change', function() {
+    addFieldsForSeveralPlots(this.value);
+    numbOfPlots = parseInt(this.value);
+  }, false);
+
+  document.getElementById('showvals').addEventListener('change', function() {
+    draw(canvas);
+  }, false);
+
+  function load(){
+    numbOfPlots = parseInt(document.getElementById('number').value);
+    addFieldsForSeveralPlots(numbOfPlots);
+  }
+
   function getVal(id){
     return document.getElementById(id).value;
   }
+  // Returns the parseFloat value of the text field elem with the given element.
   function getFloat(id){
     return parseFloat(document.getElementById(id).value);
+  }
+  // Returns the innerHTML of the element.
+  function getContent(id){
+    return document.getElementById(id).innerHTML;
+  }
+
+  // Returns the values in float of the field with idstart of all the plots.
+  function getTextFieldValues(idstart, numb){
+    var values = [];
+    var id = "";
+    for(var j = 0; j < numb; j++){
+      id = idstart+(j+1);
+      values.push(getVal(id))
+    }
+    return values;
+  }
+
+  // Returns the values in float of the field with idstart of all the plots.
+  function getTextFieldFloats(idstart, numb){
+    var floats = [];
+    var id = "";
+    for(var j = 0; j < numb; j++){
+      id = idstart+(j+1);
+      floats.push(getFloat(id))
+    }
+    return floats;
+  }
+
+  function print(id, content){
+    document.getElementById(id).innerHTML = content;
+  }
+  // Appends the content to the end of the elem with id.
+  function append(id, content){
+    var oldcontent = getContent(id);
+    print(id, oldcontent+content);
+  }
+
+  // Clears the text fields for the plots (to create a good number of them)
+  function clearTextFields(){
+    for(var j = 0; j < 6; j++){
+      document.getElementById("tfields"+(j+1)).innerHTML = "";
+    }
   }
 
   function clear(cnvs){
@@ -93,21 +211,21 @@ Your browser does not support the canvas element.
     var cheight = getFloat("cheight");
     var cwidth = getFloat("cwidth");
     var ticklen = getFloat("tick");
-    var min = getFloat("min");
-    var max = getFloat("max");
-    var q1 = getFloat("q1");
-    var q2 = getFloat("q2");
-    var q3 = getFloat("q3");
-    var axisstart = min;
-    if(getFloat("start") < min){
-      axisstart = Math.round(getFloat("start"));
-    }
-    var axisend = max;
-    if(getFloat("end") > max){
-      axisend = Math.round(getFloat("end"));
-    }
-    var title = getVal("title");
+    var showvalues = document.getElementById("showvals").checked;
+
+    // These values are not checked. User will see it though if they are not good.
+    var axisstart = getFloat("start");
+    var axisend = getFloat("end");
+
     var axistitle = getVal("axistitle");
+
+    // These are different for different plots:
+    var titles = getTextFieldValues("title",numbOfPlots);
+    var mins = getTextFieldFloats("min",numbOfPlots);
+    var maxs = getTextFieldFloats("max",numbOfPlots);
+    var q1s = getTextFieldFloats("q1",numbOfPlots);
+    var q2s = getTextFieldFloats("q2",numbOfPlots);
+    var q3s = getTextFieldFloats("q3",numbOfPlots);
 
     var linew = 2;
     var basefontsize = 10;
@@ -125,28 +243,31 @@ Your browser does not support the canvas element.
     ctx.fillStyle = 'black';
 
     // Values in pixels. Rounded where error does not get repeated.
-    var ymiddle = cheight/2-10;
+
+    // Space below/above the box on the bottom (tick line + title)
+    var spacebelow = 40+Math.round(cheight/(7*numbOfPlots));
+    var spaceabove = 30+Math.round(cheight/(7*numbOfPlots));
+
+    // Setting a flexible space below the box title:
+    var titlepaddingbottom = (10+Math.round(cheight/100));
+
+    // Shows main title a bit differently if it's the only one:
+    if(numbOfPlots === 1){
+      titlepaddingbottom = Math.round(spaceabove/2)-5;
+    }
+    else{
+      if(showvalues){
+        titlepaddingbottom += 5;
+      }
+    }
+
+    // Boxheight changes depending on the canvas height and the number of plots.
+    var boxheight =(cheight-spacebelow-numbOfPlots*spaceabove)/numbOfPlots;
     var xmiddle = Math.round(cwidth/2);
-    var boxheight = (ymiddle-40)*2;
-    var yboxtop = Math.round(ymiddle+boxheight/2);
-    var yboxbottom = Math.round(ymiddle-boxheight/2);
     var xaxisstart = 15;
     var xaxisend = cwidth-15;
     var unitstep = (xaxisend-xaxisstart)/(axisend-axisstart);
     var xtick = ticklen*unitstep;
-    var xmin = Math.round(xaxisstart+(min-axisstart)*unitstep);
-    var xmax = Math.round(xaxisstart+(max-axisstart)*unitstep);
-    var xq1 = Math.round(xmin+(q1-min)*unitstep);
-    var xq2 = Math.round(xmin+(q2-min)*unitstep);
-    var xq3 = Math.round(xmin+(q3-min)*unitstep);
-
-    // Titles:
-    ctx.textAlign = "center";
-    ctx.font = 'normal '+(basefontsize+5)+'px sans-serif';
-    ctx.fillText(title, xmiddle, 20);
-    ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
-    ctx.fillText(axistitle, xmiddle, cheight-10);
-
 
     // Axis:
     var ytickline = cheight-40;
@@ -154,63 +275,116 @@ Your browser does not support the canvas element.
     ctx.lineTo(xaxisend,ytickline);
     ctx.stroke();
 
+    ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
+    ctx.textAlign = "center";
+    ctx.fillText(axistitle, xmiddle, cheight-10);
+
     ctx.font = 'bold '+basefontsize+'px sans-serif';
     var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
+
     for(var i = 0; i < numbofticks; i++){
       ctx.moveTo(Math.round(xaxisstart+i*xtick),ytickline-3);
       ctx.lineTo(Math.round(xaxisstart+i*xtick),ytickline+3);
       ctx.stroke();
-      ctx.textAlign = "center";
       ctx.fillText(
-        roundTo(axisstart+i*ticklen,2),
+        roundTo(axisstart+i*ticklen,3),
           Math.round(xaxisstart+i*xtick), ytickline+13);
     }
-    //ctx.strokeStyle = 'blue';
 
-    // Left vertical (min)
-    ctx.moveTo(xmin,yboxtop);
-    ctx.lineTo(xmin,yboxbottom);
-    ctx.stroke();
+    // For each plot:
+    for(var n = 0; n < numbOfPlots; n++){
 
-    // Right vertical (max)
-    ctx.moveTo(xmax,yboxtop);
-    ctx.lineTo(xmax,yboxbottom);
-    ctx.stroke();
+      var ymiddle = Math.round(n*(spaceabove+boxheight)+spaceabove+boxheight/2);
+      var yboxbottom = Math.round(ymiddle+boxheight/2);
+      var yboxtop = Math.round(ymiddle-boxheight/2);
 
-    // Left horizontal (min-q1)
-    ctx.moveTo(xmin,ymiddle);
-    ctx.lineTo(xq1, ymiddle);
-    ctx.stroke();
+      var minititlepaddingbottom = 3;
 
-    // Top horizontal (q1-q3)
-    ctx.moveTo(xq1,yboxtop);
-    ctx.lineTo(xq3,yboxtop);
-    ctx.stroke();
+      var title = titles[n];
+      var min = mins[n];
+      var max = maxs[n];
+      var q1 = q1s[n];
+      var q2 = q2s[n];
+      var q3 = q3s[n];
 
-    // Bottom horizontal (q1-q3)
-    ctx.moveTo(xq1,yboxbottom);
-    ctx.lineTo(xq3,yboxbottom);
-    ctx.stroke();
+      var xmin = Math.round(xaxisstart+(min-axisstart)*unitstep);
+      var xmax = Math.round(xaxisstart+(max-axisstart)*unitstep);
+      var xq1 = Math.round(xmin+(q1-min)*unitstep);
+      var xq2 = Math.round(xmin+(q2-min)*unitstep);
+      var xq3 = Math.round(xmin+(q3-min)*unitstep);
 
-    // Right horizontal (q3-max)
-    ctx.moveTo(xq3,ymiddle);
-    ctx.lineTo(xmax,ymiddle);
-    ctx.stroke();
+      // Titles:
+      ctx.textAlign = "center";
+      ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
+      if(numbOfPlots === 1){
+        ctx.font = 'normal '+(basefontsize+4+cheight/100)+'px sans-serif';
+      }
+      ctx.fillText(title, xmiddle,
+        Math.round(ymiddle-boxheight/2-titlepaddingbottom));
 
-    // Vertical q1
-    ctx.moveTo(xq1,yboxtop);
-    ctx.lineTo(xq1,yboxbottom);
-    ctx.stroke();
+      //ctx.strokeStyle = 'blue';
+      ctx.font = 'normal '+(basefontsize-1)+'px sans-serif';
 
-    // Vertical q2
-    ctx.moveTo(xq2,yboxtop);
-    ctx.lineTo(xq2,yboxbottom);
-    ctx.stroke();
+      // Left vertical (min)
+      ctx.moveTo(xmin,yboxtop);
+      ctx.lineTo(xmin,yboxbottom);
+      ctx.stroke();
+      if(showvalues){
+        ctx.fillText(min, xmin, yboxtop-minititlepaddingbottom);
+      }
 
-    // Vertical q3
-    ctx.moveTo(xq3,yboxtop);
-    ctx.lineTo(xq3,yboxbottom);
-    ctx.stroke();
+      // Right vertical (max)
+      ctx.moveTo(xmax,yboxtop);
+      ctx.lineTo(xmax,yboxbottom);
+      ctx.stroke();
+      if(showvalues){
+        ctx.fillText(max, xmax, yboxtop-minititlepaddingbottom);
+      }
+
+      // Left horizontal (min-q1)
+      ctx.moveTo(xmin,ymiddle);
+      ctx.lineTo(xq1, ymiddle);
+      ctx.stroke();
+
+      // Top horizontal (q1-q3)
+      ctx.moveTo(xq1,yboxtop);
+      ctx.lineTo(xq3,yboxtop);
+      ctx.stroke();
+
+      // Bottom horizontal (q1-q3)
+      ctx.moveTo(xq1,yboxbottom);
+      ctx.lineTo(xq3,yboxbottom);
+      ctx.stroke();
+
+      // Right horizontal (q3-max)
+      ctx.moveTo(xq3,ymiddle);
+      ctx.lineTo(xmax,ymiddle);
+      ctx.stroke();
+
+      // Vertical q1
+      ctx.moveTo(xq1,yboxtop);
+      ctx.lineTo(xq1,yboxbottom);
+      ctx.stroke();
+      if(showvalues){
+        ctx.fillText(q1, xq1, yboxtop-minititlepaddingbottom);
+      }
+
+      // Vertical q2
+      ctx.moveTo(xq2,yboxtop);
+      ctx.lineTo(xq2,yboxbottom);
+      ctx.stroke();
+      if(showvalues){
+        ctx.fillText(q2, xq2, yboxtop-minititlepaddingbottom);
+      }
+
+      // Vertical q3
+      ctx.moveTo(xq3,yboxtop);
+      ctx.lineTo(xq3,yboxbottom);
+      ctx.stroke();
+      if(showvalues){
+        ctx.fillText(q3, xq3, yboxtop-minititlepaddingbottom);
+      }
+    }
   }
 </script>
 </body>
