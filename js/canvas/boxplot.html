@@ -135,6 +135,9 @@ Your browser does not support the canvas element.
   document.getElementById('number').addEventListener('change', function() {
     addFieldsForSeveralPlots(this.value);
     numbOfPlots = parseInt(this.value);
+    document.getElementById("cheight").value = Math.round(100 + 50*numbOfPlots);
+    document.getElementById("end").value = Math.round(28 + 2*numbOfPlots);
+    draw(canvas);
   }, false);
 
   document.getElementById('showvals').addEventListener('change', function() {
