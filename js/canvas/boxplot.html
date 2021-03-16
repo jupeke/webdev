@@ -282,7 +282,7 @@ Your browser does not support the canvas element.
     ctx.textAlign = "center";
     ctx.fillText(axistitle, xmiddle, cheight-10);
 
-    ctx.font = 'bold '+basefontsize+'px sans-serif';
+    ctx.font = 'bold '+(basefontsize+2)+'px sans-serif';
     var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
 
     for(var i = 0; i < numbofticks; i++){
@@ -326,7 +326,7 @@ Your browser does not support the canvas element.
         Math.round(ymiddle-boxheight/2-titlepaddingbottom));
 
       //ctx.strokeStyle = 'blue';
-      ctx.font = 'normal '+(basefontsize-1)+'px sans-serif';
+      ctx.font = 'normal '+(basefontsize)+'px sans-serif';
 
       // Left vertical (min)
       ctx.moveTo(xmin,yboxtop);
