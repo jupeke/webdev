@@ -134,7 +134,7 @@ Your browser does not support the canvas element.
 
   document.getElementById('number').addEventListener('change', function() {
     addFieldsForSeveralPlots(this.value);
-    numbOfPlots = this.value;
+    numbOfPlots = parseInt(this.value);
   }, false);
 
   document.getElementById('showvals').addEventListener('change', function() {
@@ -281,6 +281,7 @@ Your browser does not support the canvas element.
 
     ctx.font = 'bold '+basefontsize+'px sans-serif';
     var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
+
     for(var i = 0; i < numbofticks; i++){
       ctx.moveTo(Math.round(xaxisstart+i*xtick),ytickline-3);
       ctx.lineTo(Math.round(xaxisstart+i*xtick),ytickline+3);
