@@ -26,6 +26,10 @@
     #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
     .center {text-align: center}
     .label {display: inline-block; width: 125px}
+    .title {}
+    .bottomtitle {}
+    .valuelabel {}
+    .tickval {font-weight: normal; font-size: 12px}
   </style>
 </head>
 <body onload="load()">
@@ -76,8 +80,8 @@
   <label for="showvals">Show values</label>
 </p>
 
-<canvas id="myCanvas" width="300" height="150" display="none">
-Your browser does not support the canvas element.
+<canvas id="myCanvas" width="300" height="150">
+  Your browser does not support the canvas element.
 </canvas>
 <svg id="mysvg" width="300" height="150">
   Sorry, your browser does not support inline SVG.
@@ -86,7 +90,15 @@ Your browser does not support the canvas element.
 <script>
 
   // All the JS code is here.
-  var useSVG = True;
+  // Global variables to make context available:
+  var canvas = document.getElementById("myCanvas");
+  var svg = document.getElementById("mysvg");
+  var numbOfPlots = 1;
+  var ticklinecolor = "black";
+  var color = "black";
+  var linew = 2;
+  var basefontsize = 10;
+
   // Returns a float number rounded to the given number of figures, or NaN.
   // The 1st parameter is the number to be rounded (text type ok) and the
   // 2nd one is the number of figures.
@@ -124,19 +136,15 @@ Your browser does not support the canvas element.
     }
   }
 
-  // Global variables to make context available:
-  var canvas = document.getElementById("myCanvas");
-  var svg = document.getElementById("mysvg");
-  var numbOfPlots = 1;
 
   // Bind event handlers to buttons etc.
   document.getElementById('draw').addEventListener('click', function() {
-
-    draw(canvas);
+    draw(canvas, svg);
   }, false);
 
   document.getElementById('clear').addEventListener('click', function() {
     clear(canvas);
+    clearSVG(svg);
   }, false);
 
   document.getElementById('number').addEventListener('change', function() {
@@ -144,11 +152,11 @@ Your browser does not support the canvas element.
     numbOfPlots = parseInt(this.value);
     document.getElementById("cheight").value = Math.round(100 + 50*numbOfPlots);
     document.getElementById("end").value = Math.round(28 + 2*numbOfPlots);
-    draw(canvas);
+    draw(canvas, svg);
   }, false);
 
   document.getElementById('showvals').addEventListener('change', function() {
-    draw(canvas);
+    draw(canvas, svg);
   }, false);
 
   function load(){
@@ -223,28 +231,50 @@ Your browser does not support the canvas element.
   }
   // Creates and appends a DOM elem to a svg element.
   function createLine(x1, y1, x2, y2, lineWidth, color, svg){
-
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    //newLine.setAttribute('id','line2');
+    element.setAttribute('x1',x1);
+    element.setAttribute('y1',y1);
+    element.setAttribute('x2',x2);
+    element.setAttribute('y2',y2);
+    element.setAttribute('stroke-width',lineWidth);
+    element.setAttribute("stroke", color);
+    svg.appendChild(element);
   }
+
   // Creates and appends a DOM elem to a svg element.
-  function createText(x, y, text, classs,svg){
+  function createText(x, y, text, size, classs,svg){
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     element.setAttributeNS(null, 'x', x);
     element.setAttributeNS(null, 'y', y);
+    element.setAttributeNS(null,'class', classs);
+    element.setAttributeNS(null,'style', 'font-size:'+size);
+    element.setAttributeNS(null,'text-anchor', 'middle'); // Center-aligned
     var txt = document.createTextNode(text);
     element.appendChild(txt);
-    txt.setAttribute("class", classs);
     svg.appendChild(element);
   }
 
 // Creates and appends a DOM elem to a svg element.
   function createRect(x, y, width, height,lineWidth, color, svg){
-
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    //newLine.setAttribute('id','line2');
+    element.setAttribute('x',x);
+    element.setAttribute('y',y);
+    element.setAttribute('width',width);
+    element.setAttribute('height',height);
+    element.setAttribute('stroke-width',lineWidth);
+    element.setAttribute("stroke", color);
+    element.setAttributeNS(null, 'fill', 'transparent');
+    svg.appendChild(element);
   }
 
   //================================ SVG ends ==================================
 
-  function draw(cnvs){
+  function draw(cnvs,svg){
     clear(cnvs);
+    clearSVG(svg);
+
     var ctx = cnvs.getContext("2d");
 
     // Values got from the user. The two first ones are in pixels, others not.
@@ -267,11 +297,10 @@ Your browser does not support the canvas element.
     var q2s = getTextFieldFloats("q2",numbOfPlots);
     var q3s = getTextFieldFloats("q3",numbOfPlots);
 
-    var linew = 2;
-    var basefontsize = 10;
-
     cnvs.width = cwidth;
     cnvs.height = cheight;
+    svg.setAttribute("width", cwidth);
+    svg.setAttribute("height", cheight);
 
     // White background:
     ctx.fillStyle = "white";
@@ -320,17 +349,28 @@ Your browser does not support the canvas element.
     ctx.textAlign = "center";
     ctx.fillText(axistitle, xmiddle, cheight-10);
 
+    // SVG:
+    createLine(xaxisstart, ytickline, xaxisend, ytickline, linew, ticklinecolor, svg);
+    createText(xmiddle, cheight-10, axistitle,(basefontsize+4)+"px", "bottomtitle",svg);
+
     ctx.font = 'bold '+(basefontsize+2)+'px sans-serif';
     var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
 
     for(var i = 0; i < numbofticks; i++){
+      var x1 = Math.round(xaxisstart+i*xtick);
+      var y1 = ytickline-3;
+      var x2 = x1;
+      var y2 = ytickline+3;
+      var val = roundTo(axisstart+i*ticklen,3);
       ctx.beginPath();
-      ctx.moveTo(Math.round(xaxisstart+i*xtick),ytickline-3);
-      ctx.lineTo(Math.round(xaxisstart+i*xtick),ytickline+3);
+      ctx.moveTo(x1,y1);
+      ctx.lineTo(x2,y2);
       ctx.stroke();
-      ctx.fillText(
-        roundTo(axisstart+i*ticklen,3),
-          Math.round(xaxisstart+i*xtick), ytickline+13);
+      ctx.fillText(val, x1, y2+11);
+
+      // SVG
+      createLine(x1, y1, x2, y2, linew, ticklinecolor, svg);
+      createText(x1, y2+12, val,(basefontsize+2)+"px", "tickval",svg);
     }
 
     // For each plot:
@@ -359,12 +399,17 @@ Your browser does not support the canvas element.
 
       // Titles:
       ctx.textAlign = "center";
-      ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
+      var y_title = Math.round(ymiddle-boxheight/2-titlepaddingbottom);
+      var fontsize = (basefontsize+4);
       if(numbOfPlots === 1){
-        ctx.font = 'normal '+(basefontsize+4+cheight/100)+'px sans-serif';
+        fontsize = (basefontsize+4+cheight/100);
       }
-      ctx.fillText(title, xmiddle,
-        Math.round(ymiddle-boxheight/2-titlepaddingbottom));
+      ctx.font = 'normal '+fontsize+'px sans-serif';
+      ctx.fillText(title, xmiddle, y_title);
+
+      // SVG
+      createLine(x1, y1, x2, y2, linew, color, svg);
+      createText(xmiddle, y_title, title,fontsize+"px", "title",svg);
 
       //ctx.strokeStyle = 'blue';
       ctx.font = 'normal '+(basefontsize)+'px sans-serif';
@@ -376,7 +421,12 @@ Your browser does not support the canvas element.
       ctx.stroke();
       if(showvalues){
         ctx.fillText(min, xmin, yboxtop-minititlepaddingbottom);
+        createText(xmin, yboxtop-minititlepaddingbottom,
+          min,(basefontsize+1)+"px", "valuelabel",svg);
       }
+
+      // SVG
+      createLine(xmin, yboxtop, xmin, yboxbottom, linew, color, svg);
 
       // Right vertical (max)
       ctx.beginPath();
@@ -385,7 +435,12 @@ Your browser does not support the canvas element.
       ctx.stroke();
       if(showvalues){
         ctx.fillText(max, xmax, yboxtop-minititlepaddingbottom);
+        createText(xmax, yboxtop-minititlepaddingbottom,
+          max,(basefontsize+1)+"px", "valuelabel",svg);
       }
+
+      // SVG
+      createLine(xmax, yboxtop, xmax, yboxbottom, linew, color, svg);
 
       // Left horizontal (min-q1)
       ctx.beginPath();
@@ -393,11 +448,17 @@ Your browser does not support the canvas element.
       ctx.lineTo(xq1, ymiddle);
       ctx.stroke();
 
+      // SVG
+      createLine(xmin, ymiddle, xq1, ymiddle, linew, color, svg);
+
       // Right horizontal (q3-max)
       ctx.beginPath();
       ctx.moveTo(xq3,ymiddle);
       ctx.lineTo(xmax,ymiddle);
       ctx.stroke();
+
+      // SVG
+      createLine(xq3, ymiddle, xmax, ymiddle, linew, color, svg);
 
       // The box: ===========================================================
       ctx.beginPath();
@@ -407,6 +468,8 @@ Your browser does not support the canvas element.
       // Possible q1 value
       if(showvalues){
         ctx.fillText(q1, xq1, yboxtop-minititlepaddingbottom);
+        createText(xq1, yboxtop-minititlepaddingbottom,
+          q1,(basefontsize+1)+"px", "valuelabel",svg);
       }
 
       // Vertical q2 and the possible q2 value
@@ -416,12 +479,24 @@ Your browser does not support the canvas element.
       ctx.stroke();
       if(showvalues){
         ctx.fillText(q2, xq2, yboxtop-minititlepaddingbottom);
+        createText(xq2, yboxtop-minititlepaddingbottom,
+          q2,(basefontsize+1)+"px", "valuelabel",svg);
       }
+
+      // SVG
+      createLine(xq2, yboxtop, xq2, yboxbottom, linew, color, svg);
 
       // Possible q3 value
       if(showvalues){
         ctx.fillText(q3, xq3, yboxtop-minititlepaddingbottom);
+        createText(xq3, yboxtop-minititlepaddingbottom,
+          q3,(basefontsize+1)+"px", "valuelabel",svg);
       }
+
+      // SVG
+      createRect(xq1, yboxtop, boxwidth, Math.round(boxheight),
+        linew, color, svg);
+
       //========================================================================
     }
   }
