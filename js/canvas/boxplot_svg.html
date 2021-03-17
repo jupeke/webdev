@@ -9,6 +9,7 @@
   <style>
     body {background-color: lightblue; font-size: 100%}
     canvas {background-color: white; display: block; margin: 10px auto 10px auto}
+    svg {background-color: white; display: block; margin: 10px auto 10px auto}
     input, button, select{
       display: inline-block;
       margin: 2px;
@@ -75,11 +76,16 @@
   <label for="showvals">Show values</label>
 </p>
 
-<canvas id="myCanvas" width="300" height="150">
+<!--<canvas id="myCanvas" width="300" height="150">
 Your browser does not support the canvas element.
-</canvas>
+</canvas>-->
+<svg id="mysvg" width="300" height="150">
+  Sorry, your browser does not support inline SVG.
+</svg>
 
 <script>
+
+  // All the JS code is here.
 
   // Returns a float number rounded to the given number of figures, or NaN.
   // The 1st parameter is the number to be rounded (text type ok) and the
@@ -119,7 +125,8 @@ Your browser does not support the canvas element.
   }
 
   // Global variables to make context available:
-  var canvas = document.getElementById("myCanvas");
+  //var canvas = document.getElementById("myCanvas");
+  var svg = document.getElementById("mysvg");
   var numbOfPlots = 1;
 
   // Bind event handlers to buttons etc.
@@ -204,6 +211,28 @@ Your browser does not support the canvas element.
     ctx.beginPath();  // Important! Otherwise draws the old ones again next time.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
+
+  //================================ SVG =======================================
+  // SVG specific functions
+  function clearSVG(svg){
+    // https://stackoverflow.com/questions/3674265/is-there-an-easy-way-to-clear-an-svg-elements-contents
+    while (svg.lastChild) {
+      svg.removeChild(svg.lastChild);
+    }
+  }
+
+  function createLine(){
+
+  }
+
+  function createText(){
+
+  }
+  function createRect(){
+
+  }
+
+  //================================ SVG ends ==================================
 
   function draw(cnvs){
     clear(cnvs);
