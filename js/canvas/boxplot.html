@@ -274,6 +274,7 @@ Your browser does not support the canvas element.
 
     // Axis:
     var ytickline = cheight-40;
+    ctx.beginPath();
     ctx.moveTo(xaxisstart,ytickline);
     ctx.lineTo(xaxisend,ytickline);
     ctx.stroke();
@@ -286,6 +287,7 @@ Your browser does not support the canvas element.
     var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
 
     for(var i = 0; i < numbofticks; i++){
+      ctx.beginPath();
       ctx.moveTo(Math.round(xaxisstart+i*xtick),ytickline-3);
       ctx.lineTo(Math.round(xaxisstart+i*xtick),ytickline+3);
       ctx.stroke();
@@ -316,6 +318,8 @@ Your browser does not support the canvas element.
       var xq2 = Math.round(xmin+(q2-min)*unitstep);
       var xq3 = Math.round(xmin+(q3-min)*unitstep);
 
+      var boxwidth = xq3-xq1;
+
       // Titles:
       ctx.textAlign = "center";
       ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
@@ -329,6 +333,7 @@ Your browser does not support the canvas element.
       ctx.font = 'normal '+(basefontsize)+'px sans-serif';
 
       // Left vertical (min)
+      ctx.beginPath();
       ctx.moveTo(xmin,yboxtop);
       ctx.lineTo(xmin,yboxbottom);
       ctx.stroke();
@@ -337,6 +342,7 @@ Your browser does not support the canvas element.
       }
 
       // Right vertical (max)
+      ctx.beginPath();
       ctx.moveTo(xmax,yboxtop);
       ctx.lineTo(xmax,yboxbottom);
       ctx.stroke();
@@ -345,34 +351,29 @@ Your browser does not support the canvas element.
       }
 
       // Left horizontal (min-q1)
+      ctx.beginPath();
       ctx.moveTo(xmin,ymiddle);
       ctx.lineTo(xq1, ymiddle);
       ctx.stroke();
 
-      // Top horizontal (q1-q3)
-      ctx.moveTo(xq1,yboxtop);
-      ctx.lineTo(xq3,yboxtop);
-      ctx.stroke();
-
-      // Bottom horizontal (q1-q3)
-      ctx.moveTo(xq1,yboxbottom);
-      ctx.lineTo(xq3,yboxbottom);
-      ctx.stroke();
-
       // Right horizontal (q3-max)
+      ctx.beginPath();
       ctx.moveTo(xq3,ymiddle);
       ctx.lineTo(xmax,ymiddle);
       ctx.stroke();
 
-      // Vertical q1
-      ctx.moveTo(xq1,yboxtop);
-      ctx.lineTo(xq1,yboxbottom);
+      // The box: ===========================================================
+      ctx.beginPath();
+      ctx.rect(xq1, yboxtop, boxwidth, Math.round(boxheight));
       ctx.stroke();
+
+      // Possible q1 value
       if(showvalues){
         ctx.fillText(q1, xq1, yboxtop-minititlepaddingbottom);
       }
 
-      // Vertical q2
+      // Vertical q2 and the possible q2 value
+      ctx.beginPath();
       ctx.moveTo(xq2,yboxtop);
       ctx.lineTo(xq2,yboxbottom);
       ctx.stroke();
@@ -380,13 +381,11 @@ Your browser does not support the canvas element.
         ctx.fillText(q2, xq2, yboxtop-minititlepaddingbottom);
       }
 
-      // Vertical q3
-      ctx.moveTo(xq3,yboxtop);
-      ctx.lineTo(xq3,yboxbottom);
-      ctx.stroke();
+      // Possible q3 value
       if(showvalues){
         ctx.fillText(q3, xq3, yboxtop-minititlepaddingbottom);
       }
+      //========================================================================
     }
   }
 </script>
