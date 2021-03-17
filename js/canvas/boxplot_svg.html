@@ -9,6 +9,7 @@
   <style>
     body {background-color: lightblue; font-size: 100%}
     canvas {background-color: white; display: block; margin: 10px auto 10px auto}
+    svg {background-color: white; display: block; margin: 10px auto 10px auto}
     input, button, select{
       display: inline-block;
       margin: 2px;
@@ -75,12 +76,17 @@
   <label for="showvals">Show values</label>
 </p>
 
-<canvas id="myCanvas" width="300" height="150">
+<canvas id="myCanvas" width="300" height="150" display="none">
 Your browser does not support the canvas element.
 </canvas>
+<svg id="mysvg" width="300" height="150">
+  Sorry, your browser does not support inline SVG.
+</svg>
 
 <script>
 
+  // All the JS code is here.
+  var useSVG = True;
   // Returns a float number rounded to the given number of figures, or NaN.
   // The 1st parameter is the number to be rounded (text type ok) and the
   // 2nd one is the number of figures.
@@ -120,10 +126,12 @@ Your browser does not support the canvas element.
 
   // Global variables to make context available:
   var canvas = document.getElementById("myCanvas");
+  var svg = document.getElementById("mysvg");
   var numbOfPlots = 1;
 
   // Bind event handlers to buttons etc.
   document.getElementById('draw').addEventListener('click', function() {
+
     draw(canvas);
   }, false);
 
@@ -204,6 +212,36 @@ Your browser does not support the canvas element.
     ctx.beginPath();  // Important! Otherwise draws the old ones again next time.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
+
+  //================================ SVG =======================================
+  // SVG specific functions
+  function clearSVG(svg){
+    // https://stackoverflow.com/questions/3674265/is-there-an-easy-way-to-clear-an-svg-elements-contents
+    while (svg.lastChild) {
+      svg.removeChild(svg.lastChild);
+    }
+  }
+  // Creates and appends a DOM elem to a svg element.
+  function createLine(x1, y1, x2, y2, lineWidth, color, svg){
+
+  }
+  // Creates and appends a DOM elem to a svg element.
+  function createText(x, y, text, classs,svg){
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    element.setAttributeNS(null, 'x', x);
+    element.setAttributeNS(null, 'y', y);
+    var txt = document.createTextNode(text);
+    element.appendChild(txt);
+    txt.setAttribute("class", classs);
+    svg.appendChild(element);
+  }
+
+// Creates and appends a DOM elem to a svg element.
+  function createRect(x, y, width, height,lineWidth, color, svg){
+
+  }
+
+  //================================ SVG ends ==================================
 
   function draw(cnvs){
     clear(cnvs);
@@ -293,12 +331,11 @@ Your browser does not support the canvas element.
       ctx.fillText(
         roundTo(axisstart+i*ticklen,3),
           Math.round(xaxisstart+i*xtick), ytickline+13);
-      //ctx.beginPath();
     }
 
     // For each plot:
     for(var n = 0; n < numbOfPlots; n++){
-      //ctx.beginPath();
+
       var ymiddle = Math.round(n*(spaceabove+boxheight)+spaceabove+boxheight/2);
       var yboxbottom = Math.round(ymiddle+boxheight/2);
       var yboxtop = Math.round(ymiddle-boxheight/2);
