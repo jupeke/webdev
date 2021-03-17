@@ -76,9 +76,9 @@
   <label for="showvals">Show values</label>
 </p>
 
-<!--<canvas id="myCanvas" width="300" height="150">
+<canvas id="myCanvas" width="300" height="150" display="none">
 Your browser does not support the canvas element.
-</canvas>-->
+</canvas>
 <svg id="mysvg" width="300" height="150">
   Sorry, your browser does not support inline SVG.
 </svg>
@@ -86,7 +86,7 @@ Your browser does not support the canvas element.
 <script>
 
   // All the JS code is here.
-
+  var useSVG = True;
   // Returns a float number rounded to the given number of figures, or NaN.
   // The 1st parameter is the number to be rounded (text type ok) and the
   // 2nd one is the number of figures.
@@ -125,12 +125,13 @@ Your browser does not support the canvas element.
   }
 
   // Global variables to make context available:
-  //var canvas = document.getElementById("myCanvas");
+  var canvas = document.getElementById("myCanvas");
   var svg = document.getElementById("mysvg");
   var numbOfPlots = 1;
 
   // Bind event handlers to buttons etc.
   document.getElementById('draw').addEventListener('click', function() {
+
     draw(canvas);
   }, false);
 
@@ -220,15 +221,23 @@ Your browser does not support the canvas element.
       svg.removeChild(svg.lastChild);
     }
   }
-
-  function createLine(){
-
-  }
-
-  function createText(){
+  // Creates and appends a DOM elem to a svg element.
+  function createLine(x1, y1, x2, y2, lineWidth, color, svg){
 
   }
-  function createRect(){
+  // Creates and appends a DOM elem to a svg element.
+  function createText(x, y, text, classs,svg){
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    element.setAttributeNS(null, 'x', x);
+    element.setAttributeNS(null, 'y', y);
+    var txt = document.createTextNode(text);
+    element.appendChild(txt);
+    txt.setAttribute("class", classs);
+    svg.appendChild(element);
+  }
+
+// Creates and appends a DOM elem to a svg element.
+  function createRect(x, y, width, height,lineWidth, color, svg){
 
   }
 
