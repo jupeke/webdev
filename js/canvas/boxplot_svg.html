@@ -96,6 +96,7 @@
   var numbOfPlots = 1;
   var ticklinecolor = "black";
   var color = "black";
+  var textcolor = "black";
   var linew = 2;
   var basefontsize = 10;
 
@@ -235,9 +236,10 @@
 
   // Creates and adds a centered text to a canvas element.
   // Mode stands for "normal", "bold" or "italic".
-  function createText_canvas(x, y, text, size, mode,cnvs){
+  function createText_canvas(x, y, text, size, mode, color, cnvs){
     var ctx = cnvs.getContext("2d");
     //ctx.beginPath();  // Needed?
+    ctx.fillStyle = color;
     ctx.font = mode+' '+size+'px sans-serif';
     ctx.textAlign = "center";
     ctx.fillText(text, x, y);
@@ -372,8 +374,8 @@
     var fontsize = basefontsize+4;
     createLine_canvas(xaxisstart, ytickline, xaxisend, ytickline,
       linew, ticklinecolor, canvas);
-    createText_canvas(xmiddle, cheight-10, axistitle,fontsize+"px",
-      "normal",canvas);
+    createText_canvas(xmiddle, cheight-10, axistitle,fontsize,
+      "normal",textcolor,canvas);
 
     createLine_svg(xaxisstart, ytickline, xaxisend, ytickline,
       linew, ticklinecolor, svg);
@@ -448,7 +450,7 @@
       ctx.stroke();
       if(showvalues){
         ctx.fillText(min, xmin, yboxtop-minititlepaddingbottom);
-        createText(xmin, yboxtop-minititlepaddingbottom,
+        createText_svg(xmin, yboxtop-minititlepaddingbottom,
           min,(basefontsize+1)+"px", "valuelabel",svg);
       }
 
@@ -462,7 +464,7 @@
       ctx.stroke();
       if(showvalues){
         ctx.fillText(max, xmax, yboxtop-minititlepaddingbottom);
-        createText(xmax, yboxtop-minititlepaddingbottom,
+        createText_svg(xmax, yboxtop-minititlepaddingbottom,
           max,(basefontsize+1)+"px", "valuelabel",svg);
       }
 
@@ -495,7 +497,7 @@
       // Possible q1 value
       if(showvalues){
         ctx.fillText(q1, xq1, yboxtop-minititlepaddingbottom);
-        createText(xq1, yboxtop-minititlepaddingbottom,
+        createText_svg(xq1, yboxtop-minititlepaddingbottom,
           q1,(basefontsize+1)+"px", "valuelabel",svg);
       }
 
@@ -506,7 +508,7 @@
       ctx.stroke();
       if(showvalues){
         ctx.fillText(q2, xq2, yboxtop-minititlepaddingbottom);
-        createText(xq2, yboxtop-minititlepaddingbottom,
+        createText_svg(xq2, yboxtop-minititlepaddingbottom,
           q2,(basefontsize+1)+"px", "valuelabel",svg);
       }
 
@@ -516,7 +518,7 @@
       // Possible q3 value
       if(showvalues){
         ctx.fillText(q3, xq3, yboxtop-minititlepaddingbottom);
-        createText(xq3, yboxtop-minititlepaddingbottom,
+        createText_svg(xq3, yboxtop-minititlepaddingbottom,
           q3,(basefontsize+1)+"px", "valuelabel",svg);
       }
 
