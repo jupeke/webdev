@@ -29,7 +29,7 @@
     .title {}
     .bottomtitle {}
     .valuelabel {}
-    .tickval {font-weight: normal; font-size: 12px}
+    .tickval {}
   </style>
 </head>
 <body onload="load()">
@@ -74,10 +74,14 @@
   </div>
 </div>
 <p class="center">
-  <button type="button" id="draw">Draw plot</button>
-  <button type="button" id="clear">Clear</button>
   <input type="checkbox" id="showvals">
   <label for="showvals">Show values</label>
+  <button type="button" id="draw">Draw plot</button>
+  <button type="button" id="clear">Clear</button>
+  <input type="checkbox" id="modesvg" checked="checked">
+  <label for="modesvg">SVG</label>
+  <input type="checkbox" id="modecanvas">
+  <label for="modecanvas">Canvas</label>
 </p>
 
 <canvas id="mycanvas" width="300" height="150">
@@ -373,16 +377,14 @@
     var ytickline = cheight-40;
     var fontsize = basefontsize+4;
     createLine_canvas(xaxisstart, ytickline, xaxisend, ytickline,
-      linew, ticklinecolor, canvas);
+      linew, ticklinecolor, cnvs);
     createText_canvas(xmiddle, cheight-10, axistitle,fontsize,
-      "normal",textcolor,canvas);
+      "normal",textcolor,cnvs);
 
     createLine_svg(xaxisstart, ytickline, xaxisend, ytickline,
       linew, ticklinecolor, svg);
-    createText_svg(xmiddle, cheight-10, axistitle,fontsize+"px",
-      "bottomtitle",svg);
+    createText_svg(xmiddle, cheight-10, axistitle,fontsize, "bottomtitle",svg);
 
-    ctx.font = 'bold '+(basefontsize+2)+'px sans-serif';
     var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
 
     for(var i = 0; i < numbofticks; i++){
@@ -391,15 +393,14 @@
       var x2 = x1;
       var y2 = ytickline+3;
       var val = roundTo(axisstart+i*ticklen,3);
-      ctx.beginPath();
-      ctx.moveTo(x1,y1);
-      ctx.lineTo(x2,y2);
-      ctx.stroke();
-      ctx.fillText(val, x1, y2+11);
+
+      // Canvas:
+      createLine_canvas(x1, y1, x2, y2, linew, ticklinecolor, cnvs);
+      createText_canvas(x1, y2+11, val,basefontsize+2,"normal",textcolor,cnvs);
 
       // SVG
       createLine_svg(x1, y1, x2, y2, linew, ticklinecolor, svg);
-      createText_svg(x1, y2+12, val,(basefontsize+2)+"px", "tickval",svg);
+      createText_svg(x1, y2+12, val,basefontsize+2, "tickval",svg);
     }
 
     // For each plot:
@@ -427,101 +428,85 @@
       var boxwidth = xq3-xq1;
 
       // Titles:
-      ctx.textAlign = "center";
       var y_title = Math.round(ymiddle-boxheight/2-titlepaddingbottom);
       var fontsize = (basefontsize+4);
       if(numbOfPlots === 1){
         fontsize = (basefontsize+4+cheight/100);
       }
-      ctx.font = 'normal '+fontsize+'px sans-serif';
-      ctx.fillText(title, xmiddle, y_title);
+      // Canvas:
+      createText_canvas(xmiddle, y_title, title,fontsize,"normal",textcolor,cnvs);
 
       // SVG
-      createLine_svg(x1, y1, x2, y2, linew, color, svg);
-      createText_svg(xmiddle, y_title, title,fontsize+"px", "title",svg);
-
-      //ctx.strokeStyle = 'blue';
-      ctx.font = 'normal '+(basefontsize)+'px sans-serif';
+      createText_svg(xmiddle, y_title, title,fontsize+2, "title",svg);
 
       // Left vertical (min)
-      ctx.beginPath();
-      ctx.moveTo(xmin,yboxtop);
-      ctx.lineTo(xmin,yboxbottom);
-      ctx.stroke();
       if(showvalues){
-        ctx.fillText(min, xmin, yboxtop-minititlepaddingbottom);
+        createText_canvas(xmin, yboxtop-minititlepaddingbottom, min,
+          basefontsize+1,"normal",textcolor,cnvs);
         createText_svg(xmin, yboxtop-minititlepaddingbottom,
-          min,(basefontsize+1)+"px", "valuelabel",svg);
+          min,basefontsize+1, "valuelabel",svg);
       }
-
+      // canvas
+      createLine_canvas(xmin, yboxtop, xmin, yboxbottom, linew, ticklinecolor, cnvs);
       // SVG
       createLine_svg(xmin, yboxtop, xmin, yboxbottom, linew, color, svg);
 
       // Right vertical (max)
-      ctx.beginPath();
-      ctx.moveTo(xmax,yboxtop);
-      ctx.lineTo(xmax,yboxbottom);
-      ctx.stroke();
       if(showvalues){
-        ctx.fillText(max, xmax, yboxtop-minititlepaddingbottom);
+        createText_canvas(xmax, yboxtop-minititlepaddingbottom,
+          max, basefontsize+1,"normal",textcolor,cnvs);
         createText_svg(xmax, yboxtop-minititlepaddingbottom,
-          max,(basefontsize+1)+"px", "valuelabel",svg);
+          max,basefontsize+1, "valuelabel",svg);
       }
 
+      // canvas
+      createLine_canvas(xmax, yboxtop, xmax, yboxbottom, linew, ticklinecolor, cnvs);
       // SVG
       createLine_svg(xmax, yboxtop, xmax, yboxbottom, linew, color, svg);
 
       // Left horizontal (min-q1)
-      ctx.beginPath();
-      ctx.moveTo(xmin,ymiddle);
-      ctx.lineTo(xq1, ymiddle);
-      ctx.stroke();
-
+      // canvas
+      createLine_canvas(xmin, ymiddle, xq1, ymiddle, linew, ticklinecolor, cnvs);
       // SVG
       createLine_svg(xmin, ymiddle, xq1, ymiddle, linew, color, svg);
 
       // Right horizontal (q3-max)
-      ctx.beginPath();
-      ctx.moveTo(xq3,ymiddle);
-      ctx.lineTo(xmax,ymiddle);
-      ctx.stroke();
-
+      // canvas
+      createLine_canvas(xq3, ymiddle, xmax, ymiddle, linew, ticklinecolor, cnvs);
       // SVG
       createLine_svg(xq3, ymiddle, xmax, ymiddle, linew, color, svg);
 
       // The box: ===========================================================
-      ctx.beginPath();
-      ctx.rect(xq1, yboxtop, boxwidth, Math.round(boxheight));
-      ctx.stroke();
-
       // Possible q1 value
       if(showvalues){
-        ctx.fillText(q1, xq1, yboxtop-minititlepaddingbottom);
+        createText_canvas(xq1, yboxtop-minititlepaddingbottom,
+          q1, basefontsize+1,"normal",textcolor,cnvs);
         createText_svg(xq1, yboxtop-minititlepaddingbottom,
-          q1,(basefontsize+1)+"px", "valuelabel",svg);
+          q1,basefontsize+1, "valuelabel",svg);
       }
 
       // Vertical q2 and the possible q2 value
-      ctx.beginPath();
-      ctx.moveTo(xq2,yboxtop);
-      ctx.lineTo(xq2,yboxbottom);
-      ctx.stroke();
       if(showvalues){
-        ctx.fillText(q2, xq2, yboxtop-minititlepaddingbottom);
+        createText_canvas(xq2, yboxtop-minititlepaddingbottom,
+          q2, basefontsize+1,"normal",textcolor,cnvs);
         createText_svg(xq2, yboxtop-minititlepaddingbottom,
-          q2,(basefontsize+1)+"px", "valuelabel",svg);
+          q2,basefontsize+1, "valuelabel",svg);
       }
-
+      // canvas
+      createLine_canvas(xq2, yboxtop, xq2, yboxbottom, linew, ticklinecolor, cnvs);
       // SVG
       createLine_svg(xq2, yboxtop, xq2, yboxbottom, linew, color, svg);
 
       // Possible q3 value
       if(showvalues){
-        ctx.fillText(q3, xq3, yboxtop-minititlepaddingbottom);
+        createText_canvas(xq3, yboxtop-minititlepaddingbottom,
+          q3, basefontsize+1,"normal",textcolor,cnvs);
         createText_svg(xq3, yboxtop-minititlepaddingbottom,
-          q3,(basefontsize+1)+"px", "valuelabel",svg);
+          q3,basefontsize+1, "valuelabel",svg);
       }
-
+      // Canvas
+      createRect_canvas(xq1, yboxtop, boxwidth, Math.round(boxheight),
+        linew, color, cnvs);
       // SVG
       createRect_svg(xq1, yboxtop, boxwidth, Math.round(boxheight),
         linew, color, svg);
