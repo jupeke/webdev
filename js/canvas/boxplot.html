@@ -394,11 +394,7 @@
     svg.setAttribute("width", cwidth);
     svg.setAttribute("height", cheight);
 
-    // White background:
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, cnvs.width, cnvs.height);
-
-    // Values in pixels. Rounded where error does not get repeated.
+    // Values in pixels: Rounded where error does not get too much repeated.
 
     // Space below/above the box on the bottom (tick line + title)
     var spacebelow = 40+Math.round(cheight/(7*numbOfPlots));
