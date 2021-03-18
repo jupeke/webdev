@@ -7,7 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Draw boxplots</title>
   <style>
-    body {background-color: lightblue; font-size: 100%}
+    body {background-color: lightblue; font-size: 100%;
+      font-family: Arial, sans-serif;
+    }
     canvas {background-color: white; display: block; margin: 10px auto 10px auto}
     svg {background-color: white; display: block; margin: 10px auto 10px auto}
     input, button, select{
@@ -16,6 +18,7 @@
       padding: 5px;
       font-size: 95%;
       border-radius: 5px;
+      font-family: Arial, sans-serif
     }
     input.text { width: 180px}
     input.number { width: 40px}
@@ -26,12 +29,12 @@
     #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
     .center {text-align: center}
     .label {display: inline-block; width: 100px}
-    .title {}
-    .bottomtitle {}
-    .valuelabel {}
-    .tickval {}
+    .title {font-family: Arial, sans-serif}
+    .bottomtitle {font-family: Arial, sans-serif}
+    .valuelabel {font-family: Arial, sans-serif}
+    .tickval {font-family: Arial, sans-serif;}
     .history {
-      font-size: 90%; font-family: Consolas, Calibri, fantasy;
+      font-size: 90%; font-family: "Times New Roman", Arial, sans-serif;
       font-style: italic; olor: black; margin:10%;
     }
   </style>
@@ -280,7 +283,7 @@
     var ctx = cnvs.getContext("2d");
     //ctx.beginPath();  // Needed?
     ctx.fillStyle = color;
-    ctx.font = mode+' '+size+'px sans-serif';
+    ctx.font = mode+' '+size+'px Arial, sans-serif';
     ctx.textAlign = "center";
     ctx.fillText(text, x, y);
   }
@@ -324,7 +327,7 @@
     element.setAttributeNS(null, 'x', x);
     element.setAttributeNS(null, 'y', y);
     element.setAttributeNS(null,'class', classs);
-    element.setAttributeNS(null,'style', 'font-size:'+size);
+    element.setAttributeNS(null,'style', 'font-size:'+size+'px');
     element.setAttributeNS(null,'text-anchor', 'middle'); // Center-aligned
     var txt = document.createTextNode(text);
     element.appendChild(txt);
@@ -445,7 +448,7 @@
 
       // Canvas:
       createLine_canvas(x1, y1, x2, y2, linew, ticklinecolor, cnvs);
-      createText_canvas(x1, y2+11, val,basefontsize+2,"normal",textcolor,cnvs);
+      createText_canvas(x1, y2+12, val,basefontsize+2,"normal",textcolor,cnvs);
 
       // SVG
       createLine_svg(x1, y1, x2, y2, linew, ticklinecolor, svg);
@@ -478,15 +481,15 @@
 
       // Titles:
       var y_title = Math.round(ymiddle-boxheight/2-titlepaddingbottom);
-      var fontsize = (basefontsize+4);
+      var fontsize = basefontsize+4;
       if(numbOfPlots === 1){
-        fontsize = (basefontsize+4+cheight/100);
+        fontsize = (basefontsize+4+cheight/100)+2;
       }
       // Canvas:
       createText_canvas(xmiddle, y_title, title,fontsize,"normal",textcolor,cnvs);
 
       // SVG
-      createText_svg(xmiddle, y_title, title,fontsize+2, "title",svg);
+      createText_svg(xmiddle, y_title, title,fontsize, "title",svg);
 
       // Left vertical (min)
       if(showvalues){
