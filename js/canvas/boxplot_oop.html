@@ -80,7 +80,7 @@
   <label for="showvals">Show values</label>
 </p>
 
-<canvas id="mycanvas" width="300" height="150">
+<canvas id="myCanvas" width="300" height="150">
   Your browser does not support the canvas element.
 </canvas>
 <svg id="mysvg" width="300" height="150">
@@ -91,7 +91,7 @@
 
   // All the JS code is here.
   // Global variables to make context available:
-  var canvas = document.getElementById("mycanvas");
+  var canvas = document.getElementById("myCanvas");
   var svg = document.getElementById("mysvg");
   var numbOfPlots = 1;
   var ticklinecolor = "black";
@@ -143,8 +143,8 @@
   }, false);
 
   document.getElementById('clear').addEventListener('click', function() {
-    clear_canvas(canvas);
-    clear_svg(svg);
+    clear(canvas);
+    clearSVG(svg);
   }, false);
 
   document.getElementById('number').addEventListener('change', function() {
@@ -214,57 +214,23 @@
     }
   }
 
-  //=============================== Canvas =====================================
-  // Canvas specific functions
-  function clear_canvas(cnvs){
+  function clear(cnvs){
     var ctx = cnvs.getContext("2d");
     // Clears the canvas:
     ctx.beginPath();  // Important! Otherwise draws the old ones again next time.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-  // Creates and adds a line to a canvas element.
-  function createLine_canvas(x1, y1, x2, y2, lineWidth, color, cnvs){
-    var ctx = cnvs.getContext("2d");
-    ctx.beginPath();
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = color;
-    ctx.moveTo(x1,y1);
-    ctx.lineTo(x2,y2);
-    ctx.stroke();
-  }
-
-  // Creates and adds a centered text to a canvas element.
-  // Mode stands for "normal", "bold" or "italic".
-  function createText_canvas(x, y, text, size, mode,cnvs){
-    var ctx = cnvs.getContext("2d");
-    //ctx.beginPath();  // Needed?
-    ctx.font = mode+' '+size+'px sans-serif';
-    ctx.textAlign = "center";
-    ctx.fillText(text, x, y);
-  }
-
-// Creates and adds a rectangel to a canvas element.
-  function createRect_canvas(x, y, width, height,lineWidth, color, cnvs){
-    var ctx = cnvs.getContext("2d");
-    ctx.beginPath();
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = color;
-    ctx.rect(x, y, width, height);
-    ctx.stroke();
-  }
-  //============================================================================
 
   //================================ SVG =======================================
   // SVG specific functions
-  function clear_svg(svg){
+  function clearSVG(svg){
     // https://stackoverflow.com/questions/3674265/is-there-an-easy-way-to-clear-an-svg-elements-contents
     while (svg.lastChild) {
       svg.removeChild(svg.lastChild);
     }
   }
-
   // Creates and appends a DOM elem to a svg element.
-  function createLine_svg(x1, y1, x2, y2, lineWidth, color, svg){
+  function createLine(x1, y1, x2, y2, lineWidth, color, svg){
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     //newLine.setAttribute('id','line2');
     element.setAttribute('x1',x1);
@@ -277,7 +243,7 @@
   }
 
   // Creates and appends a DOM elem to a svg element.
-  function createText_svg(x, y, text, size, classs,svg){
+  function createText(x, y, text, size, classs,svg){
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     element.setAttributeNS(null, 'x', x);
     element.setAttributeNS(null, 'y', y);
@@ -290,7 +256,7 @@
   }
 
 // Creates and appends a DOM elem to a svg element.
-  function createRect_svg(x, y, width, height,lineWidth, color, svg){
+  function createRect(x, y, width, height,lineWidth, color, svg){
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     //newLine.setAttribute('id','line2');
     element.setAttribute('x',x);
@@ -306,8 +272,8 @@
   //================================ SVG ends ==================================
 
   function draw(cnvs,svg){
-    clear_canvas(cnvs);
-    clear_svg(svg);
+    clear(cnvs);
+    clearSVG(svg);
 
     var ctx = cnvs.getContext("2d");
 
@@ -340,6 +306,11 @@
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, cnvs.width, cnvs.height);
 
+    // Formatting
+    ctx.lineWidth = linew;
+    ctx.strokeStyle = 'black';
+    ctx.fillStyle = 'black';
+
     // Values in pixels. Rounded where error does not get repeated.
 
     // Space below/above the box on the bottom (tick line + title)
@@ -369,16 +340,18 @@
 
     // Axis:
     var ytickline = cheight-40;
-    var fontsize = basefontsize+4;
-    createLine_canvas(xaxisstart, ytickline, xaxisend, ytickline,
-      linew, ticklinecolor, canvas);
-    createText_canvas(xmiddle, cheight-10, axistitle,fontsize+"px",
-      "normal",canvas);
+    ctx.beginPath();
+    ctx.moveTo(xaxisstart,ytickline);
+    ctx.lineTo(xaxisend,ytickline);
+    ctx.stroke();
 
-    createLine_svg(xaxisstart, ytickline, xaxisend, ytickline,
-      linew, ticklinecolor, svg);
-    createText_svg(xmiddle, cheight-10, axistitle,fontsize+"px",
-      "bottomtitle",svg);
+    ctx.font = 'normal '+(basefontsize+4)+'px sans-serif';
+    ctx.textAlign = "center";
+    ctx.fillText(axistitle, xmiddle, cheight-10);
+
+    // SVG:
+    createLine(xaxisstart, ytickline, xaxisend, ytickline, linew, ticklinecolor, svg);
+    createText(xmiddle, cheight-10, axistitle,(basefontsize+4)+"px", "bottomtitle",svg);
 
     ctx.font = 'bold '+(basefontsize+2)+'px sans-serif';
     var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
@@ -396,8 +369,8 @@
       ctx.fillText(val, x1, y2+11);
 
       // SVG
-      createLine_svg(x1, y1, x2, y2, linew, ticklinecolor, svg);
-      createText_svg(x1, y2+12, val,(basefontsize+2)+"px", "tickval",svg);
+      createLine(x1, y1, x2, y2, linew, ticklinecolor, svg);
+      createText(x1, y2+12, val,(basefontsize+2)+"px", "tickval",svg);
     }
 
     // For each plot:
@@ -435,8 +408,8 @@
       ctx.fillText(title, xmiddle, y_title);
 
       // SVG
-      createLine_svg(x1, y1, x2, y2, linew, color, svg);
-      createText_svg(xmiddle, y_title, title,fontsize+"px", "title",svg);
+      createLine(x1, y1, x2, y2, linew, color, svg);
+      createText(xmiddle, y_title, title,fontsize+"px", "title",svg);
 
       //ctx.strokeStyle = 'blue';
       ctx.font = 'normal '+(basefontsize)+'px sans-serif';
@@ -453,7 +426,7 @@
       }
 
       // SVG
-      createLine_svg(xmin, yboxtop, xmin, yboxbottom, linew, color, svg);
+      createLine(xmin, yboxtop, xmin, yboxbottom, linew, color, svg);
 
       // Right vertical (max)
       ctx.beginPath();
@@ -467,7 +440,7 @@
       }
 
       // SVG
-      createLine_svg(xmax, yboxtop, xmax, yboxbottom, linew, color, svg);
+      createLine(xmax, yboxtop, xmax, yboxbottom, linew, color, svg);
 
       // Left horizontal (min-q1)
       ctx.beginPath();
@@ -476,7 +449,7 @@
       ctx.stroke();
 
       // SVG
-      createLine_svg(xmin, ymiddle, xq1, ymiddle, linew, color, svg);
+      createLine(xmin, ymiddle, xq1, ymiddle, linew, color, svg);
 
       // Right horizontal (q3-max)
       ctx.beginPath();
@@ -485,7 +458,7 @@
       ctx.stroke();
 
       // SVG
-      createLine_svg(xq3, ymiddle, xmax, ymiddle, linew, color, svg);
+      createLine(xq3, ymiddle, xmax, ymiddle, linew, color, svg);
 
       // The box: ===========================================================
       ctx.beginPath();
@@ -511,7 +484,7 @@
       }
 
       // SVG
-      createLine_svg(xq2, yboxtop, xq2, yboxbottom, linew, color, svg);
+      createLine(xq2, yboxtop, xq2, yboxbottom, linew, color, svg);
 
       // Possible q3 value
       if(showvalues){
@@ -521,7 +494,7 @@
       }
 
       // SVG
-      createRect_svg(xq1, yboxtop, boxwidth, Math.round(boxheight),
+      createRect(xq1, yboxtop, boxwidth, Math.round(boxheight),
         linew, color, svg);
 
       //========================================================================

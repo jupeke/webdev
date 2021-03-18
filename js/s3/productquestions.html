@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>JS example</title>
+
+    <style>
+      body{font-size: 130%; background-color: lightgreen}
+      input, button {font-size: 90%; margin-left: 10px}
+      #end {font-size: 1000%; text-align: center;color: darkgreen;margin:auto;}
+    </style>
+
+    <script>
+      // Returns the text in the text field with the given id.
+      function getTextValue(id){
+        var text = document.getElementById(id).value;
+        return text;
+      }
+      // Returns the innerHTML of the HTML elem with the given id.
+      function getContent(id){
+        var c = document.getElementById(id).innerHTML;
+        return c;
+      }
+
+      // Replaces the content of the element (id given)
+      // with the value of the content parameter.
+      function print(id, content){
+        document.getElementById(id).innerHTML = content;
+      }
+      // Show a new question:
+      function showQuestion(){
+
+        // Clear possible comments first.
+        print("comment", "");
+
+        var n1 = parseInt(Math.round(Math.random()*10));
+        var n2 = parseInt(Math.round(Math.random()*10));
+        var q = "<p>How much is "+n1+" &middot; "+n2+"?";
+        q +=
+          '<input type="text" id="answerfield">'+
+          '<button type="button" onclick="check('+(n1*n2)+')">'+
+            'Check'+
+          '</button></p>';
+
+        print("question", q);
+        return n1*n2;
+      }
+
+      // Check if the user has answered correctly.
+      function check(answer){
+        var correct = false;
+        var userInput = parseInt(getTextValue("answerfield"));
+        if (userInput === answer){
+          askIfUserGoesOn();
+        } else{
+          var q = "Your answer '"+userInput+"' is not correct. Please correct!";
+          print("comment", q);
+        }
+      }
+
+      function askIfUserGoesOn(){
+        var q = 'Correct! One more?';
+        q += '<button type="button" onclick="showQuestion()">Yes</button>';
+        q += '<button type="button" onclick="showTheEnd()">No</button>';
+
+        print("comment", q);
+      }
+
+      // Show the end view:
+      function showTheEnd(){
+        document.body.innerHTML = "<div id='end'>Byebye!</div>";
+      }
+    </script>
+  </head>
+  <body onload="showQuestion()">
+    <h1>Summing up</h1>
+    <p id="question"></p>
+    <p id="comment"></p>
+  </body>
+</html>
