@@ -5,7 +5,7 @@
   <meta name="description" content="Draw boxplot">
   <meta name="keywords" content="boxplot">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boxplots</title>
+  <title>Function</title>
   <style>
     body {background-color: lightblue; font-size: 100%;
       font-family: Arial, sans-serif;
@@ -25,26 +25,18 @@
     a.home {text-align: center; display: block}
     p {margin-left: 0; padding-left: 0}
     #allinput {text-align: center;}
-    #fields1 { display: inline-block; margin-right: 20px;text-align: left;}
-    #fields2 { display: inline-block; text-align: left;}
+    #fields1 { display: inline-block; text-align: left;}
+    #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
     .center {text-align: center}
     .label {display: inline-block; width: 100px}
-    .title {font-family: Arial, sans-serif}
-    .bottomtitle {font-family: Arial, sans-serif}
-    .valuelabel {font-family: Arial, sans-serif}
-    .tickval {font-family: Arial, sans-serif;}
-    .history {
-      font-size: 90%; font-family: "Times New Roman", Arial, sans-serif;
-      font-style: italic; olor: black; margin:10%;
-    }
   </style>
 </head>
 <body onload="load()">
 <a class="home" href="../../index.html">Home</a>
-<h1 class="center">Drawing Boxplot</h1>
+<h1 class="center">Function</h1>
 
 <div class="center">
-  <label for="number">Number of boxplots: </label>
+  <label for="number">Number of zeros: </label>
   <select id="number">
    <option selected="selected" value="1">1</option>
    <option value="2">2</option>
@@ -119,8 +111,8 @@
   // Global variables to make context available:
   var canvas = document.getElementById("mycanvas");
   var svg = document.getElementById("mysvg");
-  var numbOfPlots = 1;
-  var ticklinecolor = "black";
+  var numbofzeros = 2;
+  var onclosedinterval = true;
   var color = "black";
   var textcolor = "black";
   var linew = 2;
