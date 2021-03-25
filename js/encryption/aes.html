@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Home</title>
+    <script
+      src="../../node_modules/crypto-js/aes.js">
+    </script>
+  </head>
+
+  <body>
+    <h1>Hello you!</h1>
+
+    <p>Testing cryptojs library</p>
+
+    <p>Sensitive Data: <input type="text" id="rawdata"/></p>
+    <p>Password:       <input type="text" id="password"/></p>
+    <p>Encrypted data: <span id="display1"></span><br/></p>
+    <p><button type="button" id="encrbtn">Encrypt</button></p>
+
+    <p>Encrypted String: <input type="text" id="endata"/></p>
+    <p>Password: <input type="text" id="password2"/></p>
+    <p>Decrypted data: <span id="display2"></span></p>
+    <p><button type="button" id="debtn">Decrypt</button></p>
+
+    <script>
+      var enbtn = document.getElementById("encrbtn");
+      var rawdata = document.getElementById("rawdata");
+      var password = document.getElementById("password");
+      var display1 = document.getElementById("display1");
+      var endata = document.getElementById("endata");
+      var password2 = document.getElementById("password2");
+      var display2 = document.getElementById("display2");
+      var debtn = document.getElementById("debtn");
+
+      enbtn.addEventListener("click",function(e){
+        var ciphertext = CryptoJS.AES.encrypt(rawdata.value, password.value);
+        endata.value =  ciphertext.toString();
+        display1.textContent = ciphertext.toString();
+      });
+
+      debtn.addEventListener("click",function(e){
+        if(password.value != password2.value){
+          alert('password must same as on encrypted');
+          return false;
+        }
+        var Normaltext = CryptoJS.AES.decrypt(endata.value, password2.value);
+        display2.textContent = Normaltext.toString(CryptoJS.enc.Utf8);
+      });
+
+    </script>
+  </body>
+</html>

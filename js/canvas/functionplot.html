@@ -29,6 +29,20 @@
     #fields2 { display: inline-block; margin-left: 40px; text-align: left;}
     .center {text-align: center}
     .label {display: inline-block; width: 100px}
+    table {
+      border-collapse: collapse;
+    }
+    table.merkkikulkutaulu td{
+      border: 1px solid black;
+      text-align: center;
+    }
+    td.doublespan  {
+      width: 60px;
+    }
+    td.singlespan  {
+      width: 30px;
+    }
+
   </style>
   <script>
 
@@ -96,20 +110,31 @@
 
 </div>
 <p class="center">
-  <button type="button" id="draw">Draw plot</button>
-  <button type="button" id="clear">Clear</button>
+  <button type="button" id="draw">Draw</button>
 </p>
 <p class="center">
-  <input type="checkbox" id="showvals">
-  <label for="showvals">Show values</label>
-  <input type="radio" id="modesvg" checked="checked" name="mode" value="svg">
-  <label for="modesvg" title="The best when zoomed in">SVG</label>
-  <input type="radio" id="modecanvas" name="mode" value="canvas">
-  <label for="modecanvas" title="Save As Image feature">Canvas</label>
-  <input type="radio" id="modeboth" name="mode" value="both">
-  <label for="modeboth">Both</label>
-</p>
 
+</p>
+<table class="merkkikulkutaulu" border=0>
+<tr>
+<td class="singlespan">x</td>
+<td class="singlespan"></td>
+<td class="doublespan" colspan=2>1</td>
+<td class="doublespan" colspan=2>4</td>
+<td class="singlespan"></td>
+</tr>
+<tr>
+<td class="singlespan">f'(x)</td>
+<td class="doublespan" colspan="2">−</td>
+<td class="doublespan" colspan="2">+</td>
+<td class="doublespan" colspan="2">−</td>
+<tr>
+<td class="singlespan">f(x)</td>
+<td class="doublespan" colspan="2">↘</td>
+<td class="doublespan" colspan="2">↗</td>
+<td class="doublespan" colspan="2">↘</td>
+</tr>
+</table>
 
 <script>
 
