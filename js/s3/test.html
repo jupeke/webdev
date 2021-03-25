@@ -14,21 +14,21 @@
         return text;
       }
 
-
-
       // Replaces the content of the element (id given)
       // with the value of reply parameter.
       function showReply(id, reply){
         document.getElementById(id).innerHTML = reply;
       }
 
-
-
       // Formats and shows the reply.
       function reply(){
         var textFromUser = getText("myTextField");
-        var reply = textFromUser;
-        showReply("output", reply);
+        var reply = "";
+        if(textFromUser === "24"){
+          showReply("output","That's correct!")
+        } else {
+          showReply("output","Wrong answer!")
+        }
       }
     </script>
   </head>
