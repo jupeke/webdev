@@ -4,16 +4,17 @@
 <title>Function</title>
 
 <script>
-// Returns a string containing all the elements in the array (provided
-// the elements are simple values like strings or numbers)
+// Prints a string containing all the elements
+// in the array to the page (provided the elements are
+// simple values like strings or numbers)
 function printMyArray(myArray){
   var i = 0;
-  var result = "";
+  var result = "Array elements:<br>";
 
   for(i=0; i < myArray.length; i++){
     result += myArray[i]+"<br>";
   }
-  return result+"<br><br>";
+  document.write("<p>"+result+"</p>");
 }
 </script>
 </head>
@@ -22,24 +23,20 @@ function printMyArray(myArray){
 <h2>How to use an array:</h2>
 
 <script>
-document.write("Creating an array with three colors:<br><br>");
-var myArray = ["blue", "pink", "white"];
-document.write(printMyArray(myArray));
+  var myArray = ["Volvo","Ford"];
+  printMyArray(myArray);
+  document.write("<p>Number of elements: "+myArray.length+"</p>");
+  document.write("<p>The 1st element: "+myArray[0]+"</p>");
+  document.write("<p>The 2nd element: "+myArray[1]+"</p>");
 
-// Adds an element to the end of the array:
-document.write("Adding an element to the end of the array: push() <br><br>");
-myArray.push("<b>black</b>");
-document.write(printMyArray(myArray));
+  // Adds an element to the end of the array:
+  document.write("Add an element to the end of the array: push() <br><br>");
+  myArray.push(Math.round(Math.random()*100));
+  printMyArray(myArray);
 
-// Removes the last element:
-document.write("Removing the last element of the array: pop() <br><br>");
-myArray.pop();
-document.write(printMyArray(myArray));
-
-// Change the 2nd element:
-document.write("Changing the 2nd element of the array:<br><br>");
-myArray[1]="<b>a totally new color!</b>";
-document.write(printMyArray(myArray));
+  document.write("Delete the last element: pop() <br><br>");
+  myArray.pop();
+  printMyArray(myArray);
 </script>
 
 </body>
