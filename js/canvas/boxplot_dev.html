@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Draw boxplot">
+  <meta name="keywords" content="boxplot">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boxplots</title>
+  <style>
+    body {background-color: lightblue; font-size: 100%;
+      font-family: Arial, sans-serif;
+    }
+    canvas {background-color: white; display: block; margin: 10px auto 10px auto}
+    svg {background-color: white; display: block; margin: 10px auto 10px auto}
+    input, button, select{
+      display: inline-block;
+      margin: 2px;
+      padding: 5px;
+      font-size: 95%;
+      border-radius: 5px;
+      font-family: Arial, sans-serif
+    }
+    input.text { width: 180px}
+    input.number { width: 40px}
+    a.home {text-align: center; display: block}
+    p {margin-left: 0; padding-left: 0}
+    #allinput {text-align: center;}
+    #fields1 { display: inline-block; margin-right: 20px;text-align: left;}
+    #fields2 { display: inline-block; text-align: left;}
+    .center {text-align: center}
+    .label {display: inline-block; width: 100px}
+    .title {font-family: Arial, sans-serif}
+    .bottomtitle {font-family: Arial, sans-serif}
+    .valuelabel {font-family: Arial, sans-serif}
+    .tickval {font-family: Arial, sans-serif;}
+    .history {
+      font-size: 90%; font-family: "Times New Roman", Arial, sans-serif;
+      font-style: italic; olor: black; margin:10%;
+    }
+  </style>
+</head>
+<body onload="load()">
+<a class="home" href="../../index.html">Home</a>
+<h1 class="center">Drawing Boxplot</h1>
+
+<div class="center">
+  <label for="number">Number of boxplots: </label>
+  <select id="number">
+   <option selected="selected" value="1">1</option>
+   <option value="2">2</option>
+   <option value="3">3</option>
+   <option value="4">4</option>
+   <option value="5">5</option>
+   <option value="6">6</option>
+   <option value="7">7</option>
+  </select>
+</div>
+
+<div id="allinput">
+
+  <div id="importfields">
+    
+  </div>
+
+  <div id="fields1">
+    <p><span id="tfields1"></span></p>
+    <p><span class="label">Min:</span><span id="tfields2"></span></p>
+    <p><span class="label">Q1:</span><span id="tfields3"></span></p>
+    <p><span class="label">Md:</span><span id="tfields4"></span></p>
+    <p><span class="label">Q3:</span><span id="tfields5"></span></p>
+    <p><span class="label">Max:</span><span id="tfields6"></span></p>
+  </div>
+  <div id="fields2">
+    <p><span class="label">Axis title:</span>
+      <input class="text" type="text" id="axistitle" value="Height (m)"></p>
+    <p><span class="label">Tick interval:</span>
+      <input class="number" type="text" id="tick" value="5"></p>
+    <p><span class="label">Axis start:</span>
+      <input class="number" type="text" id="start" value="0"></p>
+    <p><span class="label">Axis end:</span>
+      <input class="number" type="text" id="end" value="30"></p>
+    <p><span class="label">Image height:</span>
+      <input class="number" type="text" id="cheight" value="150"></p>
+    <p><span class="label">Image width:</span>
+      <input class="number" type="text" id="cwidth" value="300"></p>
+  </div>
+</div>
+<p class="center">
+  <button type="button" id="draw">Draw plot</button>
+  <button type="button" id="clear">Clear</button>
+</p>
+<p class="center">
+  <input type="checkbox" id="showvals">
+  <label for="showvals">Show values</label>
+  <input type="radio" id="modesvg" checked="checked" name="mode" value="svg">
+  <label for="modesvg" title="The best when zoomed in">SVG</label>
+  <input type="radio" id="modecanvas" name="mode" value="canvas">
+  <label for="modecanvas" title="Save As Image feature">Canvas</label>
+  <input type="radio" id="modeboth" name="mode" value="both">
+  <label for="modeboth">Both</label>
+</p>
+
+<canvas id="mycanvas" width="300" height="150" style="display:none">
+  Your browser does not support the canvas element.
+</canvas>
+<svg id="mysvg" width="300" height="150">
+  Sorry, your browser does not support inline SVG.
+</svg>
+
+<p class="history">"One day I needed a boxplot for a math assignment. I found a
+  web page at
+  <a href="https://www.imathas.com/stattools/boxplot.html" target="_blank">
+    https://www.imathas.com/stattools/boxplot.html</a>, that
+  draws boxplots based on the given information. That looked so exiting that I
+  decided to make my own version of the page. This is the result I'm quite proud of :)
+  You may freely use it and the source code, too (in the same file)."
+  <br><br>
+  -Jukka-Pekka
+</p>
+
+<script>
+
+  // All the JS code is here.
+  // Global variables to make context available:
+  var canvas = document.getElementById("mycanvas");
+  var svg = document.getElementById("mysvg");
+  var numbOfPlots = 1;
+  var ticklinecolor = "black";
+  var color = "black";
+  var textcolor = "black";
+  var linew = 2;
+  var basefontsize = 10;
+  var showmode = "svg"; // Technique to use in drawing
+
+  // Returns a float number rounded to the given number of figures, or NaN.
+  // The 1st parameter is the number to be rounded (text type ok) and the
+  // 2nd one is the number of figures.
+  function roundTo(orig, numbOfFig){
+    var n = orig*Math.pow(10,numbOfFig);
+    var n_rounded = Math.round(n);
+    var final = n_rounded/Math.pow(10,numbOfFig);
+    return final;
+  }
+
+  function addFieldsForSeveralPlots(numb){
+
+    clearTextFields();
+
+    var elems_first_parts = [
+      '<input class="text" type="text" id="title',
+      '<input class="number" type="text" id="min',
+      '<input class="number" type="text" id="q1',
+      '<input class="number" type="text" id="q2',
+      '<input class="number" type="text" id="q3',
+      '<input class="number" type="text" id="max'
+    ];
+    var linebreak = "";
+    for(var i = 0; i < numb; i++){
+      for(var j = 0; j < 6; j++){
+        if(j === 0){
+          label = '<span class="label">Plot title '+(i+1)+':</span>';
+          content = label+elems_first_parts[j]+(i+1)+
+            '" value="Trees in forest '+(i+1)+'"><br>';
+        } else{
+          content = elems_first_parts[j]+(i+1)+'" value="'+(5*j+2*i)+'">';
+        }
+        append("tfields"+(j+1), content);
+      }
+    }
+  }
+
+
+  // Bind event handlers to buttons etc.
+  document.getElementById('draw').addEventListener('click', function() {
+    draw(canvas, svg);
+  }, false);
+
+  document.getElementById('clear').addEventListener('click', function() {
+    clear_canvas(canvas);
+    clear_svg(svg);
+  }, false);
+
+  document.getElementById('number').addEventListener('change', function() {
+    addFieldsForSeveralPlots(this.value);
+    numbOfPlots = parseInt(this.value);
+    document.getElementById("cheight").value = Math.round(100 + 50*numbOfPlots);
+    document.getElementById("end").value = Math.round(28 + 2*numbOfPlots);
+    draw(canvas, svg);
+  }, false);
+
+  document.getElementById('showvals').addEventListener('change', function() {
+    draw(canvas, svg);
+  }, false);
+
+  // Radiobuttons for mode selection:
+  document.getElementById('modesvg').addEventListener('change', function() {
+    showmode = document.querySelector('input[name="mode"]:checked').value;
+    draw(canvas, svg);
+  }, false);
+  document.getElementById('modecanvas').addEventListener('change', function() {
+    showmode = document.querySelector('input[name="mode"]:checked').value;
+    draw(canvas, svg);
+  }, false);
+  document.getElementById('modeboth').addEventListener('change', function() {
+    showmode = document.querySelector('input[name="mode"]:checked').value;
+    draw(canvas, svg);
+  }, false);
+
+
+
+  function load(){
+    numbOfPlots = parseInt(document.getElementById('number').value);
+    addFieldsForSeveralPlots(numbOfPlots);
+  }
+
+  function getVal(id){
+    return document.getElementById(id).value;
+  }
+  // Returns the parseFloat value of the text field elem with the given element.
+  function getFloat(id){
+    return parseFloat(document.getElementById(id).value);
+  }
+  // Returns the innerHTML of the element.
+  function getContent(id){
+    return document.getElementById(id).innerHTML;
+  }
+
+  // Returns the values in float of the field with idstart of all the plots.
+  function getTextFieldValues(idstart, numb){
+    var values = [];
+    var id = "";
+    for(var j = 0; j < numb; j++){
+      id = idstart+(j+1);
+      values.push(getVal(id))
+    }
+    return values;
+  }
+
+  // Returns the values in float of the field with idstart of all the plots.
+  function getTextFieldFloats(idstart, numb){
+    var floats = [];
+    var id = "";
+    for(var j = 0; j < numb; j++){
+      id = idstart+(j+1);
+      floats.push(getFloat(id))
+    }
+    return floats;
+  }
+
+  function print(id, content){
+    document.getElementById(id).innerHTML = content;
+  }
+  // Appends the content to the end of the elem with id.
+  function append(id, content){
+    var oldcontent = getContent(id);
+    print(id, oldcontent+content);
+  }
+
+  // Clears the text fields for the plots (to create a good number of them)
+  function clearTextFields(){
+    for(var j = 0; j < 6; j++){
+      document.getElementById("tfields"+(j+1)).innerHTML = "";
+    }
+  }
+
+  //=============================== Canvas =====================================
+  // Canvas specific functions
+  function clear_canvas(cnvs){
+    var ctx = cnvs.getContext("2d");
+    // Clears the canvas:
+    ctx.beginPath();  // Important! Otherwise draws the old ones again next time.
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  // Creates and adds a line to a canvas element.
+  function createLine_canvas(x1, y1, x2, y2, lineWidth, color, cnvs){
+    var ctx = cnvs.getContext("2d");
+    ctx.beginPath();
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.stroke();
+  }
+
+  // Creates and adds a centered text to a canvas element.
+  // Mode stands for "normal", "bold" or "italic".
+  function createText_canvas(x, y, text, size, mode, color, cnvs){
+    var ctx = cnvs.getContext("2d");
+    //ctx.beginPath();  // Needed?
+    ctx.fillStyle = color;
+    ctx.font = mode+' '+size+'px Arial, sans-serif';
+    ctx.textAlign = "center";
+    ctx.fillText(text, x, y);
+  }
+
+// Creates and adds a rectangel to a canvas element.
+  function createRect_canvas(x, y, width, height,lineWidth, color, cnvs){
+    var ctx = cnvs.getContext("2d");
+    ctx.beginPath();
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+    ctx.rect(x, y, width, height);
+    ctx.stroke();
+  }
+  //============================================================================
+
+  //================================ SVG =======================================
+  // SVG specific functions
+  function clear_svg(svg){
+    // https://stackoverflow.com/questions/3674265/is-there-an-easy-way-to-clear-an-svg-elements-contents
+    while (svg.lastChild) {
+      svg.removeChild(svg.lastChild);
+    }
+  }
+
+  // Creates and appends a DOM elem to a svg element.
+  function createLine_svg(x1, y1, x2, y2, lineWidth, color, svg){
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    //newLine.setAttribute('id','line2');
+    element.setAttribute('x1',x1);
+    element.setAttribute('y1',y1);
+    element.setAttribute('x2',x2);
+    element.setAttribute('y2',y2);
+    element.setAttribute('stroke-width',lineWidth);
+    element.setAttribute("stroke", color);
+    svg.appendChild(element);
+  }
+
+  // Creates and appends a DOM elem to a svg element.
+  function createText_svg(x, y, text, size, classs,svg){
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    element.setAttributeNS(null, 'x', x);
+    element.setAttributeNS(null, 'y', y);
+    element.setAttributeNS(null,'class', classs);
+    element.setAttributeNS(null,'style', 'font-size:'+size+'px');
+    element.setAttributeNS(null,'text-anchor', 'middle'); // Center-aligned
+    var txt = document.createTextNode(text);
+    element.appendChild(txt);
+    svg.appendChild(element);
+  }
+
+// Creates and appends a DOM elem to a svg element.
+  function createRect_svg(x, y, width, height,lineWidth, color, svg){
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    //newLine.setAttribute('id','line2');
+    element.setAttribute('x',x);
+    element.setAttribute('y',y);
+    element.setAttribute('width',width);
+    element.setAttribute('height',height);
+    element.setAttribute('stroke-width',lineWidth);
+    element.setAttribute("stroke", color);
+    element.setAttributeNS(null, 'fill', 'transparent');
+    svg.appendChild(element);
+  }
+
+  //================================ SVG ends ==================================
+
+  function draw(cnvs,svg){
+
+    // Show only the wanted one:
+    if(showmode === "svg"){
+      document.getElementById("mysvg").style.display = "block";
+      document.getElementById("mycanvas").style.display = "none";
+    } else if(showmode === "canvas"){
+      document.getElementById("mysvg").style.display = "none";
+      document.getElementById("mycanvas").style.display = "block";
+    } else{ // both:
+      document.getElementById("mysvg").style.display = "block";
+      document.getElementById("mycanvas").style.display = "block";
+    }
+
+    clear_canvas(cnvs);
+    clear_svg(svg);
+
+    var ctx = cnvs.getContext("2d");
+
+    // Values got from the user. The two first ones are in pixels, others not.
+    var cheight = getFloat("cheight");
+    var cwidth = getFloat("cwidth");
+    var ticklen = getFloat("tick");
+    var showvalues = document.getElementById("showvals").checked;
+
+    // These values are not checked. User will see it though if they are not good.
+    var axisstart = getFloat("start");
+    var axisend = getFloat("end");
+
+    var axistitle = getVal("axistitle");
+
+    // These are different for different plots:
+    var titles = getTextFieldValues("title",numbOfPlots);
+    var mins = getTextFieldFloats("min",numbOfPlots);
+    var maxs = getTextFieldFloats("max",numbOfPlots);
+    var q1s = getTextFieldFloats("q1",numbOfPlots);
+    var q2s = getTextFieldFloats("q2",numbOfPlots);
+    var q3s = getTextFieldFloats("q3",numbOfPlots);
+
+    cnvs.width = cwidth;
+    cnvs.height = cheight;
+    svg.setAttribute("width", cwidth);
+    svg.setAttribute("height", cheight);
+
+    // Values in pixels: Rounded where error does not get too much repeated.
+
+    // Space below/above the box on the bottom (tick line + title)
+    var spacebelow = 40+Math.round(cheight/(7*numbOfPlots));
+    var spaceabove = 30+Math.round(cheight/(7*numbOfPlots));
+
+    // Setting a flexible space below the box title:
+    var titlepaddingbottom = (10+Math.round(cheight/100));
+
+    // Shows main title a bit differently if it's the only one:
+    if(numbOfPlots === 1){
+      titlepaddingbottom = Math.round(spaceabove/2)-5;
+    }
+    else{
+      if(showvalues){
+        titlepaddingbottom += 5;
+      }
+    }
+
+    // Boxheight changes depending on the canvas height and the number of plots.
+    var boxheight =(cheight-spacebelow-numbOfPlots*spaceabove)/numbOfPlots;
+    var xmiddle = Math.round(cwidth/2);
+    var xaxisstart = 15;
+    var xaxisend = cwidth-15;
+    var unitstep = (xaxisend-xaxisstart)/(axisend-axisstart);
+    var xtick = ticklen*unitstep;
+
+    // Axis:
+    var ytickline = cheight-40;
+    var fontsize = basefontsize+4;
+    createLine_canvas(xaxisstart, ytickline, xaxisend, ytickline,
+      linew, ticklinecolor, cnvs);
+    createText_canvas(xmiddle, cheight-10, axistitle,fontsize,
+      "normal",textcolor,cnvs);
+
+    createLine_svg(xaxisstart, ytickline, xaxisend, ytickline,
+      linew, ticklinecolor, svg);
+    createText_svg(xmiddle, cheight-10, axistitle,fontsize, "bottomtitle",svg);
+
+    var numbofticks = Math.floor((axisend-axisstart)/ticklen)+1;
+
+    for(var i = 0; i < numbofticks; i++){
+      var x1 = Math.round(xaxisstart+i*xtick);
+      var y1 = ytickline-3;
+      var x2 = x1;
+      var y2 = ytickline+3;
+      var val = roundTo(axisstart+i*ticklen,3);
+
+      // Canvas:
+      createLine_canvas(x1, y1, x2, y2, linew, ticklinecolor, cnvs);
+      createText_canvas(x1, y2+12, val,basefontsize+2,"normal",textcolor,cnvs);
+
+      // SVG
+      createLine_svg(x1, y1, x2, y2, linew, ticklinecolor, svg);
+      createText_svg(x1, y2+12, val,basefontsize+2, "tickval",svg);
+    }
+
+    // For each plot:
+    for(var n = 0; n < numbOfPlots; n++){
+
+      var ymiddle = Math.round(n*(spaceabove+boxheight)+spaceabove+boxheight/2);
+      var yboxbottom = Math.round(ymiddle+boxheight/2);
+      var yboxtop = Math.round(ymiddle-boxheight/2);
+
+      var minititlepaddingbottom = 3;
+
+      var title = titles[n];
+      var min = mins[n];
+      var max = maxs[n];
+      var q1 = q1s[n];
+      var q2 = q2s[n];
+      var q3 = q3s[n];
+
+      var xmin = Math.round(xaxisstart+(min-axisstart)*unitstep);
+      var xmax = Math.round(xaxisstart+(max-axisstart)*unitstep);
+      var xq1 = Math.round(xmin+(q1-min)*unitstep);
+      var xq2 = Math.round(xmin+(q2-min)*unitstep);
+      var xq3 = Math.round(xmin+(q3-min)*unitstep);
+
+      var boxwidth = xq3-xq1;
+
+      // Titles:
+      var y_title = Math.round(ymiddle-boxheight/2-titlepaddingbottom);
+      var fontsize = basefontsize+4;
+      if(numbOfPlots === 1){
+        fontsize = (basefontsize+4+cheight/100)+2;
+      }
+      // Canvas:
+      createText_canvas(xmiddle, y_title, title,fontsize,"normal",textcolor,cnvs);
+
+      // SVG
+      createText_svg(xmiddle, y_title, title,fontsize, "title",svg);
+
+      // Left vertical (min)
+      if(showvalues){
+        createText_canvas(xmin, yboxtop-minititlepaddingbottom, min,
+          basefontsize+1,"normal",textcolor,cnvs);
+        createText_svg(xmin, yboxtop-minititlepaddingbottom,
+          min,basefontsize+1, "valuelabel",svg);
+      }
+      // canvas
+      createLine_canvas(xmin, yboxtop, xmin, yboxbottom, linew, ticklinecolor, cnvs);
+      // SVG
+      createLine_svg(xmin, yboxtop, xmin, yboxbottom, linew, color, svg);
+
+      // Right vertical (max)
+      if(showvalues){
+        createText_canvas(xmax, yboxtop-minititlepaddingbottom,
+          max, basefontsize+1,"normal",textcolor,cnvs);
+        createText_svg(xmax, yboxtop-minititlepaddingbottom,
+          max,basefontsize+1, "valuelabel",svg);
+      }
+
+      // canvas
+      createLine_canvas(xmax, yboxtop, xmax, yboxbottom, linew, ticklinecolor, cnvs);
+      // SVG
+      createLine_svg(xmax, yboxtop, xmax, yboxbottom, linew, color, svg);
+
+      // Left horizontal (min-q1)
+      // canvas
+      createLine_canvas(xmin, ymiddle, xq1, ymiddle, linew, ticklinecolor, cnvs);
+      // SVG
+      createLine_svg(xmin, ymiddle, xq1, ymiddle, linew, color, svg);
+
+      // Right horizontal (q3-max)
+      // canvas
+      createLine_canvas(xq3, ymiddle, xmax, ymiddle, linew, ticklinecolor, cnvs);
+      // SVG
+      createLine_svg(xq3, ymiddle, xmax, ymiddle, linew, color, svg);
+
+      // The box: ===========================================================
+      // Possible q1 value
+      if(showvalues){
+        createText_canvas(xq1, yboxtop-minititlepaddingbottom,
+          q1, basefontsize+1,"normal",textcolor,cnvs);
+        createText_svg(xq1, yboxtop-minititlepaddingbottom,
+          q1,basefontsize+1, "valuelabel",svg);
+      }
+
+      // Vertical q2 and the possible q2 value
+      if(showvalues){
+        createText_canvas(xq2, yboxtop-minititlepaddingbottom,
+          q2, basefontsize+1,"normal",textcolor,cnvs);
+        createText_svg(xq2, yboxtop-minititlepaddingbottom,
+          q2,basefontsize+1, "valuelabel",svg);
+      }
+      // canvas
+      createLine_canvas(xq2, yboxtop, xq2, yboxbottom, linew, ticklinecolor, cnvs);
+      // SVG
+      createLine_svg(xq2, yboxtop, xq2, yboxbottom, linew, color, svg);
+
+      // Possible q3 value
+      if(showvalues){
+        createText_canvas(xq3, yboxtop-minititlepaddingbottom,
+          q3, basefontsize+1,"normal",textcolor,cnvs);
+        createText_svg(xq3, yboxtop-minititlepaddingbottom,
+          q3,basefontsize+1, "valuelabel",svg);
+      }
+      // Canvas
+      createRect_canvas(xq1, yboxtop, boxwidth, Math.round(boxheight),
+        linew, color, cnvs);
+      // SVG
+      createRect_svg(xq1, yboxtop, boxwidth, Math.round(boxheight),
+        linew, color, svg);
+
+      //========================================================================
+    }
+  }
+</script>
+</body>
+</html>
