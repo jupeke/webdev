@@ -59,7 +59,7 @@
 <div id="allinput">
 
   <div id="importfields">
-    
+
   </div>
 
   <div id="fields1">
@@ -142,10 +142,30 @@
     return final;
   }
 
+  // Creates textfields (with labels) for inserting statistical values.
+  // The number of textfields is given as parameter numb.
+  function createStatsTextFields(numb){
+    var html = "";
+    var label = "";
+    var tfield = "";
+    for(var i = 0; i < numb; i++){
+      tfield_id = "tfield"+(i+1);
+      label = "<label for="+tfield_id+">Value set "+(i+1)+": </label>";
+      tfield = "<input class='text' type='text' id='"+tfield_id+"'>",
+      html += "<p>"+label+tfield+"</p>";
+    }
+    return html;
+  }
+
+  // Creates and adds statistics insert fields into the
+  // importfields div.
+  function addStatsFields(numb){
+    var html = createStatsTextFields(numb);
+    document.getElementById('importfields').innerHTML = html;
+  }
+
   function addFieldsForSeveralPlots(numb){
-
     clearTextFields();
-
     var elems_first_parts = [
       '<input class="text" type="text" id="title',
       '<input class="number" type="text" id="min',
@@ -182,6 +202,7 @@
 
   document.getElementById('number').addEventListener('change', function() {
     addFieldsForSeveralPlots(this.value);
+    addStatsFields(this.value);
     numbOfPlots = parseInt(this.value);
     document.getElementById("cheight").value = Math.round(100 + 50*numbOfPlots);
     document.getElementById("end").value = Math.round(28 + 2*numbOfPlots);
@@ -211,6 +232,7 @@
   function load(){
     numbOfPlots = parseInt(document.getElementById('number').value);
     addFieldsForSeveralPlots(numbOfPlots);
+    addStatsFields(numbOfPlots);
   }
 
   function getVal(id){
