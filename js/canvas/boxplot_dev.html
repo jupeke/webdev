@@ -48,6 +48,19 @@
       var final = n_rounded/Math.pow(10,numbOfFig);
       return final;
     }
+
+    // Returns a string containing all the elements in the array (provided
+    // the elements are simple values like strings or numbers).
+    function printArr(myArray){
+      var i = 0;
+      var result = "";
+
+      for(i=0; i < myArray.length; i++){
+        result += myArray[i]+" ";
+      }
+      return result;
+    }
+
     // Returns the boxplot keyvalues, min, Q1, Q2, Q3 and max of values
     // in an array.
     function getKeyValues(values){
@@ -58,7 +71,7 @@
       var q3 = 0;
       var max = 0;
 
-      if(values.length > 0){
+      if(values.length > 1){
         // See https://www.tutorialrepublic.com/javascript-tutorial/javascript-sorting-arrays.php
         var sortedValues = values.sort(function(a,b){return a-b});
         min = sortedValues[0];
@@ -77,6 +90,14 @@
         q1 = getMedian(firstHalf);
         q3 = getMedian(secondHalf);
       }
+      // Single value special case:
+      else if(values.length === 1){
+        min = values[0];
+        q1 = values[0];
+        q2 = values[0];
+        q3 = values[0];
+        max = values[0];
+      }
       return [min, q1, q2, q3, max];
     }
 
@@ -85,11 +106,11 @@
     // In case of bad parameter of error returns 0;
     function getMedian(sortedValues){
       var md = 0;
-      if(sortedValues.isArray && sortedValues.length > 0){
+      if(Array.isArray(sortedValues) && sortedValues.length > 0){
         // Difference if the number of values is odd or not:
         if(sortedValues.length % 2 === 0){ 
-          var middleLeft = sortedValues[sortedValues.length/2-1];
-          var middleRight = sortedValues[sortedValues.length/2];
+          var middleLeft = parseFloat(sortedValues[sortedValues.length/2-1]);
+          var middleRight = parseFloat(sortedValues[sortedValues.length/2]);
           md = (middleLeft+middleRight)/2;
         } else{
           md = sortedValues[(sortedValues.length-1)/2];
@@ -97,6 +118,7 @@
       }
       return md;
     }
+
     // Tests the function getMedian().
     function testGetMedian(){
       var testArrs = [
@@ -238,8 +260,11 @@
       tfield = "<input class='text' type='text' id='"+tfield_id+"'>",
       html += "<p>"+label+tfield+"</p>";
     }
-    return html+'<button type="button" id="testmd" onclick="testGetMedian()">'+
-      'Test getMedian()</button>';
+    html += "<button type='button' onclick='calculate("+numb+")'>Calculate</button>";
+    return html;
+
+    //+'<button type="button" id="testmd" onclick="testGetMedian()">'+
+    //  'Test getMedian()</button>';
   }
 
   // Creates and adds statistics insert fields into the
@@ -254,12 +279,33 @@
   function getValueSet(number){
     var id = "valuesetfield"+number;
     var rawValues = document.getElementById(id).value;
+    var rawValuesTrimmed = rawValues.trim();
+    var valueArr = [];
 
-    // Splits the string into pieces at each empty space and
-    // adds the pieces into an array:
-    var separator = " ";
-    var valueArr = rawValues.split(separator);
+    if(rawValuesTrimmed.length > 0){
+      // Splits the string into pieces at each empty space and
+      // adds the pieces into an array:
+      var separator = " ";
+      valueArr = rawValuesTrimmed.split(separator);
+    }
+
     return valueArr;
+  }
+
+  // Calculates the key values of the array of values.
+  function calculate(numbOfSets){
+    var set1 = getValueSet(1);
+    if(set1.length === 0){
+      alert("No values found!");
+    } else{
+      var keyvalues = getKeyValues(set1);
+      document.getElementById('min1').value = keyvalues[0];
+      document.getElementById('q11').value = keyvalues[1];
+      document.getElementById('q21').value = keyvalues[2];
+      document.getElementById('q31').value = keyvalues[3];
+      document.getElementById('max1').value = keyvalues[4];
+      draw(canvas, svg);
+    }
   }
 
   function addFieldsForSeveralPlots(numb){
