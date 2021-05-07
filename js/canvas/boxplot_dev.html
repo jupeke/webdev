@@ -38,6 +38,92 @@
       font-style: italic; olor: black; margin:10%;
     }
   </style>
+  <script>
+    // Returns a float number rounded to the given number of figures, or NaN.
+    // The 1st parameter is the number to be rounded (text type ok) and the
+    // 2nd one is the number of figures.
+    function roundTo(orig, numbOfFig){
+      var n = orig*Math.pow(10,numbOfFig);
+      var n_rounded = Math.round(n);
+      var final = n_rounded/Math.pow(10,numbOfFig);
+      return final;
+    }
+    // Returns the boxplot keyvalues, min, Q1, Q2, Q3 and max of values
+    // in an array.
+    function getKeyValues(values){
+      var numbOfVals = values.length;
+      var min = 0;
+      var q1 = 0;
+      var q2 = 0;
+      var q3 = 0;
+      var max = 0;
+
+      if(values.length > 0){
+        // See https://www.tutorialrepublic.com/javascript-tutorial/javascript-sorting-arrays.php
+        var sortedValues = values.sort(function(a,b){return a-b});
+        min = sortedValues[0];
+        max = sortedValues[sortedValues.length-1];
+        q2 = getMedian(sortedValues);
+
+        if(sortedValues.length % 2 === 0){ 
+          var middleRightInd = sortedValues.length/2;
+          var firstHalf = sortedValues.slice(0,middleRightInd);
+          var secondHalf = sortedValues.slice(middleRightInd);
+        } else{
+          var middleInd = (sortedValues.length-1)/2;
+          var firstHalf = sortedValues.slice(0,middleInd);
+          var secondHalf = sortedValues.slice(middleInd+1);
+        }
+        q1 = getMedian(firstHalf);
+        q3 = getMedian(secondHalf);
+      }
+      return [min, q1, q2, q3, max];
+    }
+
+    // Returns the median value of the values given as
+    // parameter array sortedValues (values are in ascending order).
+    // In case of bad parameter of error returns 0;
+    function getMedian(sortedValues){
+      var md = 0;
+      if(sortedValues.isArray && sortedValues.length > 0){
+        // Difference if the number of values is odd or not:
+        if(sortedValues.length % 2 === 0){ 
+          var middleLeft = sortedValues[sortedValues.length/2-1];
+          var middleRight = sortedValues[sortedValues.length/2];
+          md = (middleLeft+middleRight)/2;
+        } else{
+          md = sortedValues[(sortedValues.length-1)/2];
+        }
+      }
+      return md;
+    }
+    // Tests the function getMedian().
+    function testGetMedian(){
+      var testArrs = [
+        [],
+        [0],
+        [0,1],
+        [4,5,7],
+        [0,1,2,4,6,7,8,8,8,8,9],
+        [2,2,2,2,2],
+        [-3,-1,0.3,0.5,1.6,1.7,1.7],
+      ];
+      var expectedValues = [0, 0, 0.5, 5, 7, 2, 0.5];
+      var feedback = "<br>";
+
+      for(var i = 0; i < 7; i++){
+        if(getMedian(testArrs[i]) === expectedValues[i]){
+          feedback += "Test "+(1+i)+" ok <br>";
+        } else{
+          feedback += "Error in test "+(1+i)+". Result = "+
+            getMedian(testArrs[i])+" but expected value "+
+            expectedValues[i]+" <br>";
+        }
+      }
+      alert(feedback);
+    }
+
+  </script>
 </head>
 <body onload="load()">
 <a class="home" href="../../index.html">Home</a>
@@ -140,16 +226,6 @@
   var basefontsize = 10;
   var showmode = "svg"; // Technique to use in drawing
 
-  // Returns a float number rounded to the given number of figures, or NaN.
-  // The 1st parameter is the number to be rounded (text type ok) and the
-  // 2nd one is the number of figures.
-  function roundTo(orig, numbOfFig){
-    var n = orig*Math.pow(10,numbOfFig);
-    var n_rounded = Math.round(n);
-    var final = n_rounded/Math.pow(10,numbOfFig);
-    return final;
-  }
-
   // Creates textfields (with labels) for inserting statistical values.
   // The number of textfields is given as parameter numb.
   function createStatsTextFields(numb){
@@ -157,12 +233,13 @@
     var label = "";
     var tfield = "";
     for(var i = 0; i < numb; i++){
-      tfield_id = "tfield"+(i+1);
+      tfield_id = "valuesetfield"+(i+1);
       label = "<label for="+tfield_id+">Value set "+(i+1)+": </label>";
       tfield = "<input class='text' type='text' id='"+tfield_id+"'>",
       html += "<p>"+label+tfield+"</p>";
     }
-    return html;
+    return html+'<button type="button" id="testmd" onclick="testGetMedian()">'+
+      'Test getMedian()</button>';
   }
 
   // Creates and adds statistics insert fields into the
@@ -170,6 +247,19 @@
   function addStatsFields(numb){
     var html = createStatsTextFields(numb);
     document.getElementById('importfields').innerHTML = html;
+  }
+
+  // Gets the values in the text field with id "valuesetfield"+number.
+  // Returns an array containing the values.
+  function getValueSet(number){
+    var id = "valuesetfield"+number;
+    var rawValues = document.getElementById(id).value;
+
+    // Splits the string into pieces at each empty space and
+    // adds the pieces into an array:
+    var separator = " ";
+    var valueArr = rawValues.split(separator);
+    return valueArr;
   }
 
   function addFieldsForSeveralPlots(numb){
