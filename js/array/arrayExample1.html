@@ -23,19 +23,13 @@ function printMyArray(myArray){
 <h2>How to use an array:</h2>
 
 <script>
-  var myArray = ["Volvo","Ford"];
+  var myArray = [];
   printMyArray(myArray);
-  document.write("<p>Number of elements: "+myArray.length+"</p>");
-  document.write("<p>The 1st element: "+myArray[0]+"</p>");
-  document.write("<p>The 2nd element: "+myArray[1]+"</p>");
 
-  // Adds an element to the end of the array:
-  document.write("Add an element to the end of the array: push() <br><br>");
   myArray.push(Math.round(Math.random()*100));
   printMyArray(myArray);
 
-  document.write("Delete the last element: pop() <br><br>");
-  myArray.pop();
+
   printMyArray(myArray);
 </script>
 
