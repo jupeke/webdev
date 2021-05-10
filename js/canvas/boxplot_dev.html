@@ -190,8 +190,8 @@
           title="Empty space">
           Empty space
         </label>
-        <input type="radio" id="radiospace" name="separator"
-          value=" " checked="checked">
+        <input type="radio" id="radiospace" checked="checked" name="separator"
+          value="ipipi">
         <label for="radiocomma" title="Comma">
          Comma
         </label>
@@ -448,11 +448,6 @@
     alert("separator="+separator);
   }, false);
 
-  document.getElementById('keyvaluemode').addEventListener('change', function() {
-    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
-    document.getElementById('importfields').style.display="none";
-  }, false);
-
   // Radiobuttons for mode selection:
   document.getElementById('modesvg').addEventListener('change', function() {
     showmode = document.querySelector('input[name="mode"]:checked').value;
@@ -474,7 +469,7 @@
       clearAll(canvas, svg);
     }
     else{
-      document.getElementById('importfields').style.display="none";
+      //document.getElementById('importfields').style.display="none";
     }
     numbOfPlots = parseInt(document.getElementById('number').value);
     addFieldsForSeveralPlots(numbOfPlots);
