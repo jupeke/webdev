@@ -21,6 +21,7 @@
       font-family: Arial, sans-serif
     }
     input.text { width: 180px}
+    input.textlong { width: 250px}
     input.number { width: 40px}
     a.home {text-align: center; display: block}
     p {margin-left: 0; padding-left: 0}
@@ -31,6 +32,7 @@
       background-color: #eef;
       border-radius: 10px;
     }
+
     #fields1 { display: inline-block; margin-right: 20px;text-align: left;}
     #fields2 { display: inline-block; text-align: left;}
     .center {text-align: center}
@@ -42,6 +44,9 @@
     .history {
       font-size: 90%; font-family: "Times New Roman", Arial, sans-serif;
       font-style: italic; olor: black; margin:10%;
+    }
+    .inlineheader{
+      font-weight: bold;
     }
   </style>
   <script>
@@ -168,14 +173,19 @@
    <option value="6">6</option>
    <option value="7">7</option>
   </select>
-  <p>
-    <label for="datamode"
-      title="Insert the statistical data: a list of values or a frequency table">
-      Insert data
+  <p><span class="inlineheader">Insert </span>
+    <label for="datamodelist"
+      title="Insert the statistical data as a list of values">
+      List of values
     </label>
-    <input type="radio" id="datamode" name="insertmode" value="data">
+    <input type="radio" id="datamodelist" name="insertmode" value="datalist">
+    <label for="datamodetable"
+      title="Insert the statistical data as a frequency table">
+      Frequency table
+    </label>
+    <input type="radio" id="datamodetable" name="insertmode" value="datatable">
     <label for="keyvaluemode" title="You insert the quartiles, min and max">
-      Insert key values
+      Min, q1, md, q3, max
     </label>
     <input type="radio" id="keyvaluemode" name="insertmode"
       value="quartiles" checked="checked">
@@ -191,7 +201,7 @@
           Empty space
         </label>
         <input type="radio" id="radiospace" checked="checked" name="separator"
-          value="ipipi">
+          value=" ">
         <label for="radiocomma" title="Comma">
          Comma
         </label>
@@ -276,19 +286,16 @@
   var insertmode = "quartiles";   // Default values to insert
   var separator = SPACE;  // To separate inserted values.
 
-  // Creates textfields (with labels) for inserting statistical values.
-  // The number of textfields is given as parameter numb.
+  // Creates one set of elements for inserting statistical values.
+  // The number of the set is given as parameter numb.
   function createStatsTextFields(numb){
     var html = "";
     var label = "";
     var tfield = "";
-    for(var i = 0; i < numb; i++){
-      tfield_id = "valuesetfield"+(i+1);
-      label = "<label for="+tfield_id+">Value set "+(i+1)+": </label>";
-      tfield = "<input class='text' type='text' id='"+tfield_id+"'>",
-      html += "<p>"+label+tfield+"</p>";
-    }
-    html += "<button type='button' onclick='calculate("+numb+")'>Calculate</button>";
+    tfield_id = "valuesetfield"+(i+1);
+    label = "<label for="+tfield_id+">Value set "+(i+1)+": </label>";
+    tfield = "<input class='textlong' type='text' id='"+tfield_id+"'>",
+    html += "<p>"+label+tfield+"</p>";
     return html;
 
     //+'<button type="button" id="testmd" onclick="testGetMedian()">'+
@@ -299,7 +306,7 @@
   // importfields div.
   function addStatsFields(numb){
     var html = createStatsTextFields(numb);
-    append('importfields', html);
+    appendSafe('importfields', html, "div");
   }
 
   // Gets the values in the text field with id "valuesetfield"+number.
@@ -345,14 +352,17 @@
       var end = parseFloat(document.getElementById('end').value);
 
       // Setting better values for start, end and tickLen.
-      // These are guesses but often pretty reasonable.
+      // These are guesses but often pretty reasonable. Some freedom is left
+      // for the user to select better values.
       if(start > keyvalues[0] ||
           start < keyvalues[0]-(keyvalues[4]-keyvalues[0])/2) {
-        var newStart = 10*Math.floor(keyvalues[0]/10);
+        //var newStart = 10*Math.floor(keyvalues[0]/10);
+        var newStart = keyvalues[0];
         document.getElementById('start').value = newStart;
       }
       if(end < keyvalues[4] || end > keyvalues[4]*2){
-        var newEnd = 10*Math.ceil(keyvalues[4]/10);
+        //var newEnd = 10*Math.ceil(keyvalues[4]/10); // Not good in all cases.
+        var newEnd = keyvalues[4];
         document.getElementById('end').value = newEnd;
       }
       if(tickLen > (keyvalues[4]-keyvalues[0])/2 ||
@@ -360,7 +370,8 @@
 
         if(keyvalues[4]-keyvalues[0] > 5){
           var newTickLen = Math.round((keyvalues[4]-keyvalues[0])/5);
-        } else{
+        }
+        else{
           // Sometime zero!
           var newTickLenCandidate = Math.round((keyvalues[4]-keyvalues[0])*20)/100;
           if(newTickLenCandidate === 0){
@@ -369,10 +380,8 @@
             newTickLen = newTickLenCandidate;
           }
         }
-
         document.getElementById('tick').value = newTickLen;
       }
-
       draw(canvas, svg);
     }
   }
@@ -427,7 +436,13 @@
   }, false);
 
   // Radiobuttons for insert mode selection:
-  document.getElementById('datamode').addEventListener('change', function() {
+  document.getElementById('datamodelist').addEventListener('change', function() {
+    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
+    document.getElementById('importfields').style.display="inline-block";
+    clearAll(canvas, svg);
+  }, false);
+
+  document.getElementById('datamodetable').addEventListener('change', function() {
     insertmode = document.querySelector('input[name="insertmode"]:checked').value;
     document.getElementById('importfields').style.display="inline-block";
     clearAll(canvas, svg);
@@ -439,13 +454,12 @@
   }, false);
 
   // Radiobuttons for separator selection:
-  document.getElementById('radiospace').addEventListener('change', function() {
+  document.querySelector('#radiospace').addEventListener('change', function() {
     separator = document.querySelector('input[name="separator"]:checked').value;
-    alert("separator="+separator);
   }, false);
-  document.getElementById('radiocomma').addEventListener('change', function() {
+
+  document.querySelector('#radiocomma').addEventListener('change', function() {
     separator = document.querySelector('input[name="separator"]:checked').value;
-    alert("separator="+separator);
   }, false);
 
   // Radiobuttons for mode selection:
@@ -464,12 +478,13 @@
 
   function load(){
     insertmode = document.querySelector('input[name="insertmode"]:checked').value;
-    if(insertmode === "data"){
+    separator = document.querySelector('input[name="separator"]:checked').value;
+    if(insertmode === "datalist" || insertmode === "datatable"){
       document.getElementById('importfields').style.display="inline-block";
       clearAll(canvas, svg);
     }
     else{
-      //document.getElementById('importfields').style.display="none";
+      document.getElementById('importfields').style.display="none";
     }
     numbOfPlots = parseInt(document.getElementById('number').value);
     addFieldsForSeveralPlots(numbOfPlots);
@@ -515,9 +530,22 @@
     document.getElementById(id).innerHTML = content;
   }
   // Appends the content to the end of the elem with id.
+  // NOTE: this detaches old eventListeners! They must be reattached or then
+  // use DOM methods (see appendSafe below).
   function append(id, content){
     var oldcontent = getContent(id);
     print(id, oldcontent+content);
+  }
+
+  // Appends the content to the end of the elem with id without destroying
+  // old elements -> eventListeners will work!
+  function appendSafe(id, content, tagname){
+    var parentelem = document.querySelector("#"+id);
+    if(parentelem){
+      var elem = document.createElement(tagname);
+      elem.innerHTML = content;
+      parentelem.appendChild(elem);
+    }
   }
 
   // Clears the text fields for the plots (to create a good number of them)
