@@ -21,10 +21,20 @@
       font-family: Arial, sans-serif
     }
     input.text { width: 180px}
+    input.textlong { width: 250px}
     input.number { width: 40px}
     a.home {text-align: center; display: block}
     p {margin-left: 0; padding-left: 0}
     #allinput {text-align: center;}
+    #importdata {
+      display: inline-block;
+      padding: 10px;
+      background-color: #cdd;
+      border-radius: 10px;
+    }
+    #importfields {
+    }
+
     #fields1 { display: inline-block; margin-right: 20px;text-align: left;}
     #fields2 { display: inline-block; text-align: left;}
     .center {text-align: center}
@@ -37,15 +47,126 @@
       font-size: 90%; font-family: "Times New Roman", Arial, sans-serif;
       font-style: italic; olor: black; margin:10%;
     }
+    .inlineheader{
+      font-weight: bold;
+    }
   </style>
+  <script>
+    // Returns a float number rounded to the given number of figures, or NaN.
+    // The 1st parameter is the number to be rounded (text type ok) and the
+    // 2nd one is the number of figures.
+    function roundTo(orig, numbOfFig){
+      var n = orig*Math.pow(10,numbOfFig);
+      var n_rounded = Math.round(n);
+      var final = n_rounded/Math.pow(10,numbOfFig);
+      return final;
+    }
+
+    // Returns a string containing all the elements in the array (provided
+    // the elements are simple values like strings or numbers).
+    function printArr(myArray){
+      var i = 0;
+      var result = "";
+
+      for(i=0; i < myArray.length; i++){
+        result += myArray[i]+" ";
+      }
+      return result;
+    }
+
+    // Returns the boxplot keyvalues, min, Q1, Q2, Q3 and max of values
+    // in an array.
+    function getKeyValues(values){
+      var numbOfVals = values.length;
+      var min = 0;
+      var q1 = 0;
+      var q2 = 0;
+      var q3 = 0;
+      var max = 0;
+
+      if(values.length > 1){
+        // See https://www.tutorialrepublic.com/javascript-tutorial/javascript-sorting-arrays.php
+        var sortedValues = values.sort(function(a,b){return a-b});
+        min = sortedValues[0];
+        max = sortedValues[sortedValues.length-1];
+        q2 = getMedian(sortedValues);
+
+        if(sortedValues.length % 2 === 0){ 
+          var middleRightInd = sortedValues.length/2;
+          var firstHalf = sortedValues.slice(0,middleRightInd);
+          var secondHalf = sortedValues.slice(middleRightInd);
+        } else{
+          var middleInd = (sortedValues.length-1)/2;
+          var firstHalf = sortedValues.slice(0,middleInd);
+          var secondHalf = sortedValues.slice(middleInd+1);
+        }
+        q1 = getMedian(firstHalf);
+        q3 = getMedian(secondHalf);
+      }
+      // Single value special case:
+      else if(values.length === 1){
+        min = values[0];
+        q1 = values[0];
+        q2 = values[0];
+        q3 = values[0];
+        max = values[0];
+      }
+      return [min, q1, q2, q3, max];
+    }
+
+    // Returns the median value of the values given as
+    // parameter array sortedValues (values are in ascending order).
+    // In case of bad parameter of error returns 0;
+    function getMedian(sortedValues){
+      var md = 0;
+      if(Array.isArray(sortedValues) && sortedValues.length > 0){
+        // Difference if the number of values is odd or not:
+        if(sortedValues.length % 2 === 0){ 
+          var middleLeft = parseFloat(sortedValues[sortedValues.length/2-1]);
+          var middleRight = parseFloat(sortedValues[sortedValues.length/2]);
+          md = (middleLeft+middleRight)/2;
+        } else{
+          md = sortedValues[(sortedValues.length-1)/2];
+        }
+      }
+      return md;
+    }
+
+    // Tests the function getMedian().
+    function testGetMedian(){
+      var testArrs = [
+        [],
+        [0],
+        [0,1],
+        [4,5,7],
+        [0,1,2,4,6,7,8,8,8,8,9],
+        [2,2,2,2,2],
+        [-3,-1,0.3,0.5,1.6,1.7,1.7],
+      ];
+      var expectedValues = [0, 0, 0.5, 5, 7, 2, 0.5];
+      var feedback = "<br>";
+
+      for(var i = 0; i < 7; i++){
+        if(getMedian(testArrs[i]) === expectedValues[i]){
+          feedback += "Test "+(1+i)+" ok <br>";
+        } else{
+          feedback += "Error in test "+(1+i)+". Result = "+
+            getMedian(testArrs[i])+" but expected value "+
+            expectedValues[i]+" <br>";
+        }
+      }
+      alert(feedback);
+    }
+
+  </script>
 </head>
 <body onload="load()">
 <a class="home" href="../../index.html">Home</a>
-<h1 class="center">Drawing Boxplot</h1>
+<h1 class="center">Boxplots</h1>
 
 <div class="center">
   <label for="number">Number of boxplots: </label>
-  <select id="number">
+  <select id="number" title="Note: changing removes the typed values!">
    <option selected="selected" value="1">1</option>
    <option value="2">2</option>
    <option value="3">3</option>
@@ -54,9 +175,48 @@
    <option value="6">6</option>
    <option value="7">7</option>
   </select>
+  <p><span class="inlineheader">Insert: </span>
+    <label for="datamodelist"
+      title="Insert the statistical data as a list of values">
+      List of values
+    </label>
+    <input type="radio" id="datamodelist" name="insertmode" value="datalist">
+    <label for="datamodetable"
+      title="Insert the statistical data as a frequency table">
+      Frequency table
+    </label>
+    <input type="radio" id="datamodetable" name="insertmode" value="datatable">
+    <label for="keyvaluemode" title="You insert the quartiles, min and max">
+      Min, q1, md, q3, max
+    </label>
+    <input type="radio" id="keyvaluemode" name="insertmode"
+      value="quartiles" checked="checked">
+  </p>
 </div>
 
 <div id="allinput">
+  <div>
+    <div id="importdata">
+      <p title="Separator between data values">
+        <span class="inlineheader">Separator: </span>
+        <label for="radiospace"
+          title="Empty space">
+          Empty space
+        </label>
+        <input type="radio" id="radiospace" checked="checked" name="separator"
+          value=" ">
+        <label for="radiocomma" title="Comma">
+         Comma
+        </label>
+        <input type="radio" id="radiocomma" name="separator"
+          value=",">
+      </p>
+
+      <div id="importfields"></div>
+
+      <div><button id="calculatebutton" type="button">Calculate</button></div>
+    </div>
+  </div>
   <div id="fields1">
     <p><span id="tfields1"></span></p>
     <p><span class="label">Min:</span><span id="tfields2"></span></p>
@@ -114,9 +274,10 @@
 </p>
 
 <script>
+  const COMMA = ",";
+  const SPACE = " ";
 
-  // All the JS code is here.
-  // Global variables to make context available:
+  // Global variables:
   var canvas = document.getElementById("mycanvas");
   var svg = document.getElementById("mysvg");
   var numbOfPlots = 1;
@@ -126,21 +287,196 @@
   var linew = 2;
   var basefontsize = 10;
   var showmode = "svg"; // Technique to use in drawing
+  var insertmode = "quartiles";   // Default values to insert
+  var separator = SPACE;  // To separate inserted values.
 
-  // Returns a float number rounded to the given number of figures, or NaN.
-  // The 1st parameter is the number to be rounded (text type ok) and the
-  // 2nd one is the number of figures.
-  function roundTo(orig, numbOfFig){
-    var n = orig*Math.pow(10,numbOfFig);
-    var n_rounded = Math.round(n);
-    var final = n_rounded/Math.pow(10,numbOfFig);
-    return final;
+  // Creates the sets of elements for inserting statistical values.
+  // The number of the sets is given as parameter numb. The 2nd parameter refers
+  // to the mode of inserting values: a frequency table or a simple list.
+  function createStatsTextFields(numb, insertmode){
+    var html = "";
+    var label = "";
+    var tfield = "";
+    var valuefieldlabeltext = "";
+    var freqfieldlabeltext = "";
+
+    for(var i = 0; i < numb; i++){
+      tfield_id = "valuesetfield"+(i+1);
+
+      // Set number only if there are more than one set:
+      if(numb > 1){
+        valuefieldlabeltext = "Value set "+(i+1)+":";
+        freqfieldlabeltext = "Frequency set "+(i+1)+":";
+      } else {
+        valuefieldlabeltext = "Value set:";
+        freqfieldlabeltext = "Frequency set:";
+      }
+      label = "<label for="+tfield_id+">"+valuefieldlabeltext+"</label>";
+      tfield = "<input class='textlong' type='text' id='"+tfield_id+"'>",
+      html += "<div>"+label+tfield+"</div>";
+
+      // Adds another text field in case of a frequency table:
+      if(insertmode === "datatable"){
+        ftfield_id = "fsetfield"+(i+1);
+        label = "<label for="+ftfield_id+">"+freqfieldlabeltext+"</label>";
+        ftfield = "<input class='textlong' type='text' id='"+ftfield_id+"'>",
+        html += "<div id='fset"+numb+"'>"+label+ftfield+"</div>";
+      }
+    }
+    return html;
+    //+'<button type="button" id="testmd" onclick="testGetMedian()">'+
+    //  'Test getMedian()</button>';
+  }
+
+  // Creates and adds statistics insert fields into the
+  // importfields div.
+  function addStatsFields(numb, insertmode){
+    var html = createStatsTextFields(numb, insertmode);
+    print('importfields', html);
+  }
+  // Updates the insert fields.
+  function updateStatsFields(numbOfPlots, insertmode){
+    addStatsFields(numbOfPlots, insertmode);
+  }
+
+  // Gets the values in the text field with id "valuesetfield"+number.
+  // Returns an array containing the values.
+  // If insertmode = "datatable", checks first that the value list and
+  // frequency list have the same number of elements and then
+  // makes one list of single values (frequency indicating the number
+  // of multiples of one value).
+  function getValueSet(number, separator, insertmode){
+    var valuefield_id = "valuesetfield"+number;
+    var frecfield_id = "fsetfield"+number;
+    var rawvalues = "";
+    var rawfreqs = "";
+    var values = "";
+    var freqs = "";
+
+    rawvalues = document.getElementById(valuefield_id).value;
+
+    // Removes empty spaces from the ends.
+    // If separator is not comma, replaces commas with dots, too.
+    if(separator !== COMMA){
+      values = rawvalues.trim().replaceAll(COMMA,".");
+    } else{
+      values = rawvalues.trim();
+    }
+
+    if(insertmode === "datatable"){
+      rawfreqs = document.getElementById(frecfield_id).value;
+      if(separator !== COMMA){
+        freqs = rawfreqs.trim().replaceAll(COMMA,".");
+      } else{
+        freqs = rawfreqs.trim();
+      }
+    }
+    var value_arr = [];
+    var freqs_arr = [];
+    var final_arr = [];
+    if(values.length > 0){
+
+      // Splits the string into pieces at each empty space and
+      // adds the pieces into an array:
+      value_arr = values.split(separator);
+
+      if(insertmode === "datalist"){
+        final_arr = value_arr;
+      }
+      else{ // Here frequencies are taken into account:
+        freqs_arr = freqs.split(separator);
+
+        // Must have the same number of values:
+        if(value_arr.length === freqs_arr.length){
+          for(var i = 0; i < value_arr.length; i++){
+            var freq = parseInt(freqs_arr[i]);
+            for(var j=0; j < freq; j++){
+              final_arr.push(value_arr[i]);
+            }
+          }
+        }
+        else{
+          alert("Missing or bad values in set "+number);
+        }
+      }
+    }
+    return final_arr;
+  }
+
+  function getValueSets(numbOfPlots, separator, insertmode){
+    var sets = [];
+    for(var i = 0; i < numbOfPlots; i++){
+      var set = getValueSet((i+1), separator, insertmode);
+      if(set.length > 0){
+        sets.push(set);
+      }
+    }
+    return sets;
+  }
+
+  // Calculates the key values of the array of values.
+  function calculate(numbOfSets,separator, insertmode){
+    var valuesets = getValueSets(numbOfSets, separator, insertmode);
+    var keyvaluesets = [];
+
+    // If value sets are ok, goes on. Otherwise nothing is done (a message
+    // has been sent in function getValueSets).
+    if(valuesets.length === numbOfSets){
+      for(var i = 0; i < numbOfSets; i++){
+        var set = valuesets[i];
+          var keyvalues = getKeyValues(set);
+          keyvaluesets.push(keyvalues);
+          document.getElementById('min'+(i+1)).value = keyvalues[0];
+          document.getElementById('q1'+(i+1)).value = keyvalues[1];
+          document.getElementById('q2'+(i+1)).value = keyvalues[2];
+          document.getElementById('q3'+(i+1)).value = keyvalues[3];
+          document.getElementById('max'+(i+1)).value = keyvalues[4];
+      }
+
+      var tickLen = parseFloat(document.getElementById('tick').value);
+      var start = parseFloat(document.getElementById('start').value);
+      var end = parseFloat(document.getElementById('end').value);
+
+      // Setting better values for start, end and tickLen.
+      // These are guesses but often pretty reasonable. Some freedom is left
+      // for the user to select better values.
+      if(start > keyvaluesets[0][0] ||
+          start < keyvaluesets[0][0]-(keyvaluesets[0][4]-keyvaluesets[0][0])/2) {
+
+        var newStart = keyvaluesets[0][0];
+        document.getElementById('start').value = newStart;
+      }
+      if(end < keyvaluesets[numbOfSets-1][4] ||
+          end > keyvaluesets[numbOfSets-1][4]*2){
+
+        var newEnd = keyvaluesets[numbOfSets-1][4];
+        document.getElementById('end').value = newEnd;
+      }
+      // Here a guess in given based on the first set only. User can edit the choice.
+      if(tickLen > (keyvaluesets[0][4]-keyvaluesets[0][0])/2 ||
+          tickLen < (keyvaluesets[0][4]-keyvaluesets[0][0])/20){
+
+        if(keyvaluesets[0][4]-keyvaluesets[0][0] > 5){
+          var newTickLen = Math.round((keyvaluesets[0][4]-keyvaluesets[0][0])/5);
+        }
+        else{
+          // Sometime zero!
+          var newTickLenCandidate =
+            Math.round((keyvaluesets[0][4]-keyvaluesets[0][0])*20)/100;
+          if(newTickLenCandidate === 0){
+            newTickLen = 1;
+          } else{
+            newTickLen = newTickLenCandidate;
+          }
+        }
+        document.getElementById('tick').value = newTickLen;
+      }
+      draw(canvas, svg);
+    }
   }
 
   function addFieldsForSeveralPlots(numb){
-
     clearTextFields();
-
     var elems_first_parts = [
       '<input class="text" type="text" id="title',
       '<input class="number" type="text" id="min',
@@ -164,7 +500,6 @@
     }
   }
 
-
   // Bind event handlers to buttons etc.
   document.getElementById('draw').addEventListener('click', function() {
     draw(canvas, svg);
@@ -175,16 +510,58 @@
     clear_svg(svg);
   }, false);
 
+  document.getElementById('calculatebutton').addEventListener('click', function() {
+    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
+    separator = document.querySelector('input[name="separator"]:checked').value;
+    calculate(numbOfPlots,separator, insertmode);
+  }, false);
+
   document.getElementById('number').addEventListener('change', function() {
     addFieldsForSeveralPlots(this.value);
+    addStatsFields(this.value, insertmode);
     numbOfPlots = parseInt(this.value);
     document.getElementById("cheight").value = Math.round(100 + 50*numbOfPlots);
     document.getElementById("end").value = Math.round(28 + 2*numbOfPlots);
-    draw(canvas, svg);
+    if(insertmode === "quartiles"){
+      draw(canvas, svg);
+    }
+    else{
+      clear_canvas(canvas);
+      clear_svg(svg);
+    }
   }, false);
 
   document.getElementById('showvals').addEventListener('change', function() {
     draw(canvas, svg);
+  }, false);
+
+  // Radiobuttons for insert mode selection:
+  document.getElementById('datamodelist').addEventListener('change', function() {
+    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
+    document.getElementById('importdata').style.display="inline-block";
+    clearAll(canvas, svg);
+    updateStatsFields(numbOfPlots, insertmode);
+  }, false);
+
+  document.getElementById('datamodetable').addEventListener('change', function() {
+    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
+    document.getElementById('importdata').style.display="inline-block";
+    clearAll(canvas, svg);
+    updateStatsFields(numbOfPlots, insertmode);
+  }, false);
+
+  document.getElementById('keyvaluemode').addEventListener('change', function() {
+    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
+    document.getElementById('importdata').style.display="none";
+  }, false);
+
+  // Radiobuttons for separator selection:
+  document.querySelector('#radiospace').addEventListener('change', function() {
+    separator = document.querySelector('input[name="separator"]:checked').value;
+  }, false);
+
+  document.querySelector('#radiocomma').addEventListener('change', function() {
+    separator = document.querySelector('input[name="separator"]:checked').value;
   }, false);
 
   // Radiobuttons for mode selection:
@@ -201,11 +578,19 @@
     draw(canvas, svg);
   }, false);
 
-
-
   function load(){
+    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
+    separator = document.querySelector('input[name="separator"]:checked').value;
+    if(insertmode === "datalist" || insertmode === "datatable"){
+      document.getElementById('importdata').style.display="inline-block";
+      clearAll(canvas, svg);
+    }
+    else{
+      document.getElementById('importdata').style.display="none";
+    }
     numbOfPlots = parseInt(document.getElementById('number').value);
     addFieldsForSeveralPlots(numbOfPlots);
+    addStatsFields(numbOfPlots, insertmode);
   }
 
   function getVal(id){
@@ -213,7 +598,8 @@
   }
   // Returns the parseFloat value of the text field elem with the given element.
   function getFloat(id){
-    return parseFloat(document.getElementById(id).value);
+    var raw = document.getElementById(id).value;
+    return parseFloat(raw.trim().replaceAll(COMMA,"."));
   }
   // Returns the innerHTML of the element.
   function getContent(id){
@@ -246,9 +632,22 @@
     document.getElementById(id).innerHTML = content;
   }
   // Appends the content to the end of the elem with id.
+  // NOTE: this detaches old eventListeners! They must be reattached or then
+  // use DOM methods (see appendSafe below).
   function append(id, content){
     var oldcontent = getContent(id);
     print(id, oldcontent+content);
+  }
+
+  // Appends the content to the end of the elem with id without destroying
+  // old elements -> eventListeners will work!
+  function appendSafe(id, content, tagname){
+    var parentelem = document.querySelector("#"+id);
+    if(parentelem){
+      var elem = document.createElement(tagname);
+      elem.innerHTML = content;
+      parentelem.appendChild(elem);
+    }
   }
 
   // Clears the text fields for the plots (to create a good number of them)
@@ -257,6 +656,15 @@
       document.getElementById("tfields"+(j+1)).innerHTML = "";
     }
   }
+
+  // Clears text fields (most), and the pictures:
+  function clearAll(cnvs, svg){
+
+    clear_svg(svg);
+    clear_canvas(cnvs);
+  }
+
+
 
   //=============================== Canvas =====================================
   // Canvas specific functions
