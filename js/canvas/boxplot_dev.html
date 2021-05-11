@@ -332,48 +332,83 @@
 
   // Gets the values in the text field with id "valuesetfield"+number.
   // Returns an array containing the values.
-  function getValueSet(number, separator){
-    var id = "valuesetfield"+number;
-    var rawValues = document.getElementById(id).value;
+  // If insertmode = "datatable", checks first that the value list and
+  // frequency list have the same number of elements and then
+  // makes one list of single values (frequency indicating the number
+  // of multiples of one value).
+  function getValueSet(number, separator, insertmode){
+    var valuefield_id = "valuesetfield"+number;
+    var frecfield_id = "fsetfield"+number;
+    var rawvalues = "";
+    var rawfreqs = "";
+    var values = "";
+    var freqs = "";
+
+    rawvalues = document.getElementById(valuefield_id).value;
 
     // Removes empty spaces from the ends.
     // If separator is not comma, replaces commas with dots, too.
     if(separator !== COMMA){
-      rawValuesTrimmed = rawValues.trim().replaceAll(COMMA,".");
+      values = rawValues.trim().replaceAll(COMMA,".");
     } else{
-      rawValuesTrimmed = rawValues.trim();
+      values = rawValues.trim();
     }
 
-    var valueArr = [];
+    if(insertmode === "datatable"){
+      rawfreqs = document.getElementById(frecfield_id).value;
+      if(separator !== COMMA){
+        freqs = rawfreqs.trim().replaceAll(COMMA,".");
+      } else{
+        freqs = rawfreqs.trim();
+      }
+    }
+    var value_arr = [];
+    var freqs_arr = [];
+    var final_arr = [];
+    if(values.length > 0){
 
-    if(rawValuesTrimmed.length > 0){
       // Splits the string into pieces at each empty space and
       // adds the pieces into an array:
-      valueArr = rawValuesTrimmed.split(separator);
-    }
+      value_arr = values.split(separator);
 
-    return valueArr;
+      if(insertmode === "datalist"){
+        final_arr = value_arr;
+      }
+      else{ // Here frequencies are taken into account:
+        freqs_arr = freqs.split(separator);
+
+        // Must have the same number of values:
+        if(value_arr.length === freqs_arr.length){
+          for(var i = 0; i < value_arr.length; i++){
+            var freq = parseInt(freqs_arr[i]);
+            for(var j=0; j < freq; j++){
+              final_arr.push(value_arr[i]);
+            }
+          }
+        }
+      }
+    }
+    return final_arr;
   }
 
   function getValueSets(numbOfPlots, separator, insertmode){
-
     var sets = [];
-
     for(var i = 0; i < numbOfPlots){
-      var set = getValueSet((i+1), separator);
+      var set = getValueSet((i+1), separator, insertmode);
     }
   }
 
   // Calculates the key values of the array of values.
-  function calculate(numbOfSets){
+  function calculate(numbOfSets,separator, insertmode){
 
-    var keyvaluesets = getValueSets(numbOfSets);
+    var valuesets = getValueSets(numbOfSets, separator, insertmode);
+    var keyvaluesets = [];
 
     // If value sets are ok, goes on. Otherwise nothing is done (a message
     // has been sent in function getValueSets).
-    if(keyvaluesets.length === numbOfSets){
+    if(valuesets.length === numbOfSets){
       for(var i = 0; i < numbOfSets){
-        var set = getValueSet((i+1), separator);
+        var set = valuesets[i];
           var keyvalues = getKeyValues(set);
           keyvaluesets.push(keyvalues);
           document.getElementById('min'+(i+1)).value = keyvalues[0];
