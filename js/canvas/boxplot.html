@@ -14,7 +14,7 @@
     svg {background-color: white; display: block; margin: 10px auto 10px auto}
     input, button, select{
       display: inline-block;
-      margin: 2px;
+      margin: 3px;
       padding: 5px;
       font-size: 95%;
       border-radius: 5px;
@@ -29,6 +29,7 @@
     #importdata {
       display: inline-block;
       padding: 10px;
+      margin-bottom: 10px;
       background-color: #cdd;
       border-radius: 10px;
     }
@@ -165,17 +166,19 @@
 <h1 class="center">Boxplots</h1>
 
 <div class="center">
-  <label for="number">Number of boxplots: </label>
-  <select id="number" title="Note: changing removes the typed values!">
-   <option selected="selected" value="1">1</option>
-   <option value="2">2</option>
-   <option value="3">3</option>
-   <option value="4">4</option>
-   <option value="5">5</option>
-   <option value="6">6</option>
-   <option value="7">7</option>
-  </select>
-  <p><span class="inlineheader">Insert: </span>
+  <p>
+    <label for="number">Number of boxplots: </label>
+    <select id="number" title="Note: changing removes the typed values!">
+     <option selected="selected" value="1">1</option>
+     <option value="2">2</option>
+     <option value="3">3</option>
+     <option value="4">4</option>
+     <option value="5">5</option>
+     <option value="6">6</option>
+     <option value="7">7</option>
+    </select>
+  </p>
+  <div><span class="inlineheader">Insert: </span>
     <label for="datamodelist"
       title="Insert the statistical data as a list of values">
       List of values
@@ -218,26 +221,26 @@
     </div>
   </div>
   <div id="fields1">
-    <p><span id="tfields1"></span></p>
-    <p><span class="label">Min:</span><span id="tfields2"></span></p>
-    <p><span class="label">Q1:</span><span id="tfields3"></span></p>
-    <p><span class="label">Md:</span><span id="tfields4"></span></p>
-    <p><span class="label">Q3:</span><span id="tfields5"></span></p>
-    <p><span class="label">Max:</span><span id="tfields6"></span></p>
+    <div><span id="tfields1"></span></div>
+    <div><span class="label">Min:</span><span id="tfields2"></span></div>
+    <div><span class="label">Q1:</span><span id="tfields3"></span></div>
+    <div><span class="label">Md:</span><span id="tfields4"></span></div>
+    <div><span class="label">Q3:</span><span id="tfields5"></span></div>
+    <div><span class="label">Max:</span><span id="tfields6"></span></div>
   </div>
   <div id="fields2">
-    <p><span class="label">Axis title:</span>
-      <input class="text" type="text" id="axistitle" value="Height (m)"></p>
-    <p><span class="label">Tick interval:</span>
-      <input class="number" type="text" id="tick" value="5"></p>
-    <p><span class="label">Axis start:</span>
-      <input class="number" type="text" id="start" value="0"></p>
-    <p><span class="label">Axis end:</span>
-      <input class="number" type="text" id="end" value="30"></p>
-    <p><span class="label">Image height:</span>
-      <input class="number" type="text" id="cheight" value="150"></p>
-    <p><span class="label">Image width:</span>
-      <input class="number" type="text" id="cwidth" value="300"></p>
+    <div><span class="label">Axis title:</span>
+      <input class="text" type="text" id="axistitle" value="Height (m)"></div>
+    <div><span class="label">Tick interval:</span>
+      <input class="number" type="text" id="tick" value="5"></div>
+    <div><span class="label">Axis start:</span>
+      <input class="number" type="text" id="start" value="0"></div>
+    <div><span class="label">Axis end:</span>
+      <input class="number" type="text" id="end" value="30"></div>
+    <div><span class="label">Image height:</span>
+      <input class="number" type="text" id="cheight" value="150"></div>
+    <div><span class="label">Image width:</span>
+      <input class="number" type="text" id="cwidth" value="300"></div>
   </div>
 </div>
 <p class="center">
