@@ -162,7 +162,7 @@
 </head>
 <body onload="load()">
 <a class="home" href="../../index.html">Home</a>
-<h1 class="center">Drawing Boxplot</h1>
+<h1 class="center">Boxplots</h1>
 
 <div class="center">
   <label for="number">Number of boxplots: </label>
@@ -213,7 +213,7 @@
 
       <div id="importfields"></div>
 
-      <div><button type="button" onclick="calculate()">Calculate</button></div>
+      <div><button id="calculatebutton" type="button">Calculate</button></div>
     </div>
   </div>
   <div id="fields1">
@@ -273,13 +273,10 @@
 </p>
 
 <script>
-
-  // All the JS code is here.
-
   const COMMA = ",";
   const SPACE = " ";
 
-  // Global variables to make context available:
+  // Global variables:
   var canvas = document.getElementById("mycanvas");
   var svg = document.getElementById("mysvg");
   var numbOfPlots = 1;
@@ -314,7 +311,6 @@
       }
     }
     return html;
-
     //+'<button type="button" id="testmd" onclick="testGetMedian()">'+
     //  'Test getMedian()</button>';
   }
@@ -349,9 +345,9 @@
     // Removes empty spaces from the ends.
     // If separator is not comma, replaces commas with dots, too.
     if(separator !== COMMA){
-      values = rawValues.trim().replaceAll(COMMA,".");
+      values = rawvalues.trim().replaceAll(COMMA,".");
     } else{
-      values = rawValues.trim();
+      values = rawvalues.trim();
     }
 
     if(insertmode === "datatable"){
@@ -386,6 +382,9 @@
             }
           }
         }
+        else{
+          alert("Missing or bad values in set "+number);
+        }
       }
     }
     return final_arr;
@@ -393,21 +392,22 @@
 
   function getValueSets(numbOfPlots, separator, insertmode){
     var sets = [];
-    for(var i = 0; i < numbOfPlots){
+    for(var i = 0; i < numbOfPlots; i++){
       var set = getValueSet((i+1), separator, insertmode);
+      sets.push(set);
     }
+    return sets;
   }
 
   // Calculates the key values of the array of values.
   function calculate(numbOfSets,separator, insertmode){
-
     var valuesets = getValueSets(numbOfSets, separator, insertmode);
     var keyvaluesets = [];
 
     // If value sets are ok, goes on. Otherwise nothing is done (a message
     // has been sent in function getValueSets).
     if(valuesets.length === numbOfSets){
-      for(var i = 0; i < numbOfSets){
+      for(var i = 0; i < numbOfSets; i++){
         var set = valuesets[i];
           var keyvalues = getKeyValues(set);
           keyvaluesets.push(keyvalues);
@@ -416,7 +416,6 @@
           document.getElementById('q2'+(i+1)).value = keyvalues[2];
           document.getElementById('q3'+(i+1)).value = keyvalues[3];
           document.getElementById('max'+(i+1)).value = keyvalues[4];
-        }
       }
 
       var tickLen = parseFloat(document.getElementById('tick').value);
@@ -428,13 +427,13 @@
       // for the user to select better values.
       if(start > keyvaluesets[0][0] ||
           start < keyvaluesets[0][0]-(keyvaluesets[0][4]-keyvaluesets[0][0])/2) {
-        //var newStart = 10*Math.floor(keyvaluesets[0][0]/10);
+
         var newStart = keyvaluesets[0][0];
         document.getElementById('start').value = newStart;
       }
       if(end < keyvaluesets[numbOfSets-1][4] ||
           end > keyvaluesets[numbOfSets-1][4]*2){
-        //var newEnd = 10*Math.ceil(keyvaluesets[numbOfSets-1][4]/10); // Not good in all cases.
+
         var newEnd = keyvaluesets[numbOfSets-1][4];
         document.getElementById('end').value = newEnd;
       }
@@ -497,13 +496,25 @@
     clear_svg(svg);
   }, false);
 
+  document.getElementById('calculatebutton').addEventListener('click', function() {
+    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
+    separator = document.querySelector('input[name="separator"]:checked').value;
+    calculate(numbOfPlots,separator, insertmode);
+  }, false);
+
   document.getElementById('number').addEventListener('change', function() {
     addFieldsForSeveralPlots(this.value);
     addStatsFields(this.value, insertmode);
     numbOfPlots = parseInt(this.value);
     document.getElementById("cheight").value = Math.round(100 + 50*numbOfPlots);
     document.getElementById("end").value = Math.round(28 + 2*numbOfPlots);
-    draw(canvas, svg);
+    if(insertmode === "quartiles"){
+      draw(canvas, svg);
+    }
+    else{
+      clear_canvas(canvas);
+      clear_svg(svg);
+    }
   }, false);
 
   document.getElementById('showvals').addEventListener('change', function() {
@@ -557,11 +568,11 @@
     insertmode = document.querySelector('input[name="insertmode"]:checked').value;
     separator = document.querySelector('input[name="separator"]:checked').value;
     if(insertmode === "datalist" || insertmode === "datatable"){
-      document.getElementById('importfields').style.display="inline-block";
+      document.getElementById('importdata').style.display="inline-block";
       clearAll(canvas, svg);
     }
     else{
-      document.getElementById('importfields').style.display="none";
+      document.getElementById('importdata').style.display="none";
     }
     numbOfPlots = parseInt(document.getElementById('number').value);
     addFieldsForSeveralPlots(numbOfPlots);
