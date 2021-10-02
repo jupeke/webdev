@@ -1,0 +1,87 @@
+<!-- Author: Jukka-Pekka Kerkkänen, 10/2021 -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Noppaa</title>
+    <meta charset="utf-8">
+    <script>
+      var toggle = 0;
+      function noppauta(){
+        var deg = 360;
+        var rotate_time = 3;
+        var color_time = rotate_time;
+        var tulos = Math.ceil(Math.random()*3);
+        var noppa = document.getElementById("noppa");
+        var color = "#585";
+        if (toggle === 1){
+          deg = 0;
+          noppa.style.backgroundColor = color;
+          color = "#aea";
+        } else{
+          deg = 360;
+          noppa.style.backgroundColor = "#aea";
+        }
+        // Remove the old number and transitions:
+        noppa.innerHTML = "";
+        noppa.style.transition = "";
+
+        // Rotation begins immediately:
+        noppa.style.transition =
+          "transform "+rotate_time+"s";
+        noppa.style.transform = "rotate("+deg+"deg)";
+
+        // Delay of 1,5 s for the number. This way also the color
+        // tranformation begins 2s later than the rotation.
+        setTimeout(function() {
+          noppa.style.transition =
+            "transform "+rotate_time+"s, color "+color_time+"s";
+          noppa.style.color = color;
+          noppa.innerHTML = tulos;
+        }, 1500);
+
+        if (toggle === 1){
+          toggle = 0;
+        } else{
+          toggle = 1;
+        }
+      }
+    </script>
+    <style>
+      body{
+        background-color: #000;
+      }
+      #noppa{
+        margin: 10% auto;
+        padding: 50px;
+        text-align: center;
+        font-size: 1400%;
+        color: #585;
+        font-weight: bold;
+        width: 200px;
+        height: 200px;
+        line-height: 200px;
+        background-color: #aea;
+        border-radius: 20px;
+        /*transition: transform 3s, color 8s;*/
+      }
+      #painikerivi{
+        text-align: center;
+        padding: 30px;
+      }
+      #painikerivi button{
+        padding: 10px;
+        font-size: 200%;
+        background-color: red;
+        color: white;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="painikerivi">
+      <button onclick="noppauta()">Heitä noppaa!</button>
+    </div>
+    <div id="noppa">1</div>
+  </body>
+</html>
