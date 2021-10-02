@@ -1,48 +1,30 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>JS example</title>
-    <style>
-      body{font-size: 130%; background-color: lightgreen}
-      input, button {font-size: 90%;}
-      #output {font-weight: bold; color: blue}
-    </style>
-    <script>
-      // Returns the text in the text field with the given id.
-      function getText(id){
-        var text = document.getElementById(id).value;
-        return text;
-      }
+<head>
+   <script>
+   function printMyArray(myArray){
+     var i = 0;
+     var result = "";
 
-      // Replaces the content of the element (id given)
-      // with the value of reply parameter.
-      function showReply(id, reply){
-        document.getElementById(id).innerHTML = reply;
-      }
-
-      // Formats and shows the reply.
-      function reply(){
-        var textFromUser = getText("myTextField");
-        var reply = "";
-        if(textFromUser === "24"){
-          showReply("output","That's correct!")
-        } else {
-          showReply("output","Wrong answer!")
-        }
-      }
-    </script>
+     for(i=0; i < myArray.length; i++){
+       result += myArray[i]+"<br>";
+     }
+     return result+"<br><br>";
+   }
+   function greetMe(){
+     var numbers = [];
+     for(var i=0; i < 10; i++){
+       numbers.push(Math.round(Math.random()*20));
+     }
+     document.getElementById('demo').innerHTML =
+      printMyArray(numbers);
+   }
+  </script>
   </head>
-  <body>
-    <h1>What does a function say?</h1>
-    <p>Write some text in the text field and press the button.</p>
+<body>
 
-
-
-    <input type="text" id="myTextField">
-    <button onclick="reply()">Get a reply</button>
-
-
-
-    <p>Reply: <span id="output"></span></p>
-  </body>
+<h2>Numbers in array</h2>
+<button type="button" onclick="greetMe()">click me</button>
+<p id="demo"></p>
+</body>
 </html>
