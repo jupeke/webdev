@@ -5,7 +5,7 @@
   <meta name="description" content="Draw boxplot">
   <meta name="keywords" content="boxplot">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boxplots</title>
+  <title>Number line</title>
   <style>
     body {background-color: lightblue; font-size: 100%;
       font-family: Arial, sans-serif;
@@ -83,7 +83,7 @@
 </head>
 <body onload="load()">
 <a class="home" href="../../index.html">Home</a>
-<h1 class="center">Boxplots</h1>
+<h1 class="center">Number line</h1>
 
 <div class="center">
 
@@ -364,35 +364,6 @@
     draw(canvas, svg);
   }, false);
 
-  // Radiobuttons for insert mode selection:
-  document.getElementById('datamodelist').addEventListener('change', function() {
-    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
-    document.getElementById('importdata').style.display="inline-block";
-    clearAll(canvas, svg);
-    updateStatsFields(numbOfPlots, insertmode);
-  }, false);
-
-  document.getElementById('datamodetable').addEventListener('change', function() {
-    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
-    document.getElementById('importdata').style.display="inline-block";
-    clearAll(canvas, svg);
-    updateStatsFields(numbOfPlots, insertmode);
-  }, false);
-
-  document.getElementById('keyvaluemode').addEventListener('change', function() {
-    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
-    document.getElementById('importdata').style.display="none";
-  }, false);
-
-  // Radiobuttons for separator selection:
-  document.querySelector('#radiospace').addEventListener('change', function() {
-    separator = document.querySelector('input[name="separator"]:checked').value;
-  }, false);
-
-  document.querySelector('#radiocomma').addEventListener('change', function() {
-    separator = document.querySelector('input[name="separator"]:checked').value;
-  }, false);
-
   // Radiobuttons for mode selection:
   document.getElementById('modesvg').addEventListener('change', function() {
     showmode = document.querySelector('input[name="mode"]:checked').value;
@@ -408,8 +379,6 @@
   }, false);
 
   function load(){
-    insertmode = document.querySelector('input[name="insertmode"]:checked').value;
-    separator = document.querySelector('input[name="separator"]:checked').value;
     if(insertmode === "datalist" || insertmode === "datatable"){
       document.getElementById('importdata').style.display="inline-block";
       clearAll(canvas, svg);
