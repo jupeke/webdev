@@ -1,0 +1,113 @@
+<!-- Author: Jukka-Pekka Kerkkänen, 10/2021 -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Noppaa</title>
+    <meta charset="utf-8">
+    <script>
+      var nopat = [];
+      var number_of_dice = 2;
+      var toggle = 0;
+      function noppauta(){
+        var deg = 360;
+        var rotate_time = 3;
+        var color_time = rotate_time+2;
+        var tulos = Math.ceil(Math.random()*6);
+        var noppa = document.getElementById("noppa");
+        var color = "white";
+        if (toggle === 1){
+          deg = 0;
+          noppa.style.backgroundColor = color;
+          color = "blue";
+        } else{
+          deg = 360;
+          noppa.style.backgroundColor = "blue";
+        }
+        // Remove the old number:
+        noppa.innerHTML = "";
+
+        // Rotation begins immediately:
+        noppa.style.transition =
+          "transform "+rotate_time+"s";
+        noppa.style.transform = "rotate("+deg+"deg)";
+
+        // Delay of 1,5 s for the number. This way also the color
+        // tranformation begins 2s later than the rotation.
+        setTimeout(function() {
+          noppa.style.transition =
+            "transform "+rotate_time+"s, color "+color_time+"s";
+          noppa.style.color = color;
+          noppa.innerHTML = tulos;
+        }, 1500);
+
+        if (toggle === 1){
+          toggle = 0;
+        } else{
+          toggle = 1;
+        }
+      }
+      function init(number){
+        var dice_html = ""; // 1 die - 2 dice
+        for (var i=0; i < number; i++){
+          dice_html += '<div class="noppa">1</div>';
+        }
+        document.getElementById('nopat').innerHTML = dice_html;
+      }
+    </script>
+    <style>
+      body{
+        background-color: #000;
+      }
+      #nopat{
+        text-align: center;
+      }
+      .noppa{
+        display: inline-block;
+        margin: 10% auto;
+        padding: 50px;
+        margin: 50px;
+        text-align: center;
+        font-size: 1600%;
+        color: blue;
+        font-weight: bold;
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        background-color: blue;
+        border-radius: 30px;
+        /*transition: transform 3s, color 8s;*/
+      }
+      #painikerivi{
+        text-align: center;
+        padding: 30px;
+      }
+      #painikerivi button, #painikerivi select{
+        padding: 20px;
+        font-size: 250%;
+        background-color: red;
+        color: white;
+        border: solid 5px white;
+        border-radius: 20px;
+      }
+    </style>
+  </head>
+
+  <body onload="init(2)">
+    <div id="painikerivi">
+      <button onclick="noppauta()">Heitä noppaa!</button>
+      <label for="cars">Choose a car:</label>
+
+      <select id="number" onchange="init(this.value)">
+        <option value="1">1</option>
+        <option value="2" selected="selected">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </select>
+    </div>
+    <div id="nopat"></div>
+  </body>
+</html>
