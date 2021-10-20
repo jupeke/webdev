@@ -5,24 +5,40 @@
     <title>Noppaa</title>
     <meta charset="utf-8">
     <script>
-      var nopat = [];
-      var number_of_dice = 2;
       var toggle = 0;
-      function noppauta(){
+      function roll(){
+        var nopat = document.getElementsByClassName("noppa");
+        var number_of_dice = nopat.length;
+
+        for (var i = 0; i < number_of_dice; i++){
+          var noppa = nopat[i];
+
+          noppauta(noppa, toggle);
+        }
+
+        if (toggle === 1){
+          toggle = 0;
+        } else{
+          toggle = 1;
+        }
+      }
+
+      function noppauta(noppa, toggle){
         var deg = 360;
         var rotate_time = 3;
         var color_time = rotate_time+2;
         var tulos = Math.ceil(Math.random()*6);
-        var noppa = document.getElementById("noppa");
-        var color = "white";
+        var color = "pink";
+
         if (toggle === 1){
           deg = 0;
           noppa.style.backgroundColor = color;
-          color = "blue";
+          color = "#84f";
         } else{
           deg = 360;
-          noppa.style.backgroundColor = "blue";
+          noppa.style.backgroundColor = "#84f";
         }
+
         // Remove the old number:
         noppa.innerHTML = "";
 
@@ -39,12 +55,6 @@
           noppa.style.color = color;
           noppa.innerHTML = tulos;
         }, 1500);
-
-        if (toggle === 1){
-          toggle = 0;
-        } else{
-          toggle = 1;
-        }
       }
       function init(number){
         var dice_html = ""; // 1 die - 2 dice
@@ -67,13 +77,13 @@
         padding: 50px;
         margin: 50px;
         text-align: center;
-        font-size: 1600%;
-        color: blue;
+        font-size: 800%;
+        color: #84f;
         font-weight: bold;
         width: 100px;
         height: 100px;
         line-height: 100px;
-        background-color: blue;
+        background-color: #84f;
         border-radius: 30px;
         /*transition: transform 3s, color 8s;*/
       }
@@ -84,9 +94,9 @@
       #painikerivi button, #painikerivi select{
         padding: 20px;
         font-size: 250%;
-        background-color: red;
-        color: white;
-        border: solid 5px white;
+        background-color: #84f;
+        color: pink;
+        border: solid 5px pink;
         border-radius: 20px;
       }
     </style>
@@ -94,8 +104,8 @@
 
   <body onload="init(2)">
     <div id="painikerivi">
-      <button onclick="noppauta()">Heitä noppaa!</button>
-      <label for="cars">Choose a car:</label>
+      <button onclick="roll()">Roll the dice!</button>
+      <label for="number">Number of dice to roll</label>
 
       <select id="number" onchange="init(this.value)">
         <option value="1">1</option>
