@@ -8,12 +8,13 @@
       var toggle = 0;
       function roll(){
         var nopat = document.getElementsByClassName("noppa");
+        var min = parseInt(document.getElementById("min").value);
+        var max = parseInt(document.getElementById("max").value);
         var number_of_dice = nopat.length;
 
         for (var i = 0; i < number_of_dice; i++){
           var noppa = nopat[i];
-
-          noppauta(noppa, toggle);
+          noppauta(noppa, toggle, min, max);
         }
 
         if (toggle === 1){
@@ -23,27 +24,31 @@
         }
       }
       // Helps with many dice:
-      function add_option_elem(val){
+      function add_option_elem(val, default){
         var selected = "";
-        if (val === 2){
+        if (val === default){
           selected = 'selected="selected"';
         }
         return '<option value="'+val+'" '+selected+'>'+val+'</option>';
       }
 
-      function create_option_elems(number){
+      function create_option_elems(number, default){
         var options_html = "";
-        for(var i = 0; i < number; i++){
-          options_html += add_option_elem(i+1);
+        for(var i = 0; i < number+1; i++){
+          options_html += add_option_elem(i,default);
         }
         return options_html;
       }
 
-      function noppauta(noppa, toggle){
+      function noppauta(noppa, toggle, min, max){
         var deg = 360;
         var rotate_time = 3;
         var color_time = rotate_time+2;
-        var tulos = Math.ceil(Math.random()*6);
+        var diff = max-min;
+        if (diff < 0){
+          diff = min-max;
+        }
+        var tulos = Math.round(Math.random()*(diff))+min;
         var color = "pink";
 
         if (toggle === 1){
@@ -73,10 +78,12 @@
         }, 1500);
       }
       function init(number){
-        var dice_html = ""; // 1 die - 2 dice
+        var dice_html = "<table>"; // 1 die (1 dice) - 2 dice
         for (var i=0; i < number; i++){
-          dice_html += '<div>Student '+(i+1)+': <div class="noppa">1</div></div>';
+          dice_html += '<tr><td class="studlabel">Student '+(i+1)+
+            ':</td><td><div class="noppa">1</div></td>';
         }
+        dice_html += "</table>";
         document.getElementById('nopat').innerHTML = dice_html;
       }
     </script>
@@ -84,24 +91,31 @@
       body{
         background-color: #000;
         color: white;
+        font-size: 120%;
+      }
+      table{
+        margin: 10px auto
+      }
+      .studlabel{
+        font-size: 120%;
       }
       #nopat{
         text-align: center;
       }
       .noppa{
         display: inline-block;
-        margin: 10% auto;
-        padding: 30px;
-        margin: 30px;
+        margin: 10px auto;
+        padding: 10px;
+        margin: 20px;
         text-align: center;
-        font-size: 400%;
+        font-size: 250%;
         color: #84f;
         font-weight: bold;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
         background-color: #84f;
-        border-radius: 20px;
+        border-radius: 10px;
         /*transition: transform 3s, color 8s;*/
       }
       #painikerivi{
@@ -109,8 +123,9 @@
         padding: 30px;
       }
       #painikerivi button, #painikerivi select{
-        padding: 20px;
-        font-size: 200%;
+        padding: 10px;
+        margin: 5px;
+        font-size: 150%;
         background-color: #84f;
         color: pink;
         border: solid 5px pink;
@@ -121,20 +136,23 @@
 
   <body onload="init(2)">
     <div id="painikerivi">
-      <button onclick="roll()">Roll the marks!</button>
-      <label for="number"></label>
+      <button onclick="roll()">Let it roll!</button>
 
+      <label for="min">Min:</label>
       <select id="min">
-        <script>document.write(create_option_elems(10))</script>
+        <script>document.write(create_option_elems(10, 2))</script>
       </select>
 
+      <label for="max">Max:</label>
       <select id="max">
-        <script>document.write(create_option_elems(10))</script>
+        <script>document.write(create_option_elems(10,10))</script>
       </select>
-
-      <select id="number" onchange="init(this.value)">
-        <script>document.write(create_option_elems(30))</script>
-      </select>
+      <p>
+        <label for="number">Number of students:</label>
+        <select id="number" onchange="init(this.value)">
+          <script>document.write(create_option_elems(30,5))</script>
+        </select>
+      </p>
     </div>
     <div id="nopat"></div>
   </body>
