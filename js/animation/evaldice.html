@@ -1,0 +1,141 @@
+<!-- Author: Jukka-Pekka Kerkkänen, 10/2021 -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Noppaa</title>
+    <meta charset="utf-8">
+    <script>
+      var toggle = 0;
+      function roll(){
+        var nopat = document.getElementsByClassName("noppa");
+        var number_of_dice = nopat.length;
+
+        for (var i = 0; i < number_of_dice; i++){
+          var noppa = nopat[i];
+
+          noppauta(noppa, toggle);
+        }
+
+        if (toggle === 1){
+          toggle = 0;
+        } else{
+          toggle = 1;
+        }
+      }
+      // Helps with many dice:
+      function add_option_elem(val){
+        var selected = "";
+        if (val === 2){
+          selected = 'selected="selected"';
+        }
+        return '<option value="'+val+'" '+selected+'>'+val+'</option>';
+      }
+
+      function create_option_elems(number){
+        var options_html = "";
+        for(var i = 0; i < number; i++){
+          options_html += add_option_elem(i+1);
+        }
+        return options_html;
+      }
+
+      function noppauta(noppa, toggle){
+        var deg = 360;
+        var rotate_time = 3;
+        var color_time = rotate_time+2;
+        var tulos = Math.ceil(Math.random()*6);
+        var color = "pink";
+
+        if (toggle === 1){
+          deg = 0;
+          noppa.style.backgroundColor = color;
+          color = "#84f";
+        } else{
+          deg = 360;
+          noppa.style.backgroundColor = "#84f";
+        }
+
+        // Remove the old number:
+        noppa.innerHTML = "";
+
+        // Rotation begins immediately:
+        noppa.style.transition =
+          "transform "+rotate_time+"s";
+        noppa.style.transform = "rotate("+deg+"deg)";
+
+        // Delay of 1,5 s for the number. This way also the color
+        // tranformation begins 2s later than the rotation.
+        setTimeout(function() {
+          noppa.style.transition =
+            "transform "+rotate_time+"s, color "+color_time+"s";
+          noppa.style.color = color;
+          noppa.innerHTML = tulos;
+        }, 1500);
+      }
+      function init(number){
+        var dice_html = ""; // 1 die - 2 dice
+        for (var i=0; i < number; i++){
+          dice_html += '<div>Student '+(i+1)+': <div class="noppa">1</div></div>';
+        }
+        document.getElementById('nopat').innerHTML = dice_html;
+      }
+    </script>
+    <style>
+      body{
+        background-color: #000;
+        color: white;
+      }
+      #nopat{
+        text-align: center;
+      }
+      .noppa{
+        display: inline-block;
+        margin: 10% auto;
+        padding: 30px;
+        margin: 30px;
+        text-align: center;
+        font-size: 400%;
+        color: #84f;
+        font-weight: bold;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        background-color: #84f;
+        border-radius: 20px;
+        /*transition: transform 3s, color 8s;*/
+      }
+      #painikerivi{
+        text-align: center;
+        padding: 30px;
+      }
+      #painikerivi button, #painikerivi select{
+        padding: 20px;
+        font-size: 200%;
+        background-color: #84f;
+        color: pink;
+        border: solid 5px pink;
+        border-radius: 20px;
+      }
+    </style>
+  </head>
+
+  <body onload="init(2)">
+    <div id="painikerivi">
+      <button onclick="roll()">Roll the marks!</button>
+      <label for="number"></label>
+
+      <select id="min">
+        <script>document.write(create_option_elems(10))</script>
+      </select>
+
+      <select id="max">
+        <script>document.write(create_option_elems(10))</script>
+      </select>
+
+      <select id="number" onchange="init(this.value)">
+        <script>document.write(create_option_elems(30))</script>
+      </select>
+    </div>
+    <div id="nopat"></div>
+  </body>
+</html>
