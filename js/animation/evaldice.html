@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Noppaa</title>
+    <title>Custom dice</title>
     <meta charset="utf-8">
     <script>
       var toggle = 0;
@@ -24,18 +24,18 @@
         }
       }
       // Helps with many dice:
-      function add_option_elem(val, default){
+      function add_option_elem(val, def){
         var selected = "";
-        if (val === default){
+        if (val === def){
           selected = 'selected="selected"';
         }
         return '<option value="'+val+'" '+selected+'>'+val+'</option>';
       }
 
-      function create_option_elems(number, default){
+      function create_option_elems(number, def){
         var options_html = "";
         for(var i = 0; i < number+1; i++){
-          options_html += add_option_elem(i,default);
+          options_html += add_option_elem(i,def);
         }
         return options_html;
       }
@@ -47,8 +47,10 @@
         var diff = max-min;
         if (diff < 0){
           diff = min-max;
+          min = max;
         }
-        var tulos = Math.round(Math.random()*(diff))+min;
+        // Math.random() returns a random number between 0 (inclusive),  and 1 (exclusive).
+        var tulos = Math.floor(Math.random()*(diff+1))+min;
         var color = "pink";
 
         if (toggle === 1){
@@ -64,12 +66,11 @@
         noppa.innerHTML = "";
 
         // Rotation begins immediately:
-        noppa.style.transition =
-          "transform "+rotate_time+"s";
+        noppa.style.transition = "transform "+rotate_time+"s";
         noppa.style.transform = "rotate("+deg+"deg)";
 
         // Delay of 1,5 s for the number. This way also the color
-        // tranformation begins 2s later than the rotation.
+        // tranformation begins later than the rotation.
         setTimeout(function() {
           noppa.style.transition =
             "transform "+rotate_time+"s, color "+color_time+"s";
@@ -129,12 +130,12 @@
         background-color: #84f;
         color: pink;
         border: solid 5px pink;
-        border-radius: 20px;
+        border-radius: 10px;
       }
     </style>
   </head>
 
-  <body onload="init(2)">
+  <body onload="init(5)">
     <div id="painikerivi">
       <button onclick="roll()">Let it roll!</button>
 
