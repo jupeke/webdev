@@ -1,0 +1,20 @@
+
+body{
+  background-color: pink;
+  color: red;
+  text-align: center;
+}
+p {
+  background-color: lightgreen;
+  padding: 10px;
+  font-size: 120%;
+  border-radius: 10px;
+}
+.notice{
+  font-weight: bold;
+  color: blue
+}
+#weird{
+  background-color: black;
+  color: white;
+}
