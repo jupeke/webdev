@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>Testing JS timing</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      class Test {
+        constructor(){
+          this.id = 0;
+        }
+        start(){
+          this.id++;
+          document.getElementById("result").innerHTML = this.id;
+
+          // arrow function (ES6) works! It preserves the scope of this.
+          setTimeout(() => {
+              // Hey I can access 'this' in here!
+              this.start();
+          }, 1000);
+        }
+      }
+      // Test for Test:
+      function init() {
+        var test = new Test();
+        test.start();
+      }
+
+      class Person{
+        constructor(){
+
+        }
+      }
+      class Computer{
+        constructor(){
+
+        }
+      }
+      class Views{
+        constructor(){
+
+        }
+      }
+
+    </script>
+  </head>
+  <body>
+    <h1>Bill Solver</h1>
+    <div id="result"></div>
+    <button onclick="init()">Solve it</button>
+    <script>
+
+    </script>
+
+  </body>
+</html>
