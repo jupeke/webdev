@@ -3,50 +3,160 @@
     <title>Testing JS timing</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      table{
+        border-collapse: collapse;
+      }
+      button, select, input{
+          padding: 5px;
+          font-size: 120%;
+      }
+      th, td{
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+      }
+      input{
+          border: none;
+          width: 5em;
+      }
+      .nopadding{
+          padding:0;
+      }
+      .wide_input{
+          width: 15em;
+      }
+    </style>
     <script>
-      class Test {
-        constructor(){
-          this.id = 0;
-        }
-        start(){
-          this.id++;
-          document.getElementById("result").innerHTML = this.id;
-
-          // arrow function (ES6) works! It preserves the scope of this.
-          setTimeout(() => {
-              // Hey I can access 'this' in here!
-              this.start();
-          }, 1000);
-        }
-      }
-      // Test for Test:
-      function init() {
-        var test = new Test();
-        test.start();
-      }
+      var numb_of_all = 3;  // Defaults
+      var vue = "";
 
       class Person{
-        constructor(){
-
-        }
+          constructor(name, weight, paid){
+              this.name = name;
+              this.weight = weight;
+              this.paid = paid;
+              this.balance = 0;
+          }
       }
       class Computer{
-        constructor(){
+          constructor(){
+              this.persons = [];
+              this.total = 0;
+              this.weights_total = 0;
+          }
+          // Counts and returns the sum of all the paid amounts.
+          count_total(){
+              let persons = this.persons;
+              let sum = 0;
+              for(let i=0; i < persons.length; i++){
+                  sum += persons[i].paid;
+              }
+              return sum;
+          }
+          // Counts and returns the sum of all weights.
+          // Note: the sum should not zero (division problem).
+          // The caller takes care of the checking.
+          }
+          count_weights_total(){
+              let persons = this.persons;
+              let sum = 0;
+              for(let i=0; i < persons.length; i++){
+                  sum += persons[i].paid;
+              }
+              return sum;
+          }
+          get_persons_in_debt(){
+              let persons = this.persons;
+              let paid_total = this.paid_total;
 
-        }
+          }
       }
       class Views{
-        constructor(){
+          constructor(){
 
-        }
+          }
+          make_infotable(numb){
+              let html = "<table id='persons_table'>";
+              html += "<tr><th></th><th>Name</th><th>Paid</th><th>Weight (%)</th></tr>";
+              let index = 1;
+              for(var i = 0; i < numb; i++){
+                  index++;
+                  html += "<tr><td>Person "+(i+1)+"</td>"+
+                    "<td class='nopadding'>"+
+                        "<input class='wide_input' id='name_"+index+"' type='text'>"+
+                    "</td>"+
+                    "<td class='nopadding'>"+
+                        "<input id='paid_"+index+"' type='text'>"+
+                    "</td>"+
+                    "<td class='nopadding'>"+
+                        "<input id='weight_"+index+"' type='text'>"+
+                    "</td>"+
+                    "</tr>";
+              }
+              html += "</table>";
+              return html;
+          }
+          show_table(){
+              let numb = this.get_elem("numb_of_all").value;
+              numb_of_all = numb;
+              let tbl = this.make_infotable(numb);
+              this.set_content("persons",tbl);
+          }
+          // General help methods to handle HTML and DOM
+          get_elem(id){
+              return document.getElementById(id);
+          }
+          set_content(id,content){
+              let elem = this.get_elem(id)
+              elem.innerHTML = content;
+          }
+          // Helps with many similar options:
+          add_option_elem(val, def){
+              var selected = "";
+              if (val === def){
+                  selected = 'selected="selected"';
+              }
+              return '<option value="'+val+'" '+selected+'>'+val+'</option>';
+          }
+
+          // Options with numbers 1-number:
+          create_option_elems(number, def){
+              var options_html = "";
+              for(var i = 0; i < number; i++){
+                  options_html += this.add_option_elem(i+1,def);
+              }
+              return options_html;
+          }
       }
+
+      function init(){
+          let vues = vue;
+          let numb = numb_of_all;
+          let tbl = vues.make_infotable(numb);
+          vues.set_content("persons",tbl);
+      }
+
 
     </script>
   </head>
-  <body>
+  <body onload="init()">
     <h1>Bill Solver</h1>
+    <p id="guide">This application makes it easy to know how much each ows who.</p>
+    <p id="question_number">
+      <label for="numb_of_all">How many participated?</label>
+      <select id="numb_of_all" onchange="vue.show_table(this.value)">
+        <script>
+          vue = new Views(); // Seems to run before init()!
+          document.write(vue.create_option_elems(100, 3))
+        </script>
+      </select>
+      <!--<button onclick="show_table()">Show table</button>-->
+
+    </p>
+    <div id="persons"></div>
     <div id="result"></div>
-    <button onclick="init()">Solve it</button>
+    <p><button onclick="init()">Solve it</button></p>
     <script>
 
     </script>
