@@ -28,6 +28,8 @@
       }
     </style>
     <script>
+      const MIN_PAYMENT = 1;
+      const NUMB_OF_FIGURES = 0;
       var numb_of_all = 3;  // Defaults
       var vue = "";
 
@@ -42,8 +44,11 @@
       class Computer{
           constructor(){
               this.persons = [];
-              this.total = 0;
-              this.weights_total = 0;
+              this.the_rich = [];
+              this.the_poor = [];
+              this.payments = [][];
+              this.total = this-count_total();
+              this.weights_total = this.count_weights_total();
           }
           // Counts and returns the sum of all the paid amounts.
           count_total(){
@@ -66,10 +71,77 @@
               }
               return sum;
           }
-          get_persons_in_debt(){
+          // Returns an array of two arrays: persons having paid less than their
+          // share and another array with all the rest. Divides all the persons into
+          // two groups.
+          // Also sets the balance of each person telling how much he/she must
+          // pay or get from others.
+          get_the_rich_and_the_poor(){
               let persons = this.persons;
               let paid_total = this.paid_total;
+              let the_poor = [];
+              let the_rich = [];
+              let total_to_pay_for_person = 0;
+              for(let i = 0; i < persons.length; i++){
+                  let p = persons[i];
+                  total_to_pay_for_person = this.personal_total_by_weight(p)
 
+                  // Positive balance -> person must pay to someone. Negative->
+                  // someone else ows him that much.
+                  p.balance = personal_total_by_weight - p.paid;
+
+                  // If person must pay -> adds to the persons in debt.
+                  if(p.balance > 0){
+                      the_poor[] = p;
+                  } else{
+                      the_rich[] = p;
+                  }
+              }
+              return [the_poor, the_rich];
+          }
+          calculate(){
+              // Clears the old values:
+              this.clear_results();
+              let groups = this.get_the_rich_and_the_poor();
+              this.the_poor = groups[0];
+              this.the_rich = groups[1];
+
+              // Calculate the sum to pay for each poor person. The payment
+              // is divided into parts based on the ricḧ́s needs.. The sums
+              // are written into the payments table (2-dim). The first row
+              // like the first col are left empty (for the names).
+              let x = 1;
+              let y = 1;
+              for(let i = 0; i < this.the_poor.length; i++){
+                  let payer = this.the_poor[i];
+                  for(let k = 0; k < this.the_rich.length; k++){
+                      let rich_guy = this.the_rich[k];
+
+                      // Balance must be > or = MIN_PAYMENT for payment need.
+                      if(payer.balance < MIN_PAYMENT ||
+                          Math.abs(rich_guy.balance < MIN_PAYMENT)){
+
+                            // Nothing to pay:
+                          this.payments[x][y] = "-";
+                      }
+                      // If there is still debt to pay:
+                      else if(payer.balance > MIN_PAYMENT){
+                          // How much to pay to this rich person?
+                          let payment_exact =
+                            Math.min(payer.balance, rich_guy.balance);
+                          let payment = round_to(payment_exact, NUMB_OF_FIGURES);
+                          payer.balance -= payment;
+                          rich_guy.balance += payment;
+                          this.payments[x][y] = payment;
+                      }
+                      // One step to the right: the next rich guy:
+                      x++;
+                  }
+                  // New payer (one step down in the table):
+                  y++;
+                  // Jump to the column 2 (the 1st rich guy):
+                  x = 1;
+              }
           }
       }
       class Views{
