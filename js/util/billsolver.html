@@ -30,36 +30,56 @@
     <script>
       const MIN_PAYMENT = 1;
       const NUMB_OF_FIGURES = 0;
+      const UNKNOWN = -123456;
       var numb_of_all = 3;  // Defaults
       var controller = "";
 
-      class Array_2d(){
-
+      // A 2d array, works as a cols times rows table
+      class Table{
           // Parametres: number of columns and rows:
           constructor(cols, rows){
               this.rows = rows;
               this.cols = cols;
-              this.arr_2d = this.initiate();
+              this.table = this.initiate();
           }
-          // Set value to the cell at (x,y). x refers to col (width),
-          // y to row (height) like in the coordinates system.
+          // Set value to the cell at (x,y). Value x refers to col (width),
+          // y to row (height) like in the coordinates system. Note:
+          // x and y begin at 1. Cell (1,1) is the top left one (like in a
+          // spread sheet program).
+          // Return True if success, otherwise False.
           set(value, x, y){
-
+              let success = false;
+              if(x > this.cols || y > this.rows){
+                  alert("Value too big for the table!");
+              } else{
+                  this.table[y][x] = value;
+                  success = true;
+              }
+              return success;
           }
+          // Returns the value of cell (x,y).
           get(x,y){
-
+              let value = UNKNOWN;
+              if(x > this.cols || y > this.rows){
+                  alert("Value too big for the table!");
+              } else{
+                  value = this.table[y][x];
+              }
+              return value;
           }
-          // Initate array with the right size:
+          // Initate array with the right sizes:
           initiate(){
-              let arr = new Array[this.rows];
-              for(let i = 0; i < arr.length; i++){
+              let table = new Array[this.rows];
+              for(let i = 0; i < table.length; i++){
                   arr[i] = new Array(this.cols);
               }
+              return table;
           }
       }
 
       class Person{
-          constructor(name, weight, paid){
+          constructor(number, name, weight, paid){
+              this.number = number;
               this.name = name;
               this.weight = weight;
               this.paid = paid;
@@ -71,11 +91,16 @@
               this.persons = [];
               this.the_rich = [];
               this.the_poor = [];
-              this.payments = [][];
-              this.total = this-count_total();
+              this.payments = [];
+              this.total = this.count_total();
               this.weights_total = this.count_weights_total();
               this.vues = new Views();
           }
+          // Reads the info table and returns an array of person objects.
+          read_info_table(){
+              
+          }
+
           // Counts and returns the sum of all the paid amounts.
           count_total(){
               let persons = this.persons;
@@ -88,7 +113,6 @@
           // Counts and returns the sum of all weights.
           // Note: the sum should not zero (division problem).
           // The caller takes care of the checking.
-          }
           count_weights_total(){
               let persons = this.persons;
               let sum = 0;
@@ -118,9 +142,9 @@
 
                   // If person must pay -> adds to the persons in debt.
                   if(p.balance > 0){
-                      the_poor[] = p;
+                      the_poor.push(p);
                   } else{
-                      the_rich[] = p;
+                      the_rich.push(p);
                   }
               }
               return [the_poor, the_rich];
@@ -131,13 +155,14 @@
               let groups = this.get_the_rich_and_the_poor();
               this.the_poor = groups[0];
               this.the_rich = groups[1];
+              this.payments = Table(this.the_poor.length,this.the_rich.length);
 
               // Calculate the sum to pay for each poor person. The payment
               // is divided into parts based on the ricḧ́s needs.. The sums
               // are written into the payments table (2-dim). The first row
               // like the first col are left empty (for the names).
-              let x = 1;
-              let y = 1;
+              let x = 2;
+              let y = 2;
               for(let i = 0; i < this.the_poor.length; i++){
                   let payer = this.the_poor[i];
                   for(let k = 0; k < this.the_rich.length; k++){
@@ -148,7 +173,7 @@
                           Math.abs(rich_guy.balance < MIN_PAYMENT)){
 
                             // Nothing to pay:
-                          this.payments[x][y] = "-";
+                          this.payment.set("-",x,y);
                       }
                       // If there is still debt to pay:
                       else if(payer.balance > MIN_PAYMENT){
@@ -158,7 +183,7 @@
                           let payment = round_to(payment_exact, NUMB_OF_FIGURES);
                           payer.balance -= payment;
                           rich_guy.balance += payment;
-                          this.payments[x][y] = payment;
+                          this.payments.set(payment,x,y);
                       }
                       // One step to the right: the next rich guy:
                       x++;
@@ -166,7 +191,7 @@
                   // New payer (one step down in the table):
                   y++;
                   // Jump to the column 2 (the 1st rich guy):
-                  x = 1;
+                  x = 2;
               }
           }
           // Add the names to the payments table (the rich row 1, the poor column 1)
@@ -175,11 +200,11 @@
               let rich = "";
               for(let i = 0; i < this.the_poor.length; i++){
                   poor = this.the_poor[i];
-                  this.payments[i][0] = poor.name;
+                  this.payments.set(poor.name,1,i+1);
               }
               for(let j = 0; j < this.the_rich.length; j++){
                   rich = this.the_rich[j];
-                  this.payments[0][j] = poor.name;
+                  this.payments.set(rich.name,j+1,1);
               }
           }
       }
@@ -190,10 +215,10 @@
           make_infotable(numb){
               let html = "<table id='persons_table'>";
               html += "<tr><th></th><th>Name</th><th>Paid</th><th>Weight (%)</th></tr>";
-              let index = 1;
+              let index = 0;
               for(var i = 0; i < numb; i++){
                   index++;
-                  html += "<tr><td>Person "+(i+1)+"</td>"+
+                  html += "<tr><td>Person "+index+"</td>"+
                     "<td class='nopadding'>"+
                         "<input class='wide_input' id='name_"+index+"' type='text'>"+
                     "</td>"+
