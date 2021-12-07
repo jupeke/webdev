@@ -33,6 +33,31 @@
       var numb_of_all = 3;  // Defaults
       var controller = "";
 
+      class Array_2d(){
+
+          // Parametres: number of columns and rows:
+          constructor(cols, rows){
+              this.rows = rows;
+              this.cols = cols;
+              this.arr_2d = this.initiate();
+          }
+          // Set value to the cell at (x,y). x refers to col (width),
+          // y to row (height) like in the coordinates system.
+          set(value, x, y){
+
+          }
+          get(x,y){
+
+          }
+          // Initate array with the right size:
+          initiate(){
+              let arr = new Array[this.rows];
+              for(let i = 0; i < arr.length; i++){
+                  arr[i] = new Array(this.cols);
+              }
+          }
+      }
+
       class Person{
           constructor(name, weight, paid){
               this.name = name;
