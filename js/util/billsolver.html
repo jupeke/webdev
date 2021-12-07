@@ -31,7 +31,7 @@
       const MIN_PAYMENT = 1;
       const NUMB_OF_FIGURES = 0;
       var numb_of_all = 3;  // Defaults
-      var vue = "";
+      var controller = "";
 
       class Person{
           constructor(name, weight, paid){
@@ -41,7 +41,7 @@
               this.balance = 0;
           }
       }
-      class Computer{
+      class Controller{
           constructor(){
               this.persons = [];
               this.the_rich = [];
@@ -49,6 +49,7 @@
               this.payments = [][];
               this.total = this-count_total();
               this.weights_total = this.count_weights_total();
+              this.vues = new Views();
           }
           // Counts and returns the sum of all the paid amounts.
           count_total(){
@@ -143,6 +144,19 @@
                   x = 1;
               }
           }
+          // Add the names to the payments table (the rich row 1, the poor column 1)
+          write_names_to_table(){
+              let poor = "";
+              let rich = "";
+              for(let i = 0; i < this.the_poor.length; i++){
+                  poor = this.the_poor[i];
+                  this.payments[i][0] = poor.name;
+              }
+              for(let j = 0; j < this.the_rich.length; j++){
+                  rich = this.the_rich[j];
+                  this.payments[0][j] = poor.name;
+              }
+          }
       }
       class Views{
           constructor(){
@@ -203,7 +217,8 @@
       }
 
       function init(){
-          let vues = vue;
+          controller = new Controller();
+          let vues = controller.vues;
           let numb = numb_of_all;
           let tbl = vues.make_infotable(numb);
           vues.set_content("persons",tbl);
@@ -217,7 +232,7 @@
     <p id="guide">This application makes it easy to know how much each ows who.</p>
     <p id="question_number">
       <label for="numb_of_all">How many participated?</label>
-      <select id="numb_of_all" onchange="vue.show_table(this.value)">
+      <select id="numb_of_all" onchange="controller.vues.show_table(this.value)">
         <script>
           vue = new Views(); // Seems to run before init()!
           document.write(vue.create_option_elems(100, 3))
