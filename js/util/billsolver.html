@@ -77,7 +77,19 @@
           }
           // Returns an HTML presentation of the table:
           toHTML(){
+              let html = "<table>";
 
+              // Rows:
+              for(let k = 0; k < this.the_poor.length; k++){
+
+
+                  // a Row (there are as many cols as the rich);
+                  for(let k = 0; k < this.the_rich.length; k++){
+
+                  }
+              }
+              html += "</table>";
+              return html;
           }
       }
 
