@@ -31,6 +31,7 @@
       const MIN_PAYMENT = 1;
       const NUMB_OF_FIGURES = 0;
       const UNKNOWN = -123456;
+      const EMPTY = "empty";
       var numb_of_all = 3;  // Defaults
       var controller = "";
 
@@ -69,9 +70,9 @@
           }
           // Initate array with the right sizes:
           initiate(){
-              let table = new Array[this.rows];
+              let table = new Array(this.rows);
               for(let i = 0; i < table.length; i++){
-                  arr[i] = new Array(this.cols);
+                  table[i] = new Array(this.cols);
               }
               return table;
           }
@@ -80,13 +81,14 @@
               let html = "<table>";
 
               // Rows:
-              for(let k = 0; k < this.the_poor.length; k++){
-
+              for(let i = 1; i <= this.rows; i++){
+                  html += "<tr>";
 
                   // a Row (there are as many cols as the rich);
-                  for(let k = 0; k < this.the_rich.length; k++){
-
+                  for(let k = 1; k <= this.cols; k++){
+                      html += "<td>"+this.get(k,i)+"</td>";
                   }
+                  html += "</tr>";
               }
               html += "</table>";
               return html;
@@ -95,10 +97,10 @@
 
       class Person{
           constructor(number, name, weight, paid){
-              this.number = number;
+              this.number = parseInt(number);
               this.name = name;
-              this.weight = weight;
-              this.paid = paid;
+              this.weight = parseFloat(weight);
+              this.paid = parseFloat(paid);
               this.balance = 0;
           }
       }
@@ -113,15 +115,31 @@
               this.vues = new Views();
           }
           // Reads the personal details and returns an array of person objects.
+          // If a cell is empty, breaks the loop and gives an error message.
           read_person_info(){
               let persons = [];
               for(let i = 0; i < numb_of_all; i++){
                   let number = (i+1);
-                  let name = this.vues.get_elem("name_"+(i+1));
-                  let paid = this.vues.get_elem("paid_"+(i+1));
-                  let weight = this.vues.get_elem("weight_"+(i+1));
-                  p = new Person(number, name, paid, weight);
+                  let name = this.vues.get_elem("name_"+(i+1)).value;
+                  if (name === ""){
+                      alert("Empty cell found! Fill in first each cell!");
+                      break;
+                  }
+                  let paid = this.vues.get_elem("paid_"+(i+1)).value;
+                  if (name === ""){
+                      alert("Empty cell found! Fill in first each cell!");
+                      break;
+                  }
+                  let weight = this.vues.get_elem("weight_"+(i+1)).value;
+                  if (name === ""){
+                      alert("Empty cell found! Fill in first each cell!");
+                      break;
+                  }
+                  let p = new Person(number, name, paid, weight);
+
                   persons.push(p);
+                  alert("Person "+number+": "+name+" has paid "+paid+
+                    " euros and has weight "+weight);
               }
               return persons;
           }
@@ -153,17 +171,19 @@
           // pay or get from others.
           get_the_rich_and_the_poor(){
               let persons = this.persons;
-              let paid_total = this.paid_total;
+              let paid_total = this.total;
               let the_poor = [];
               let the_rich = [];
               let total_to_pay_for_person = 0;
               for(let i = 0; i < persons.length; i++){
                   let p = persons[i];
-                  total_to_pay_for_person = this.personal_total_by_weight(p)
+                  total_to_pay_for_person = this.personal_total_by_weight(p);
+
+                  alert("total_to_pay_for_person="+total_to_pay_for_person);
 
                   // Positive balance -> person must pay to someone. Negative->
                   // someone else ows him that much.
-                  p.balance = personal_total_by_weight - p.paid;
+                  p.balance = total_to_pay_for_person - p.paid;
 
                   // If person must pay -> adds to the persons in debt.
                   if(p.balance > 0){
@@ -174,10 +194,26 @@
               }
               return [the_poor, the_rich];
           }
+          // Counts and returns the total to be paid by a person
+          personal_total_by_weight(person){
+              let pers_total = (this.total / this.weights_total) * person.weight;
+              return this.round_to_figures(pers_total, 2);
+          }
+
+          // Round to figures figures.
+          round_to_figures(number, figures){
+              let x = number * Math.pow(10, figures);
+              let x_rounded = Math.round(x);
+              let final = x_rounded / Math.pow(10, figures);
+              return final;
+          }
+
           calculate(){
               // Clears the old values:
               this.clear_results();
               this.persons = this.read_person_info();
+              this.total = this.count_total();
+              this.weights_total = this.count_weights_total();
               let groups = this.get_the_rich_and_the_poor();
               this.the_poor = groups[0];
               this.the_rich = groups[1];
@@ -199,7 +235,7 @@
                           Math.abs(rich_guy.balance < MIN_PAYMENT)){
 
                             // Nothing to pay:
-                          this.payment.set("-",x,y);
+                          this.payments.set("-",x,y);
                       }
                       // If there is still debt to pay:
                       else if(payer.balance > MIN_PAYMENT){
@@ -219,7 +255,7 @@
                   // Jump to the column 2 (the 1st rich guy):
                   x = 2;
               }
-              this.payments.toHTML("result");
+              this.vues.set_content("result", this.payments.toHTML());
           }
           // Add the names to the payments table (the rich row 1, the poor column 1)
           write_names_to_table(){
@@ -233,6 +269,9 @@
                   rich = this.the_rich[j];
                   this.payments.set(rich.name,j+1,1);
               }
+          }
+          clear_results(){
+              this.vues.get_elem("result").innerHTML = "";
           }
       }
       class Views{
@@ -271,8 +310,12 @@
               return document.getElementById(id);
           }
           set_content(id,content){
-              let elem = this.get_elem(id)
-              elem.innerHTML = content;
+              let elem = this.get_elem(id);
+              if(elem){
+                  elem.innerHTML = content;
+              } else {
+                  alert("No elem found with id="+id);
+              }
           }
           // Helps with many similar options:
           add_option_elem(val, def){
@@ -318,9 +361,9 @@
       <!--<button onclick="show_table()">Show table</button>-->
 
     </p>
+    <p><button onclick="controller.calculate()">Solve it</button></p>
     <div id="persons"></div>
     <div id="result"></div>
-    <p><button onclick="controller.calculate()">Solve it</button></p>
     <script>
 
     </script>
