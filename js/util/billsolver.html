@@ -75,6 +75,10 @@
               }
               return table;
           }
+          // Returns an HTML presentation of the table:
+          toHTML(){
+
+          }
       }
 
       class Person{
@@ -96,9 +100,18 @@
               this.weights_total = this.count_weights_total();
               this.vues = new Views();
           }
-          // Reads the info table and returns an array of person objects.
-          read_info_table(){
-              
+          // Reads the personal details and returns an array of person objects.
+          read_person_info(){
+              let persons = [];
+              for(let i = 0; i < numb_of_all; i++){
+                  let number = (i+1);
+                  let name = this.vues.get_elem("name_"+(i+1));
+                  let paid = this.vues.get_elem("paid_"+(i+1));
+                  let weight = this.vues.get_elem("weight_"+(i+1));
+                  p = new Person(number, name, paid, weight);
+                  persons.push(p);
+              }
+              return persons;
           }
 
           // Counts and returns the sum of all the paid amounts.
@@ -152,10 +165,11 @@
           calculate(){
               // Clears the old values:
               this.clear_results();
+              this.persons = this.read_person_info();
               let groups = this.get_the_rich_and_the_poor();
               this.the_poor = groups[0];
               this.the_rich = groups[1];
-              this.payments = Table(this.the_poor.length,this.the_rich.length);
+              this.payments = new Table(this.the_poor.length,this.the_rich.length);
 
               // Calculate the sum to pay for each poor person. The payment
               // is divided into parts based on the ricḧ́s needs.. The sums
@@ -193,6 +207,7 @@
                   // Jump to the column 2 (the 1st rich guy):
                   x = 2;
               }
+              this.payments.toHTML("result");
           }
           // Add the names to the payments table (the rich row 1, the poor column 1)
           write_names_to_table(){
@@ -293,7 +308,7 @@
     </p>
     <div id="persons"></div>
     <div id="result"></div>
-    <p><button onclick="init()">Solve it</button></p>
+    <p><button onclick="controller.calculate()">Solve it</button></p>
     <script>
 
     </script>
