@@ -4,17 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+      body{
+          font-size: 110%;
+      }
       table{
-        border-collapse: collapse;
+          border-collapse: collapse;
+          font-size: 100%;
       }
       button, select, input{
           padding: 5px;
-          font-size: 120%;
+          font-size: 100%;
       }
       th, td{
-        border: 1px solid black;
-        padding: 10px;
-        text-align: center;
+          border: 1px solid black;
+          padding: 10px;
+          text-align: center;
       }
       input{
           border: none;
@@ -25,6 +29,9 @@
       }
       .wide_input{
           width: 15em;
+      }
+      .centered{
+        text-align: center;
       }
     </style>
     <script>
@@ -39,8 +46,8 @@
       class Table{
           // Parametres: number of columns and rows:
           constructor(cols, rows){
-              this.rows = rows;
-              this.cols = cols;
+              this.rows = parseInt(rows);
+              this.cols = parseInt(cols);
               this.table = this.initiate();
           }
           // Set value to the cell at (x,y). Value x refers to col (width),
@@ -51,7 +58,7 @@
           set(value, x, y){
               let success = false;
               if(x > this.cols || y > this.rows){
-                  alert("Value too big for the table!");
+                  alert("Value too big for the table ("+x+","+y+")!");
               } else{
                   this.table[y][x] = value;
                   success = true;
@@ -62,7 +69,7 @@
           get(x,y){
               let value = UNKNOWN;
               if(x > this.cols || y > this.rows){
-                  alert("Value too big for the table!");
+                  alert("Value too big for the table ("+x+","+y+")!");
               } else{
                   value = this.table[y][x];
               }
@@ -96,7 +103,7 @@
       }
 
       class Person{
-          constructor(number, name, weight, paid){
+          constructor(number, name, paid, weight){
               this.number = parseInt(number);
               this.name = name;
               this.weight = parseFloat(weight);
@@ -110,8 +117,8 @@
               this.the_rich = [];
               this.the_poor = [];
               this.payments = [];
-              this.total = this.count_total();
-              this.weights_total = this.count_weights_total();
+              this.total = 0;
+              this.weights_total = 0;
               this.vues = new Views();
           }
           // Reads the personal details and returns an array of person objects.
@@ -138,8 +145,8 @@
                   let p = new Person(number, name, paid, weight);
 
                   persons.push(p);
-                  alert("Person "+number+": "+name+" has paid "+paid+
-                    " euros and has weight "+weight);
+                  //alert("Person "+p.number+": "+p.name+" has paid "+p.paid+
+                  //  " euros and has weight "+p.weight);
               }
               return persons;
           }
@@ -154,15 +161,20 @@
               return sum;
           }
           // Counts and returns the sum of all weights.
-          // Note: the sum should not zero (division problem).
-          // The caller takes care of the checking.
+          // Note: the sum should not zero (division problem). If it is,
+          // the value 1 is returned instead.
           count_weights_total(){
               let persons = this.persons;
               let sum = 0;
               for(let i=0; i < persons.length; i++){
-                  sum += persons[i].paid;
+                  sum += persons[i].weight;
               }
-              return sum;
+              if(sum === 0){
+                  alert("Sum of weights is zero -> is changed to 1 to avoid problems!");
+                  return 1;
+              } else{
+                  return sum;
+              }
           }
           // Returns an array of two arrays: persons having paid less than their
           // share and another array with all the rest. Divides all the persons into
@@ -179,7 +191,7 @@
                   let p = persons[i];
                   total_to_pay_for_person = this.personal_total_by_weight(p);
 
-                  alert("total_to_pay_for_person="+total_to_pay_for_person);
+                  //alert("total_to_pay_for_person="+total_to_pay_for_person);
 
                   // Positive balance -> person must pay to someone. Negative->
                   // someone else ows him that much.
@@ -192,6 +204,7 @@
                       the_rich.push(p);
                   }
               }
+              alert("the rich: "+the_rich.length+" and the poor:"+the_poor.length);
               return [the_poor, the_rich];
           }
           // Counts and returns the total to be paid by a person
@@ -217,7 +230,9 @@
               let groups = this.get_the_rich_and_the_poor();
               this.the_poor = groups[0];
               this.the_rich = groups[1];
-              this.payments = new Table(this.the_poor.length,this.the_rich.length);
+              let cols = this.the_rich.length+1 // + 1 name col
+              let rows = this.the_poor.length+1 // + 1 name row
+              this.payments = new Table(cols, rows);
 
               // Calculate the sum to pay for each poor person. The payment
               // is divided into parts based on the ricḧ́s needs.. The sums
@@ -280,19 +295,26 @@
           }
           make_infotable(numb){
               let html = "<table id='persons_table'>";
-              html += "<tr><th></th><th>Name</th><th>Paid</th><th>Weight (%)</th></tr>";
+              html += "<tr><th></th><th>Name</th>"+
+                "<th title='How much the person has paid? Do not write the unit"+
+                ", just the sum!'>Paid</th>"+
+                "<th title='Any number, only meaningfull when compared to others'>"+
+                "Weight</th></tr>";
               let index = 0;
               for(var i = 0; i < numb; i++){
                   index++;
                   html += "<tr><td>Person "+index+"</td>"+
                     "<td class='nopadding'>"+
-                        "<input class='wide_input' id='name_"+index+"' type='text'>"+
+                        "<input class='wide_input' value='p"+(i+1)+"'"+
+                        "id='name_"+index+"' type='text'>"+
                     "</td>"+
                     "<td class='nopadding'>"+
-                        "<input id='paid_"+index+"' type='text'>"+
+                        "<input id='paid_"+index+"' type='text' value='"+(i+3)+
+                        "' class='centered'>"+
                     "</td>"+
                     "<td class='nopadding'>"+
-                        "<input id='weight_"+index+"' type='text'>"+
+                        "<input id='weight_"+index+"' type='text' value='1'"+
+                        " class='centered'>"+
                     "</td>"+
                     "</tr>";
               }
