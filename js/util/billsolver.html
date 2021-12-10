@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Testing JS timing</title>
+    <title>BillSolver</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -10,6 +10,7 @@
       table{
           border-collapse: collapse;
           font-size: 100%;
+          margin:10px;
       }
       button, select, input{
           padding: 5px;
@@ -17,12 +18,29 @@
       }
       th, td{
           border: 1px solid black;
-          padding: 10px;
           text-align: center;
       }
+
+      #persons th, #persons td{
+          padding: 5px;
+      }
+
       input{
           border: none;
           width: 5em;
+      }
+      .tip{
+          font-size: 70%;
+      }
+      .poor{
+          background-color: lightblue;
+          display: block;
+          padding: 10px;
+      }
+      .rich{
+          background-color: lightgreen;
+          display: block;
+          padding: 10px;
       }
       .nopadding{
           padding:0;
@@ -46,10 +64,16 @@
       class Table{
           // Parametres: number of columns and rows:
           constructor(cols, rows){
-              this.rows = parseInt(rows);
-              this.cols = parseInt(cols);
-              this.table = this.initiate();
+              this.table = this.initiate(cols, rows);
           }
+          get_cols(){
+            return this.table[0].length;
+          }
+
+          get_rows(){
+            return this.table.length;
+          }
+
           // Set value to the cell at (x,y). Value x refers to col (width),
           // y to row (height) like in the coordinates system. Note:
           // x and y begin at 1. Cell (1,1) is the top left one (like in a
@@ -57,10 +81,10 @@
           // Return True if success, otherwise False.
           set(value, x, y){
               let success = false;
-              if(x > this.cols || y > this.rows){
+              if(x > this.get_cols() || y > this.get_rows()){
                   alert("Value too big for the table ("+x+","+y+")!");
               } else{
-                  this.table[y][x] = value;
+                  this.table[y-1][x-1] = value;
                   success = true;
               }
               return success;
@@ -68,18 +92,25 @@
           // Returns the value of cell (x,y).
           get(x,y){
               let value = UNKNOWN;
-              if(x > this.cols || y > this.rows){
+              if(x > this.get_cols() || y > this.get_rows()){
                   alert("Value too big for the table ("+x+","+y+")!");
               } else{
-                  value = this.table[y][x];
+                  value = this.table[y-1][x-1];
+                  if(value === EMPTY){
+                      value = "";
+                  }
               }
               return value;
           }
-          // Initate array with the right sizes:
-          initiate(){
-              let table = new Array(this.rows);
+          // Initate array with the right sizes and empty values:
+          initiate(cols,rows){
+              //alert("(cols,rows)=("+this.cols+","+this.rows+")");
+              let table = new Array(rows);
               for(let i = 0; i < table.length; i++){
-                  table[i] = new Array(this.cols);
+                  table[i] = new Array(cols);
+                  for(let k=0; k < cols; k++){
+                      table[i][k] = EMPTY;
+                  }
               }
               return table;
           }
@@ -88,11 +119,11 @@
               let html = "<table>";
 
               // Rows:
-              for(let i = 1; i <= this.rows; i++){
+              for(let i = 1; i <= this.get_rows(); i++){
                   html += "<tr>";
 
                   // a Row (there are as many cols as the rich);
-                  for(let k = 1; k <= this.cols; k++){
+                  for(let k = 1; k <= this.get_cols(); k++){
                       html += "<td>"+this.get(k,i)+"</td>";
                   }
                   html += "</tr>";
@@ -204,7 +235,7 @@
                       the_rich.push(p);
                   }
               }
-              alert("the rich: "+the_rich.length+" and the poor:"+the_poor.length);
+              //alert("the rich: "+the_rich.length+" and the poor:"+the_poor.length);
               return [the_poor, the_rich];
           }
           // Counts and returns the total to be paid by a person
@@ -249,8 +280,8 @@
                       if(payer.balance < MIN_PAYMENT ||
                           Math.abs(rich_guy.balance < MIN_PAYMENT)){
 
-                            // Nothing to pay:
-                          this.payments.set("-",x,y);
+                          // Nothing to pay:
+                          this.payments.set("--",x,y);
                       }
                       // If there is still debt to pay:
                       else if(payer.balance > MIN_PAYMENT){
@@ -270,6 +301,8 @@
                   // Jump to the column 2 (the 1st rich guy):
                   x = 2;
               }
+              this.payments.set("<span class='tip'>Blue pays to green</span>",1,1);
+              this.write_names_to_table();
               this.vues.set_content("result", this.payments.toHTML());
           }
           // Add the names to the payments table (the rich row 1, the poor column 1)
@@ -278,11 +311,12 @@
               let rich = "";
               for(let i = 0; i < this.the_poor.length; i++){
                   poor = this.the_poor[i];
-                  this.payments.set(poor.name,1,i+1);
+                  this.payments.set(
+                    "<span class='poor'>"+poor.name+"</span>",1,i+2);
               }
               for(let j = 0; j < this.the_rich.length; j++){
                   rich = this.the_rich[j];
-                  this.payments.set(rich.name,j+1,1);
+                  this.payments.set("<span class='rich'>"+rich.name+"</span>",j+2,1);
               }
           }
           clear_results(){
@@ -376,8 +410,8 @@
       <label for="numb_of_all">How many participated?</label>
       <select id="numb_of_all" onchange="controller.vues.show_table(this.value)">
         <script>
-          vue = new Views(); // Seems to run before init()!
-          document.write(vue.create_option_elems(100, 3))
+          let vues = new Views(); // Seems to run before init()!
+          document.write(vues.create_option_elems(100, 3))
         </script>
       </select>
       <!--<button onclick="show_table()">Show table</button>-->
