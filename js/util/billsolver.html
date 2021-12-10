@@ -11,7 +11,7 @@
       table{
           border-collapse: collapse;
           font-size: 100%;
-          margin:10px;
+          margin:20px 0;
       }
       button, select, input{
           padding: 5px;
@@ -21,14 +21,15 @@
           border: 1px solid black;
           text-align: center;
       }
-
       #persons th, #persons td{
           padding: 5px;
       }
-
       input{
           border: none;
           width: 5em;
+      }
+      #guide{
+          font-style: italic;
       }
       .tip{
           font-size: 80%;
@@ -48,7 +49,7 @@
           padding:0;
       }
       .wide_input{
-          width: 15em;
+          width: 12em;
       }
       .centered{
           text-align: center;
@@ -355,6 +356,7 @@
                   numb_of_figures = this.vues.get_elem("rounding").value;
               }
           }
+          // Adds a person row to the table at the last position.
           add_person(){
               let table = this.vues.get_elem("persons_table");
               let row = table.insertRow(-1);  // Inserts at the last position
@@ -441,12 +443,13 @@
           }
 
           make_select_participants(selected){
-              let html = '<select id="numb_of_all" '+
+              let html = '<label for="numb_of_all">How many participants? </label>';
+              html += '<select id="numb_of_all" '+
                   ' onchange="controller.vues.show_table(this.value)">';
 
-                  html += this.create_option_elems(100, selected);
+              html += this.create_option_elems(100, selected);
 
-                  html += '</select>';
+              html += '</select>';
               return html;
           }
 
@@ -493,17 +496,16 @@
           vues.set_content("persons",tbl);
       }
 
-
     </script>
   </head>
   <body onload="init()">
     <h1>Bill Solver</h1>
     <p id="guide">This application makes it easy to know how much each ows who.
-      No information is saved (reload clears all fields!):</p>
+      No information is saved (reload clears all fields!).</p>
     <p id="question_number">
-      <label for="numb_of_all">How many participants?</label>
       <div id="select_participants" class="inline">
           <script>
+              // Seems this runs before onload, that's why the check.
               if(controller === UNKNOWN){
                   controller = new Controller();
               }
