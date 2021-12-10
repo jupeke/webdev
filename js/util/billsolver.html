@@ -51,7 +51,10 @@
           width: 15em;
       }
       .centered{
-        text-align: center;
+          text-align: center;
+      }
+      .inline{
+          display: inline;
       }
     </style>
     <script>
@@ -59,7 +62,7 @@
       const EMPTY = "empty";
       const ERROR = "error";
       var numb_of_all = 3;  // Defaults
-      var controller = "";
+      var controller = UNKNOWN;
       var min_payment = 1;
       var numb_of_figures = 1;
 
@@ -352,6 +355,51 @@
                   numb_of_figures = this.vues.get_elem("rounding").value;
               }
           }
+          add_person(){
+              let table = this.vues.get_elem("persons_table");
+              let row = table.insertRow(-1);  // Inserts at the last position
+              let c1 = row.insertCell(0);
+              let c2 = row.insertCell(1);
+              let c3 = row.insertCell(2);
+              let c4 = row.insertCell(3);
+
+              numb_of_all++;
+
+              // Add the cell content:
+              c1.innerHTML = "Person "+(numb_of_all);
+              c2.innerHTML = "<input class='wide_input' id='name_"+(numb_of_all)+
+                  "' type='text'>";
+              c3.innerHTML = "<input id='paid_"+(numb_of_all)+"' "+
+                  " type='text' value='"+(numb_of_all+2)+"'"+
+                  " class='centered'>";
+              c4.innerHTML = "<input id='weight_"+(numb_of_all)+"' "+
+                  " type='text' value='1'"+
+                  " class='centered'>";
+
+              // Add class attribute to the td elements:
+              var cls1 = document.createAttribute("class");
+              cls1.value = "nopadding";
+              var cls2 = document.createAttribute("class");
+              cls2.value = "nopadding";
+              var cls3= document.createAttribute("class");
+              cls3.value = "nopadding";
+              c2.setAttributeNode(cls1);
+              c3.setAttributeNode(cls2);
+              c4.setAttributeNode(cls3);
+
+              // Must change the selected option. Here creates a new select elem.
+              this.vues.get_elem("select_participants").innerHTML =
+                  this.vues.make_select_participants(numb_of_all);
+
+          }
+          remove_empty_person(){
+              this.vues.get_elem("persons_table").deleteRow(-1);
+              numb_of_all--;
+
+              // Must change the selected option. Here creates a new select elem.
+              this.vues.get_elem("select_participants").innerHTML =
+                  this.vues.make_select_participants(numb_of_all);
+          }
       }
       class Views{
           constructor(){
@@ -391,6 +439,17 @@
               let tbl = this.make_infotable(numb);
               this.set_content("persons",tbl);
           }
+
+          make_select_participants(selected){
+              let html = '<select id="numb_of_all" '+
+                  ' onchange="controller.vues.show_table(this.value)">';
+
+                  html += this.create_option_elems(100, selected);
+
+                  html += '</select>';
+              return html;
+          }
+
           // General help methods to handle HTML and DOM
           get_elem(id){
               return document.getElementById(id);
@@ -423,7 +482,9 @@
       }
 
       function init(){
-          controller = new Controller();
+          if(controller === UNKNOWN){
+              controller = new Controller();
+          }
           controller.set_minimum();
           controller.set_rounding();
           let vues = controller.vues;
@@ -441,14 +502,16 @@
       No information is saved (reload clears all fields!):</p>
     <p id="question_number">
       <label for="numb_of_all">How many participants?</label>
-      <select id="numb_of_all" onchange="controller.vues.show_table(this.value)">
-        <script>
-          let vues = new Views(); // Seems to run before init()!
-          document.write(vues.create_option_elems(100, 3))
-        </script>
-      </select>
+      <div id="select_participants" class="inline">
+          <script>
+              if(controller === UNKNOWN){
+                  controller = new Controller();
+              }
+              document.write(controller.vues.make_select_participants(3));
+          </script>
+      </div>
       <button onclick="controller.add_person()">+</button>
-      <button onclick="controller.remove_empty_person()">&#8722</button>
+      <button onclick="controller.remove_empty_person()">−</button>
     </p>
     <p id="question_minimum">
       <label for="minimum">The smallest amount to pay?</label>
