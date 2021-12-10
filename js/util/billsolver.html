@@ -6,6 +6,7 @@
     <style>
       body{
           font-size: 110%;
+          padding: 10px;
       }
       table{
           border-collapse: collapse;
@@ -30,7 +31,8 @@
           width: 5em;
       }
       .tip{
-          font-size: 70%;
+          font-size: 80%;
+          font-weight: bold;
       }
       .poor{
           background-color: lightblue;
@@ -53,12 +55,13 @@
       }
     </style>
     <script>
-      const MIN_PAYMENT = 1;
-      const NUMB_OF_FIGURES = 0;
       const UNKNOWN = -123456;
       const EMPTY = "empty";
+      const ERROR = "error";
       var numb_of_all = 3;  // Defaults
       var controller = "";
+      var min_payment = 1;
+      var numb_of_figures = 1;
 
       // A 2d array, works as a cols times rows table
       class Table{
@@ -153,33 +156,40 @@
               this.vues = new Views();
           }
           // Reads the personal details and returns an array of person objects.
-          // If a cell is empty, breaks the loop and gives an error message.
+          // If a value cell (paid/weight) is empty, breaks the loop, gives an
+          // error message and returns the value ERROR.
           read_person_info(){
               let persons = [];
+              let success = true;
               for(let i = 0; i < numb_of_all; i++){
                   let number = (i+1);
                   let name = this.vues.get_elem("name_"+(i+1)).value;
                   if (name === ""){
-                      alert("Empty cell found! Fill in first each cell!");
-                      break;
+                      name = "Person "+(i+1);
                   }
                   let paid = this.vues.get_elem("paid_"+(i+1)).value;
-                  if (name === ""){
+                  paid = paid.replace(',','.');
+                  if (paid === ""){
                       alert("Empty cell found! Fill in first each cell!");
+                      success = false;
                       break;
                   }
                   let weight = this.vues.get_elem("weight_"+(i+1)).value;
-                  if (name === ""){
+                  weight = weight.replace(',','.');
+                  if (weight === ""){
                       alert("Empty cell found! Fill in first each cell!");
+                      success = false;
                       break;
                   }
                   let p = new Person(number, name, paid, weight);
 
                   persons.push(p);
-                  //alert("Person "+p.number+": "+p.name+" has paid "+p.paid+
-                  //  " euros and has weight "+p.weight);
               }
-              return persons;
+              if (success){
+                  return persons;
+              } else{
+                  return ERROR;
+              }
           }
 
           // Counts and returns the sum of all the paid amounts.
@@ -241,11 +251,11 @@
           // Counts and returns the total to be paid by a person
           personal_total_by_weight(person){
               let pers_total = (this.total / this.weights_total) * person.weight;
-              return this.round_to_figures(pers_total, 2);
+              return this.round_to_decimals(pers_total, 2);
           }
 
           // Round to figures figures.
-          round_to_figures(number, figures){
+          round_to_decimals(number, figures){
               let x = number * Math.pow(10, figures);
               let x_rounded = Math.round(x);
               let final = x_rounded / Math.pow(10, figures);
@@ -256,54 +266,60 @@
               // Clears the old values:
               this.clear_results();
               this.persons = this.read_person_info();
-              this.total = this.count_total();
-              this.weights_total = this.count_weights_total();
-              let groups = this.get_the_rich_and_the_poor();
-              this.the_poor = groups[0];
-              this.the_rich = groups[1];
-              let cols = this.the_rich.length+1 // + 1 name col
-              let rows = this.the_poor.length+1 // + 1 name row
-              this.payments = new Table(cols, rows);
 
-              // Calculate the sum to pay for each poor person. The payment
-              // is divided into parts based on the ricḧ́s needs.. The sums
-              // are written into the payments table (2-dim). The first row
-              // like the first col are left empty (for the names).
-              let x = 2;
-              let y = 2;
-              for(let i = 0; i < this.the_poor.length; i++){
-                  let payer = this.the_poor[i];
-                  for(let k = 0; k < this.the_rich.length; k++){
-                      let rich_guy = this.the_rich[k];
+              if(this.persons != ERROR){
+                this.total = this.count_total();
+                this.weights_total = this.count_weights_total();
+                let groups = this.get_the_rich_and_the_poor();
+                this.the_poor = groups[0];
+                this.the_rich = groups[1];
+                let cols = this.the_rich.length+1 // + 1 name col
+                let rows = this.the_poor.length+1 // + 1 name row
+                this.payments = new Table(cols, rows);
 
-                      // Balance must be > or = MIN_PAYMENT for payment need.
-                      if(payer.balance < MIN_PAYMENT ||
-                          Math.abs(rich_guy.balance < MIN_PAYMENT)){
+                // Calculate the sum to pay for each poor person. The payment
+                // is divided into parts based on the ricḧ́s needs.. The sums
+                // are written into the payments table (2-dim). The first row
+                // like the first col are left empty (for the names).
+                let x = 2;
+                let y = 2;
+                for(let i = 0; i < this.the_poor.length; i++){
+                    let payer = this.the_poor[i];
 
-                          // Nothing to pay:
-                          this.payments.set("--",x,y);
-                      }
-                      // If there is still debt to pay:
-                      else if(payer.balance > MIN_PAYMENT){
-                          // How much to pay to this rich person?
-                          let payment_exact =
-                            Math.min(payer.balance, rich_guy.balance);
-                          let payment = round_to(payment_exact, NUMB_OF_FIGURES);
-                          payer.balance -= payment;
-                          rich_guy.balance += payment;
-                          this.payments.set(payment,x,y);
-                      }
-                      // One step to the right: the next rich guy:
-                      x++;
-                  }
-                  // New payer (one step down in the table):
-                  y++;
-                  // Jump to the column 2 (the 1st rich guy):
-                  x = 2;
+                    for(let k = 0; k < this.the_rich.length; k++){
+                        let rich_guy = this.the_rich[k];
+
+                        // Balance must be > or = min_payment for payment need.
+                        if(payer.balance < min_payment ||
+                            Math.abs(rich_guy.balance) < min_payment){
+
+                            // Nothing to pay:
+                            this.payments.set("--",x,y);
+                        }
+                        // If there is still debt to pay:
+                        else if(payer.balance >= min_payment){
+                            // How much to pay to this rich person?
+                            let payment_exact =
+                                Math.min(Math.abs(payer.balance),
+                                        Math.abs(rich_guy.balance));
+                            let payment =
+                                this.round_to_decimals(payment_exact, numb_of_figures);
+                            payer.balance -= payment;
+                            rich_guy.balance += payment;
+                            this.payments.set(payment,x,y);
+                        }
+                        // One step to the right: the next rich guy:
+                        x++;
+                    }
+                    // New payer (one step down in the table):
+                    y++;
+                    // Jump to the column 2 (the 1st rich guy):
+                    x = 2;
+                }
+                this.payments.set("<span class='tip'>Blue pays to green</span>",1,1);
+                this.write_names_to_table();
+                this.vues.set_content("result", this.payments.toHTML());
               }
-              this.payments.set("<span class='tip'>Blue pays to green</span>",1,1);
-              this.write_names_to_table();
-              this.vues.set_content("result", this.payments.toHTML());
           }
           // Add the names to the payments table (the rich row 1, the poor column 1)
           write_names_to_table(){
@@ -322,6 +338,20 @@
           clear_results(){
               this.vues.get_elem("result").innerHTML = "";
           }
+          set_minimum(min){
+              if(min){
+                  min_payment = min;
+              } else{
+                  min_payment = this.vues.get_elem("minimum").value;
+              }
+          }
+          set_rounding(number){
+              if(number){
+                  numb_of_figures = number;
+              } else{
+                  numb_of_figures = this.vues.get_elem("rounding").value;
+              }
+          }
       }
       class Views{
           constructor(){
@@ -329,9 +359,9 @@
           }
           make_infotable(numb){
               let html = "<table id='persons_table'>";
-              html += "<tr><th></th><th>Name</th>"+
-                "<th title='How much the person has paid? Do not write the unit"+
-                ", just the sum!'>Paid</th>"+
+              html += "<tr><th></th><th>Name (optional)</th>"+
+                "<th title='How much the person has paid? No unit"+
+                ", just the amount!'>Paid</th>"+
                 "<th title='Any number, only meaningfull when compared to others'>"+
                 "Weight</th></tr>";
               let index = 0;
@@ -339,7 +369,7 @@
                   index++;
                   html += "<tr><td>Person "+index+"</td>"+
                     "<td class='nopadding'>"+
-                        "<input class='wide_input' value='p"+(i+1)+"'"+
+                        "<input class='wide_input' "+
                         "id='name_"+index+"' type='text'>"+
                     "</td>"+
                     "<td class='nopadding'>"+
@@ -394,6 +424,8 @@
 
       function init(){
           controller = new Controller();
+          controller.set_minimum();
+          controller.set_rounding();
           let vues = controller.vues;
           let numb = numb_of_all;
           let tbl = vues.make_infotable(numb);
@@ -405,17 +437,38 @@
   </head>
   <body onload="init()">
     <h1>Bill Solver</h1>
-    <p id="guide">This application makes it easy to know how much each ows who.</p>
+    <p id="guide">This application makes it easy to know how much each ows who.
+      No information is saved (reload clears all fields!):</p>
     <p id="question_number">
-      <label for="numb_of_all">How many participated?</label>
+      <label for="numb_of_all">How many participants?</label>
       <select id="numb_of_all" onchange="controller.vues.show_table(this.value)">
         <script>
           let vues = new Views(); // Seems to run before init()!
           document.write(vues.create_option_elems(100, 3))
         </script>
       </select>
-      <!--<button onclick="show_table()">Show table</button>-->
-
+      <button onclick="controller.add_person()">+</button>
+      <button onclick="controller.remove_empty_person()">&#8722</button>
+    </p>
+    <p id="question_minimum">
+      <label for="minimum">The smallest amount to pay?</label>
+      <select id="minimum" onchange="controller.set_minimum(this.value)">
+        <option value="0.01">0.01</option>
+        <option value="0.1">0.1</option>
+        <option value="1" selected="selected">1</option>
+        <option value="10">10</option>
+        <option value="100">100</option>
+      </select>
+    </p>
+    <p id="question_round">
+      <label for="rounding">Round to?</label>
+      <select id="rounding" onchange="controller.set_rounding(this.value)">
+        <option value="2">0.01</option>
+        <option value="1">0.1</option>
+        <option value="0" selected="selected">1</option>
+        <option value="-1">10</option>
+        <option value="-2">100</option>
+      </select>
     </p>
     <p><button onclick="controller.calculate()">Solve it</button></p>
     <div id="persons"></div>
