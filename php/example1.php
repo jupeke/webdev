@@ -4,7 +4,6 @@
   </head>
 
   <body>
-    <?php include 'links.php';?>
     <h1>Hello!</h1>
 
     <p>Web Development with PHP server-side language (Hypertext Preprocessor).
@@ -21,6 +20,9 @@
       echo $result;
     ?>
 
-
+	  <p><a href="https://www.w3schools.com">w3schools</a></p>
+    <p><a href="https://github.com/kerkkaju/webdev/tree/master/php"
+      target="_blank">Codes
+    </a></p>
   </body>
 </html>
