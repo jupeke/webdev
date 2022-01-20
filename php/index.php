@@ -1,10 +1,15 @@
 <html>
   <head>
     <title>PHP Home</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
 
   <body>
-    <?php include 'links.php';?>
+    <ul id="linkbar">
+      <?php include 'links.php';?>
+      <li><a href="form1.php">Form</a></li>
+    </ul>
+
     <h1>Hello!</h1>
 
     <p>Web Development with PHP server-side language (Hypertext Preprocessor).
