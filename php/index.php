@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>PHP Home</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
   </head>
 
