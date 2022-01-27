@@ -9,16 +9,19 @@
   <body>
     <ul id="linkbar">
       <?php include 'links.php';?>
-      <li><a href="index.php">Home</a></li>
     </ul>
     <h1>My first forms</h1>
     <?php
+      $name = "";
+      $error = "";
+      $comment = "";
       if(!isset($_POST["name"])){
-          $name = $_POST["name"];
-      } else if {
-          echo "" ;
+          $error = "Name empty?";
+      } else if (!isset($_POST["comment"])){
+          $error = "Comment empty?";
       } else{
-          
+          $name = $_POST["name"];
+          $comment = $_POST["comment"];
       }
     ?>
     <p>Write you name in the text field and press the button.</p>

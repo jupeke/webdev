@@ -9,7 +9,6 @@
   <body>
     <ul id="linkbar">
       <?php include 'links.php';?>
-      <li><a href="index.php">Home</a></li>
     </ul>
     <h1>My first form</h1>
     <?php

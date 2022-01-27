@@ -8,7 +8,6 @@
   <body>
     <ul id="linkbar">
       <?php include 'links.php';?>
-      <li><a href="form1.php">Form</a></li>
     </ul>
 
     <h1>Hello!</h1>

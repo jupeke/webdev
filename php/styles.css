@@ -1,20 +1,30 @@
-#linkbar li {
-  list-style-type: none;
+#linkbar{
   margin: 0;
   padding: 0;
+}
+
+#linkbar li {
+  list-style-type: none;
   display: inline;
 }
 
 #linkbar a {
   text-decoration: none;
   margin: 0;
-  padding: 8px;
+  padding: 10px;
   color: #444;
   background-color: #eeeeee;
+}
+#linkbar a.out{
+  background-color: #ddddee;
 }
 #linkbar a:hover {
   background-color: #dddddd;
   color: #333;
+}
+#linkbar a.out:hover {
+  background-color: #ddddff;
+  color: #222;
 }
 input {
   padding-top: 5px;
