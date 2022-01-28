@@ -12,18 +12,18 @@
 
     $head =
         '<head>
-        <title>PHP Home</title>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="styles.css">
+            <title>PHP Home</title>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="styles.css">
         </head>';
 
     $form =
         '<form method="post">
-          <label for="name">Your name:</label><br>
-          <input type="text" id="name" name="name" value="'.$name.'"><br>
-          <label for="comment">Comment:</label><br>
-          <input type="text" id="comment" name="comment" value="'.$comment.'"><br>
-          <input type="submit" value="Submit">
+            <label for="name">Your name:</label><br>
+            <input type="text" id="name" name="name" value="'.$name.'"><br>
+            <label for="comment">Comment:</label><br>
+            <input type="text" id="comment" name="comment" value="'.$comment.'"><br>
+            <input type="submit" value="Submit">
         </form>';
     
     $message =
