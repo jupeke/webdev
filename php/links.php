@@ -1,5 +1,5 @@
 <?php
-  $html =
+  $links_html =
   '<li><a href="index.php">Home</a></li>
   <li><a href="form1.php">Form 1</a></li>
   <li><a href="form2.php">Form 2</a></li>
@@ -9,5 +9,5 @@
     target="_blank">Codes</a>
   </li>
   ';
-  echo $html;
+  //echo $links_html;
 ?>

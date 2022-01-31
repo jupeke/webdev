@@ -1,3 +1,15 @@
+input {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.message{
+    font-weight: bold;
+    color: green;
+}
+
 #linkbar{
   margin: 0;
   padding: 0;
@@ -26,9 +38,6 @@
   background-color: #ddddff;
   color: #222;
 }
-input {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+#linkbar a:active {
+    border: 2px solid black;
 }
