@@ -38,6 +38,6 @@ input {
   background-color: #ddddff;
   color: #222;
 }
-#linkbar a:active {
+/*#linkbar a:active {
     border: 2px solid black;
-}
+} Not workin because page changes..*/
