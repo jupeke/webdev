@@ -5,6 +5,20 @@
     $message = "";
     $details_ok = False;
 
+    $servername = "localhost";
+    $username = "jp";
+    $password = "varpunen";
+    $dbname = "db1";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+    }
+    echo "Connected successfully";
+
     if(isset($_POST["comment"])){
         $comment = $_POST["comment"];
         if(empty($comment)){
