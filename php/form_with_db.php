@@ -29,7 +29,9 @@
             isset($_REQUEST["user_action"]) ? $_REQUEST["user_action"]: "";
 
         // User actions:
-        if($user_action = )
+        if($user_action = ){
+          
+        }
 
         if(isset($_POST["comment"])){
             $comment = $_POST["comment"];
@@ -56,7 +58,7 @@
         '<form method="post" action="form_with_db.php"?>
             <label for="comment">Comment:</label><br>
             <input type="text" id="comment" name="comment" value="'.$comment.'"><br>
-            <input type="submit" name="user_action" value="Save new comment">
+            <input type="submit" name="user_action" value="'.SAVE_NEW.'">
         </form>';
 
     if (!$details_ok){
