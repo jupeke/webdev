@@ -26,6 +26,5 @@
       echo $result;
     ?>
 
-
   </body>
 </html>

@@ -15,7 +15,7 @@
       if(isset($_POST["name"])){
           echo "Hello ".$_POST["name"];
       } else{
-          echo "" ;
+          echo "No name given" ;
       }
     ?>
     <p>Write you name in the text field and press the button.</p>
