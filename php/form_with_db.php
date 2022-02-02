@@ -31,7 +31,7 @@
             isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
 
         // User actions:
-        if($user_action == "SAVE_NEW"){
+        if($user_action === SAVE_NEW){
             if(isset($_POST["comment"])){
                 $comment = $_POST["comment"];
                 if(empty($comment)){
@@ -45,7 +45,7 @@
                     $details_ok = True;
                 }
             }
-        } else if($user_action == "DEL"){
+        } else if($user_action === DEL){
             $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
             if(comment_delete($id, $conn)){
                 $message = 'Comment deleted successfully';
@@ -81,9 +81,10 @@
               '.$links_html.'
             </ul>
             <h1>Persistent comments</h1>
-            <p>Persistent: comments are saved to a database.</p>
-            <p class="message">'.$message.'<p>
-            <p>'.comments_get_all($conn).'</p>'.
+            <p>The comments are saved to a MySQL database (persistent memory).</p>
+            <p class="message">'.$message.'</p>
+            <p class="bold">Saved comments:<p>
+            <div>'.comments_get_all($conn).'</div>'.
             $form.
         '</body>';
 
@@ -116,14 +117,17 @@
     function comments_get_all($connection){
         $sql = "SELECT * FROM comments";
         $result = $connection->query($sql);
-        $output = "";
+        $output = "<table>";
         if ($result->num_rows > 0) {
             // Extract the comments:
             while($row = $result->fetch_assoc()) {
                 $id = $row["id"];
-                $output .= $row["comment"].create_delete_button($id)."<br>";
+                $output .=
+                    '<tr><td>'.$row["comment"].'</td><td>'.
+                    create_delete_button($id)."</td></tr>";
             }
         }
+        $output .= "</table>";
         return $output;
     }
     // Create a new form element containing an input element.
@@ -131,7 +135,7 @@
         $btn =
           '<form class="inline" method="post"
             action="form_with_db.php?id_comment='.$id_comment.'"?>
-            <input class="inline" type="submit" name="user_action" value="'.DEL.'">
+            <input type="submit" name="user_action" value="'.DEL.'">
           </form>';
 
         return $btn;

@@ -1,3 +1,5 @@
 C:\Users\kerkkaju.EEB2.001\Documents\GitHub\webdev\php\
 
 C:\Users\kerkkaju.EEB2.000\Documents\GitHub\webdev\php
+
+https://serverfault.com/questions/408550/connecting-to-mysql-from-php-is-extremely-slow

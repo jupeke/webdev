@@ -5,12 +5,25 @@ input {
   margin-bottom: 5px;
 }
 
+table{
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+td, th{
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
 .message{
     font-weight: bold;
     color: green;
 }
 .inline{
     display: inline;
+}
+.bold{
+    font-weight: bold;
 }
 
 #linkbar{
