@@ -28,10 +28,10 @@
     // If a form with POST method has been sent:
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_action =
-            isset($_REQUEST["user_action"]) ? $_REQUEST["user_action"]: "none";
+            isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
 
         // User actions:
-        if($user_action = "SAVE_NEW"){
+        if($user_action == "SAVE_NEW"){
             if(isset($_POST["comment"])){
                 $comment = $_POST["comment"];
                 if(empty($comment)){
@@ -45,7 +45,7 @@
                     $details_ok = True;
                 }
             }
-        } else if($user_action = "DEL"){
+        } else if($user_action == "DEL"){
             $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
             if(comment_delete($id, $conn)){
                 $message = 'Comment deleted successfully';
@@ -121,7 +121,7 @@
             // Extract the comments:
             while($row = $result->fetch_assoc()) {
                 $id = $row["id"];
-                $output .= $row["comment"]."<br>";
+                $output .= $row["comment"].create_delete_button($id)."<br>";
             }
         }
         return $output;
@@ -129,8 +129,11 @@
     // Create a new form element containing an input element.
     function create_delete_button($id_comment){
         $btn =
-          '<form method="post" action="form_with_db.php?id_comment='.$id_comment.'"?>
-            <input type="submit" name="user_action" value="'.DEL.'">
+          '<form class="inline" method="post"
+            action="form_with_db.php?id_comment='.$id_comment.'"?>
+            <input class="inline" type="submit" name="user_action" value="'.DEL.'">
           </form>';
+
+        return $btn;
     }
 ?>

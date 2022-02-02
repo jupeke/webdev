@@ -9,6 +9,9 @@ input {
     font-weight: bold;
     color: green;
 }
+.inline{
+    display: inline;
+}
 
 #linkbar{
   margin: 0;
