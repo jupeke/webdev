@@ -3,13 +3,14 @@
     // Constants (false to make name case-sensitive). Syntax:
     // define(name, value, case-insensitive)
     define("SAVE_NEW", "Save new comment", false);
+    define("SAVE_OLD", "Save changes", false);
     define("EDIT", "Edit", false);
     define("DEL", "Delete", false);
 
     $error = "";
     $comment = "";
     $message = "";
-    $details_ok = False;
+    $message_ok = False;
 
     $servername = "localhost";
     //$username = "jp"; Not working: access denied
@@ -42,17 +43,27 @@
                     } else{
                         $message = 'Error in saving a comment: '.$conn->error;
                     }
-                    $details_ok = True;
+                    $message_ok = True;
                 }
             }
-        } else if($user_action === DEL){
+        }
+        else if($user_action === DEL){
             $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
             if(comment_delete($id, $conn)){
                 $message = 'Comment deleted successfully';
             } else{
                 $message = 'Error in deleting a comment: '.$conn->error;
             }
-            $details_ok = True;
+            $message_ok = True;
+        }
+        else if($user_action === EDIT){
+            $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
+            if(comment_delete($id, $conn)){
+                $message = 'Comment deleted successfully';
+            } else{
+                $message = 'Error in deleting a comment: '.$conn->error;
+            }
+            $message_ok = True;
         }
     }
     $head =
@@ -62,14 +73,7 @@
             <link rel="stylesheet" href="styles.css">
         </head>';
 
-    $form =
-        '<form method="post" action="form_with_db.php"?>
-            <label for="comment">Comment:</label><br>
-            <input type="text" id="comment" name="comment" value="'.$comment.'"><br>
-            <input type="submit" name="user_action" value="'.SAVE_NEW.'">
-        </form>';
-
-    if (!$details_ok){
+    if (!$message_ok){
         if (empty($message)){
             $message =
                 'Write a comment in the text field and press the button.';
@@ -83,9 +87,8 @@
             <h1>Persistent comments</h1>
             <p>The comments are saved to a MySQL database (persistent memory).</p>
             <p class="message">'.$message.'</p>
-            <p class="bold">Saved comments:<p>
             <div>'.comments_get_all($conn).'</div>'.
-            $form.
+            create_comment_form().
         '</body>';
 
     $html = '<html>'.$head.$body.'</html>';
@@ -113,23 +116,49 @@
             return false;
         }
     }
+
+    // Update (replace) a comment with id=$id_comment. $new_comment will be
+    // the new value. Return True or false based on success.
+    function comment_update($id_comment, $new_comment, $connection){
+        $sql = "UPDATE comments SET comment = '".$new_comment."' WHERE id=".
+            $id_comment;
+        if ($connection->query($sql) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Retrieves all the comments from the db.
     function comments_get_all($connection){
         $sql = "SELECT * FROM comments";
         $result = $connection->query($sql);
-        $output = "<table>";
+        $output = "<table><tr><th>Saved comments</th><th>Actions</th></tr>";
         if ($result->num_rows > 0) {
             // Extract the comments:
             while($row = $result->fetch_assoc()) {
                 $id = $row["id"];
                 $output .=
                     '<tr><td>'.$row["comment"].'</td><td>'.
-                    create_delete_button($id)."</td></tr>";
+                    create_delete_button($id).'</td></tr>';
             }
         }
         $output .= "</table>";
         return $output;
     }
+
+    // Retrieve a comment with the id_comment given.
+    function get_comment($connection, $id_comment){
+        $sql = "SELECT comment FROM comments WHERE id=".$id_comment;
+        $result = $connection->query($sql);
+        $comment = "";
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $comment = $row["comment"];
+        }
+        return $comment;
+    }
+
     // Create a new form element containing an input element.
     function create_delete_button($id_comment){
         $btn =
@@ -139,5 +168,20 @@
           </form>';
 
         return $btn;
+    }
+
+    function create_comment_form($new, $id_comment, $comment){
+        $text = SAVE_NEW;
+        $action_value = "form_with_db.php";
+        if(!$new){
+            $text = SAVE_OLD;
+            $action_value = "form_with_db.php?id=".$id_comment;
+        }
+        $form =
+          '<form method="post" action="'.$action_value.'"?>
+              <label for="comment">Comment:</label><br>
+              <input type="text" id="comment" name="comment" value="'.$comment.'"><br>
+              <input type="submit" name="user_action" value="'.$text.'">
+          </form>';
     }
 ?>

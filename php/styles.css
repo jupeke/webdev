@@ -4,26 +4,28 @@ input {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-
+body{
+  background-color: white;
+}
 table{
-    border-collapse: collapse;
-    margin: 10px 0;
+  border-collapse: collapse;
+  margin: 10px 0;
 }
 
 td, th{
-    border: 1px solid #ddd;
-    padding: 5px;
+  border: 1px solid #aaa;
+  padding: 5px;
 }
 
 .message{
-    font-weight: bold;
-    color: green;
+  font-weight: bold;
+  color: green;
 }
 .inline{
-    display: inline;
+  display: inline;
 }
 .bold{
-    font-weight: bold;
+  font-weight: bold;
 }
 
 #linkbar{
