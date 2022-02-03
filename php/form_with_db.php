@@ -58,12 +58,23 @@
         }
         else if($user_action === EDIT){
             $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
-            if(comment_delete($id, $conn)){
-                $message = 'Comment deleted successfully';
-            } else{
-                $message = 'Error in deleting a comment: '.$conn->error;
-            }
+            $comment = get_comment($conn, $id);
+            $message = 'Edit and save the comment';
             $message_ok = True;
+        }
+        else if($user_action === SAVE_OLD){
+            $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
+            $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
+            if(empty($comment)){
+                $message = 'Comment is empty! Write something, please!';
+            } else{
+                if(comment_update($comment, $conn)){
+                    $message = 'Comment saved successfully';
+                } else{
+                    $message = 'Error in saving a comment: '.$conn->error;
+                }
+                $message_ok = True;
+            }
         }
     }
     $head =
