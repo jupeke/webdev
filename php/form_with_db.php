@@ -9,13 +9,14 @@
 
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
     $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
+    $comment = isset($_POST["comment"]) ? $_POST["comment"]: "unknown";
 
     $error = "";
-    $comment = "";
     $message = "";
     $message_ok = False;
     $new = True;
 
+    // Database:
     $servername = "localhost";
     //$username = "jp"; Not working: access denied
     //$password = "varpunen";
@@ -32,23 +33,18 @@
     }
     // If a form with POST method has been sent:
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $user_action =
-            isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
 
         // User actions:
         if($user_action === SAVE_NEW){
-            if(isset($_POST["comment"])){
-                $comment = $_POST["comment"];
-                if(empty($comment)){
-                    $message = 'Comment is empty! Write a comment, please!';
+            if(empty($comment)){
+                $message = 'Comment is empty! Write a comment, please!';
+            } else{
+                if(comment_insert($comment, $conn)){
+                    $message = 'Comment saved successfully';
                 } else{
-                    if(comment_insert($comment, $conn)){
-                        $message = 'Comment saved successfully';
-                    } else{
-                        $message = 'Error in saving a comment: '.$conn->error;
-                    }
-                    $message_ok = True;
+                    $message = 'Error in saving a comment: '.$conn->error;
                 }
+                $message_ok = True;
             }
         }
         else if($user_action === DEL){
@@ -67,18 +63,17 @@
             $new = False;
         }
         else if($user_action === SAVE_OLD){
-            $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
-            $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
             if(empty($comment)){
                 $message = 'Comment is empty! Write something, please!';
             } else{
-                if(comment_update($comment, $conn)){
+                if(comment_update($id_comment, $comment, $conn)){
                     $message = 'Comment saved successfully';
                 } else{
                     $message = 'Error in saving a comment: '.$conn->error;
                 }
-                $message_ok = True;
             }
+            $comment = "";  // No need to show in the text field now.
+            $message_ok = True;
         }
     }
     $head =
@@ -103,7 +98,7 @@
             <p>The comments are saved to a MySQL database (persistent memory).</p>
             <p class="message">'.$message.'</p>
             <div>'.comments_get_all($conn).'</div>'.
-            create_comment_form($new, $id).
+            create_comment_form($new, $id_comment, $comment, $conn).
         '</body>';
 
     $html = '<html>'.$head.$body.'</html>';
@@ -155,7 +150,7 @@
                 $id = $row["id"];
                 $output .=
                     '<tr><td>'.$row["comment"].'</td><td>'.
-                    create_delete_button($id).'</td></tr>';
+                    create_comment_buttons($id).'</td></tr>';
             }
         }
         $output .= "</table>";
@@ -174,23 +169,26 @@
         return $comment;
     }
 
-    // Create a new form element containing an input element.
-    function create_delete_button($id_comment){
+    // Create a new form element containing two input elements:
+    // buttons Edit and Delete.
+    function create_comment_buttons($id_comment){
         $btn =
           '<form class="inline" method="post"
             action="form_with_db.php?id_comment='.$id_comment.'"?>
+            <input type="submit" name="user_action" value="'.EDIT.'">
             <input type="submit" name="user_action" value="'.DEL.'">
           </form>';
 
         return $btn;
     }
 
-    function create_comment_form($new, $id_comment, $comment){
+    function create_comment_form($new, $id_comment, $comment, $connection){
         $text = SAVE_NEW;
         $action_value = "form_with_db.php";
         if(!$new){
             $text = SAVE_OLD;
-            $action_value = "form_with_db.php?id=".$id_comment;
+            $action_value = "form_with_db.php?id_comment=".$id_comment;
+            $comment = get_comment($connection, $id_comment);
         }
         $form =
           '<form method="post" action="'.$action_value.'"?>
@@ -198,5 +196,7 @@
               <input type="text" id="comment" name="comment" value="'.$comment.'"><br>
               <input type="submit" name="user_action" value="'.$text.'">
           </form>';
+
+        return $form;
     }
 ?>
