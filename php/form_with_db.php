@@ -7,10 +7,14 @@
     define("EDIT", "Edit", false);
     define("DEL", "Delete", false);
 
+    $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
+    $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
+
     $error = "";
     $comment = "";
     $message = "";
     $message_ok = False;
+    $new = True;
 
     $servername = "localhost";
     //$username = "jp"; Not working: access denied
@@ -48,8 +52,7 @@
             }
         }
         else if($user_action === DEL){
-            $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
-            if(comment_delete($id, $conn)){
+            if(comment_delete($id_comment, $conn)){
                 $message = 'Comment deleted successfully';
             } else{
                 $message = 'Error in deleting a comment: '.$conn->error;
@@ -61,6 +64,7 @@
             $comment = get_comment($conn, $id);
             $message = 'Edit and save the comment';
             $message_ok = True;
+            $new = False;
         }
         else if($user_action === SAVE_OLD){
             $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
@@ -99,7 +103,7 @@
             <p>The comments are saved to a MySQL database (persistent memory).</p>
             <p class="message">'.$message.'</p>
             <div>'.comments_get_all($conn).'</div>'.
-            create_comment_form().
+            create_comment_form($new, $id).
         '</body>';
 
     $html = '<html>'.$head.$body.'</html>';
