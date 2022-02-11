@@ -14,8 +14,11 @@
     <?php
       $result = "";
       for($i = 0; $i < 10; $i++){
-        for($k = 0; $k < 70; $k++){
-          $result .= "*";
+        for($k = 0; $k < 10-$i; $k++){
+          $result .= "O ";
+        }
+        for($k = 0; $k < $i+1; $k++){
+          $result .= "H ";
         }
         $result .= "<br>";
       }
