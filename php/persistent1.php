@@ -2,6 +2,7 @@
     require 'links.php';
     // Constants (false to make name case-sensitive). Syntax:
     // define(name, value, case-insensitive)
+    // These are for button texts.
     define("SAVE_NEW", "Save new comment", false);
     define("SAVE_OLD", "Save changes", false);
     define("EDIT", "Edit", false);
@@ -9,7 +10,7 @@
 
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
     $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
-    $comment = isset($_POST["comment"]) ? $_POST["comment"]: "unknown";
+    $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
 
     $error = "";
     $message = "";
@@ -18,8 +19,6 @@
 
     // Database:
     $servername = "localhost";
-    //$username = "jp"; Not working: access denied
-    //$password = "varpunen";
     $username = "root";
     $password = "";
     $dbname = "db1";
@@ -31,10 +30,10 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    // If a form with POST method has been sent:
+    // If a form with POST method has been sent (if user has pressed a button):
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        // User actions:
+        // User actions: what to do in different cases:
         if($user_action === SAVE_NEW){
             if(empty($comment)){
                 $message = 'Comment is empty! Write a comment, please!';
@@ -76,6 +75,15 @@
             $message_ok = True;
         }
     }
+    // If message is not set,
+    if (!$message_ok){
+        if (empty($message)){
+            $message =
+                'Write a comment in the text field and press the button.';
+        }
+    }
+
+    // HTML is put together here.
     $head =
         '<head>
             <title>PHP Home</title>
@@ -83,12 +91,6 @@
             <link rel="stylesheet" href="styles.css">
         </head>';
 
-    if (!$message_ok){
-        if (empty($message)){
-            $message =
-                'Write a comment in the text field and press the button.';
-        }
-    }
     $body =
         '<body>
             <ul id="linkbar">
@@ -102,6 +104,7 @@
         '</body>';
 
     $html = '<html>'.$head.$body.'</html>';
+
     echo $html;
 
 

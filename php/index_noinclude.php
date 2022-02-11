@@ -1,6 +1,8 @@
 <html>
   <head>
     <title>PHP Home</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
   </head>
 
   <body>
@@ -20,9 +22,5 @@
       echo $result;
     ?>
 
-	  <p><a href="https://www.w3schools.com">w3schools</a></p>
-    <p><a href="https://github.com/kerkkaju/webdev/tree/master/php"
-      target="_blank">Codes
-    </a></p>
   </body>
 </html>
