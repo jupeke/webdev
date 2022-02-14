@@ -8,6 +8,9 @@
     define("EDIT", "Edit", false);
     define("DEL", "Delete", false);
 
+    // The home view of this application:
+    define("HOME","persistent1.php",false);
+
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
     $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
     $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
@@ -177,7 +180,7 @@
     function create_comment_buttons($id_comment){
         $btn =
           '<form class="inline" method="post"
-            action="form_with_db.php?id_comment='.$id_comment.'"?>
+            action="'.HOME.'?id_comment='.$id_comment.'"?>
             <input type="submit" name="user_action" value="'.EDIT.'">
             <input type="submit" name="user_action" value="'.DEL.'">
           </form>';
@@ -187,10 +190,10 @@
 
     function create_comment_form($new, $id_comment, $comment, $connection){
         $text = SAVE_NEW;
-        $action_value = "form_with_db.php";
+        $action_value = HOME;
         if(!$new){
             $text = SAVE_OLD;
-            $action_value = "form_with_db.php?id_comment=".$id_comment;
+            $action_value = "persistent1.php?id_comment=".$id_comment;
             $comment = get_comment($connection, $id_comment);
         }
         $form =
