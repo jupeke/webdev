@@ -7,8 +7,7 @@
 
   <body>
     <ul id="linkbar">
-      <?php include 'links.php'; ?>
-      <?php echo $links_html; ?>
+      <?php include 'links.php'; echo $links_html; ?>
     </ul>
     <h1>My first form</h1>
     <?php
