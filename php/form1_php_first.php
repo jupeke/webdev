@@ -1,18 +1,15 @@
 <?php
     require 'links.php';
     $name = "";
-    $error = "";
-    $comment = "";
     $message = "";
-    $details_ok = False;
 
+    // Checks if there are any not-empty message from the client:
     if(isset($_POST["name"])){
         $name = $_POST["name"];
-        $comment = $_POST["comment"];
         if(empty($name)){
-            $message = 'No name given';
+            $message = 'No name given!';
         } else{
-            $details_ok = True;
+            $message = 'Hello '.$name.'!';
         }
     }
     // HTML for the head section:
@@ -31,23 +28,13 @@
             <input type="submit" value="Submit">
         </form>';
 
-    if ($details_ok){
-        $message =
-            'Your name is "'.$name.'" and comment "'.$comment.'".';
-    } else if (empty($message)){
-        $message =
-            'Write your name and a comment in the text fields
-            and press the button.';
-    }
     // HTML for the body section:
     $body =
         '<body>
-            <ul id="linkbar">
-              '.$links_html.'
-            </ul>
-            <h1>Forms 2</h1>
+            <ul id="linkbar">'.$links_html.'</ul>
+            <h1>Forms 1 with PHP oriented approach</h1>
             <p>Here the client (browser) sends an HTTP request to the server by
-              using the POST method.</p>
+              using the POST method. </p>
             <p class="message">'.$message.'<p>'.
             $form.
         '</body>';

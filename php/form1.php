@@ -14,10 +14,11 @@
       using the POST method.</p>
     <?php
       if(isset($_POST["name"]) && !empty($_POST["name"])){
-          echo "Hello ".$_POST["name"];
+          $message = "Hello ".$_POST["name"]."!";
       } else{
-          echo "No name given" ;
+          $message = "No name given" ;
       }
+      echo '<p class="message">'.$message.'.<p>';
     ?>
     <p>Write you name in the text field and press the button.</p>
     <form method="post">

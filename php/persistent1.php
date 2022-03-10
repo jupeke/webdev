@@ -11,16 +11,18 @@
     // The home view of this application:
     define("HOME","persistent1.php",false);
 
+    // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
     $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
     $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
 
+    // Common variables:
     $error = "";
     $message = "";
     $message_ok = False;
     $new = True;
 
-    // Database:
+    // Database info:
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -173,6 +175,17 @@
             $comment = $row["comment"];
         }
         return $comment;
+    }
+
+    function create_html_for_confirm_delete($id_comment,$connection){
+        $comment = get_comment($connection, $id_comment)
+        $html =
+        '<body>
+            <h1>Persistent comments</h1>
+            <p class="message">'.$message.'</p>
+            <div>'.comments_get_all($conn).'</div>'.
+            create_comment_form($new, $id_comment, $comment, $conn).
+        '</body>';
     }
 
     // Create a new form element containing two input elements:
