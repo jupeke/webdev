@@ -2,7 +2,8 @@
   $links_html =
   '<li><a href="index.php">Home</a></li>
   <li><a href="testing.php">Testing</a></li>
-  <li><a href="form1.php">Form 1</a></li>
+  <li><a href="form1.php">Form 1 (POST)</a></li>
+  <li><a href="form1get.php">Form 1 (GET)</a></li>
   <li><a href="form2.php">Form 2</a></li>
   <li><a href="persistent1.php">Persistent comments</a></li>
   <li><a class="out" href="https://www.w3schools.com/php"
