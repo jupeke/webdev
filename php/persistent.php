@@ -9,7 +9,7 @@
     define("DEL", "Delete", false);
 
     // The home view of this application:
-    define("HOME","persistent1.php",false);
+    define("HOME","persistent.php",false);
 
     // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
@@ -206,7 +206,7 @@
         $action_value = HOME;
         if(!$new){
             $text = SAVE_OLD;
-            $action_value = "persistent1.php?id_comment=".$id_comment;
+            $action_value = "persistent.php?id_comment=".$id_comment;
             $comment = get_comment($connection, $id_comment);
         }
         $form =

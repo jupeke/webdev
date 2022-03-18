@@ -97,14 +97,13 @@
     function comments_get_all($connection){
         $sql = "SELECT * FROM comments";
         $result = $connection->query($sql);
-        $output = "<table><tr><th>Saved comments</th><th>Actions</th></tr>";
+        $output = "<table><tr><th>Saved comments</th></tr>";
         if ($result->num_rows > 0) {
             // Extract the comments:
             while($row = $result->fetch_assoc()) {
                 $id = $row["id"];
                 $output .=
-                    '<tr><td>'.$row["comment"].'</td><td>'.
-                    create_comment_buttons($id).'</td></tr>';
+                    '<tr><td>'.$row["comment"].'</td></tr>';
             }
         }
         $output .= "</table>";
