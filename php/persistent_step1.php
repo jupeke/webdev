@@ -119,7 +119,6 @@
               <input type="text" id="comment" name="comment" value="'.$comment.'"><br>
               <input type="submit" name="user_action" value="'.$text.'">
           </form>';
-
         return $form;
     }
 ?>
