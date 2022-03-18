@@ -178,7 +178,7 @@
     }
 
     function create_html_for_confirm_delete($id_comment,$connection){
-        $comment = get_comment($connection, $id_comment)
+        $comment = get_comment($connection, $id_comment);
         $html =
         '<body>
             <h1>Persistent comments</h1>

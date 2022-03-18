@@ -9,16 +9,16 @@
     <ul id="linkbar">
       <?php include 'links.php'; echo $links_html; ?>
     </ul>
-    <h1>My first form</h1>
+    <h1>My first form (POST)</h1>
     <p>Here the client (browser) sends an HTTP request to the server by
       using the POST method.</p>
     <?php
       if(isset($_POST["name"]) && !empty($_POST["name"])){
           $message = "Hello ".$_POST["name"]."!";
       } else{
-          $message = "No name given" ;
+          $message = "No name given!" ;
       }
-      echo '<p class="message">'.$message.'.<p>';
+      echo '<p class="message">'.$message.'<p>';
     ?>
     <p>Write you name in the text field and press the button.</p>
     <form method="post">

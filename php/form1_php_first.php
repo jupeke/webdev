@@ -1,14 +1,12 @@
 <?php
     require 'links.php';
     $name = "";
-    $message = "";
+    $message = "No name given!";
 
     // Checks if there are any not-empty message from the client:
     if(isset($_POST["name"])){
         $name = $_POST["name"];
-        if(empty($name)){
-            $message = 'No name given!';
-        } else{
+        if(!empty($name)){
             $message = 'Hello '.$name.'!';
         }
     }
@@ -32,10 +30,11 @@
     $body =
         '<body>
             <ul id="linkbar">'.$links_html.'</ul>
-            <h1>Forms 1 with PHP oriented approach</h1>
+            <h1>My first form (PHP-first approach)</h1>
             <p>Here the client (browser) sends an HTTP request to the server by
               using the POST method. </p>
-            <p class="message">'.$message.'<p>'.
+            <p class="message">'.$message.'<p>
+            <p>Write you name in the text field and press the button.</p>'.
             $form.
         '</body>';
 
