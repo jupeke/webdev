@@ -1,14 +1,14 @@
 <?php
     require 'links.php';
-    $name = "";
+    $fname = "";
     $error = "";
-    $comment = "";
+    $lname = "";
     $message = "";
     $details_ok = False;
 
-    if(isset($_POST["name"]) && isset($_POST["comment"])){
-        $name = $_POST["name"];
-        $comment = $_POST["comment"];
+    if(isset($_POST["fname"]) && isset($_POST["lname"])){
+        $fname = $_POST["fname"];
+        $lname = $_POST["lname"];
         if(empty($name)){
             $message = 'Name is empty! Write a name, please!';
         } else if(empty($comment)){
