@@ -5,7 +5,7 @@
     define("SAVE_NEW", "Save new comment", false);
 
     // The home view of this application:
-    define("HOME","persistent_step1.php",false);
+    define("HOME","persistent_step0.php",false);
 
     // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
@@ -16,7 +16,7 @@
     $message = "";
     $new = True;
 
-    // Database info:
+    // Database info (for development only!):
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -79,29 +79,21 @@
     // Insert a new comment into comments table. Return True or false
     // based on success
     function comment_insert($comment, $connection){
-        $sql = "INSERT INTO comments (comment) VALUES ('".$comment."')";
-        if ($connection->query($sql) === TRUE) {
-            return true;
-        } else {
-            return false;
-        }
+        $success = false;
+
+        // Write the code here.
+
+        return $success;   //
     }
 
-    // Retrieves all the comments from the db.
+    // Retrieves all the comments from the db and returns
+    // them in an HTML table.
     function comments_get_all($connection){
-        $sql = "SELECT * FROM comments";
-        $result = $connection->query($sql);
-        $output = "<table><tr><th>Saved comments</th></tr>";
-        if ($result->num_rows > 0) {
-            // Extract the comments:
-            while($row = $result->fetch_assoc()) {
-                $id = $row["id"];
-                $output .=
-                    '<tr><td>'.$row["comment"].'</td></tr>';
-            }
-        }
-        $output .= "</table>";
-        return $output;
+        $html = "<p>Function 'comments_get_all' not implemented</p>";
+
+        // Write the code here.
+
+        return $html;
     }
 
     function create_comment_form($new, $id_comment, $comment){

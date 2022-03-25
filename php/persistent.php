@@ -17,9 +17,7 @@
     $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
 
     // Common variables:
-    $error = "";
     $message = "";
-    $message_ok = False;
     $new = True;
 
     // Database info:
@@ -48,7 +46,6 @@
                 } else{
                     $message = 'Error in saving a comment: '.$conn->error;
                 }
-                $message_ok = True;
             }
         }
         else if($user_action === DEL){
@@ -57,13 +54,11 @@
             } else{
                 $message = 'Error in deleting a comment: '.$conn->error;
             }
-            $message_ok = True;
         }
         else if($user_action === EDIT){
             $id = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
             $comment = get_comment($conn, $id);
             $message = 'Edit and save the comment';
-            $message_ok = True;
             $new = False;
         }
         else if($user_action === SAVE_OLD){
@@ -77,15 +72,12 @@
                 }
             }
             $comment = "";  // No need to show in the text field now.
-            $message_ok = True;
         }
     }
     // If message is not set,
-    if (!$message_ok){
-        if (empty($message)){
-            $message =
-                'Write a comment in the text field and press the button.';
-        }
+    if (empty($message)){
+        $message =
+            'Write a comment in the text field and press the button.';
     }
 
     // HTML is put together here.
