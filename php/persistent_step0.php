@@ -79,19 +79,14 @@
     // Insert a new comment into comments table. Return True or false
     // based on success
     function comment_insert($comment, $connection){
-        $success = false;
-
-        // Write the code here.
-
-        return $success;   //
+        return false;
     }
 
     // Retrieves all the comments from the db and returns
     // them in an HTML table.
     function comments_get_all($connection){
-        $html = "<p>Function 'comments_get_all' not implemented</p>";
 
-        // Write the code here.
+        $html = "Not yet implemented";
 
         return $html;
     }
