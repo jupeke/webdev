@@ -50,7 +50,7 @@
             if(comment_delete($id_comment, $conn)){
                 $message = 'Comment deleted successfully';
             } else{
-                $message = 'Error in deleting a comment: '.$conn->error;
+                $message = 'Error in deleting a comment. '.$conn->error;
             }
         }
     }
@@ -126,9 +126,9 @@
 
     // Returns the HTML for a submit button in a form.
     function create_button($id_comment, $button_text, $url_to_go){
-        $action_value = $url_to_go."?id=".$id_comment;
+        $action_value = $url_to_go."?id_comment=".$id_comment;
         $form =
-          '<form method="get" action="'.$action_value.'">
+          '<form method="post" action="'.$action_value.'">
               <input type="submit" name="user_action" value="'.$button_text.'">
           </form>';
         return $form;

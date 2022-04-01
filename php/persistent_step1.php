@@ -40,7 +40,7 @@
                 if(comment_insert($comment, $conn)){
                     $message = 'Comment saved successfully';
                 } else{
-                    $message = 'Error in saving a comment: '.$conn->error;
+                    $message = 'Error in saving a comment. '.$conn->error;
                 }
             }
         }
