@@ -19,12 +19,12 @@
         <a href="persistent_step0.php">Starting point</a>
         <a href="persistent_step1.php">Read and Write</a>
         <a href="persistent_step2.php">Delete</a>
-        <a href="persistent_step3.php">Update</a>
+        <a href="">Update (coming)</a>
         <a href="persistent.php">Final</a>
       </div>
     </div>
   </li>
-  
+
   <li><a class="out" href="https://www.w3schools.com/php"
     target="_blank">Tutorial</a></li>
   <li><a class="out" href="https://github.com/kerkkaju/webdev/tree/master/php"
