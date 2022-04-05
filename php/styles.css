@@ -17,6 +17,10 @@ td, th{
   padding: 5px;
 }
 
+form{
+  margin: 0px;
+}
+
 .message{
   font-weight: bold;
   color: green;

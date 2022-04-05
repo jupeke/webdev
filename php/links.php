@@ -17,9 +17,9 @@
       <a class="dropbtn">Persistent comments</a>
       <div class="dropdown-content">
         <a href="persistent_step0.php">Starting point</a>
-        <a href="persistent_step1.php">Read and Write</a>
-        <a href="persistent_step2.php">Delete</a>
-        <a href="">Update (coming)</a>
+        <a href="persistent_step1.php">Step 1 - Read and Write</a>
+        <a href="persistent_step2.php">Step 2 - Delete</a>
+        <a href="persistent_step3.php">Step 3 - Update (coming)</a>
         <a href="persistent.php">Final</a>
       </div>
     </div>
