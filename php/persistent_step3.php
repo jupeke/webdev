@@ -3,8 +3,9 @@
     // Constants. Syntax: define(name, value, case-insensitive)
     // These are for button texts.
     define("SAVE_NEW", "Save new comment", false);
+    define("SAVE_OLD", "Save changes", false);
     define("DELETE_COMMENT", "Delete", false);
-    define("UPDATE_COMMENT", "Edit", false);
+    define("EDIT_COMMENT", "Edit", false);
 
     // The home view of this application:
     define("HOME","persistent_step3.php",false);
@@ -53,6 +54,26 @@
             } else{
                 $message = 'Error in deleting a comment. '.$conn->error;
             }
+        }
+        // Edit:
+        else if($user_action === EDIT_COMMENT){
+            $comment = get_comment($id_comment, $conn);
+            $message = 'Edit and save the comment';
+            $new = False;
+        }
+        // Save changes:
+        else if($user_action === SAVE_OLD){
+            if(empty($comment)){
+                $message = 'Comment is empty! Write something, please!';
+                $new = False;   // For the new trial.
+            } else{
+                if(comment_update($id_comment, $comment, $conn)){
+                    $message = 'Changes saved successfully';
+                } else{
+                    $message = 'Error in saving changes: '.$conn->error;
+                }
+            }
+            $comment = "";  // No need to show in the text field now.
         }
     }
     // If message is not set,
@@ -109,7 +130,7 @@
                 $output .= '<tr><td>'.$row["comment"].'</td>'.
                 '<td>'.
                   create_button($id, DELETE_COMMENT, HOME).
-                  create_button($id, UPDATE_COMMENT, HOME).
+                  create_button($id, EDIT_COMMENT, HOME).
                 '</td></tr>';
             }
         }
@@ -117,10 +138,34 @@
         return $output;
     }
 
+    // Retrieve the comment with the id_comment given.
+    function get_comment($id_comment, $connection){
+        $sql = "SELECT comment FROM comments WHERE id=".$id_comment;
+        $result = $connection->query($sql);
+        $comment = "";
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $comment = $row["comment"];
+        }
+        return $comment;
+    }
+
     // Delete a comment with id=$id_comment from comments. Return True or false
     // based on success
     function comment_delete($id_comment, $connection){
         $sql = "DELETE FROM comments WHERE id=".$id_comment;
+        if ($connection->query($sql) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Update (replace) a comment with id=$id_comment. $new_comment will be
+    // the new value. Return True or false based on success.
+    function comment_update($id_comment, $new_comment, $connection){
+        $sql = "UPDATE comments SET comment = '".$new_comment."' WHERE id=".
+            $id_comment;
         if ($connection->query($sql) === TRUE) {
             return true;
         } else {
@@ -141,6 +186,10 @@
     function create_comment_form($new, $id_comment, $comment){
         $text = SAVE_NEW;
         $action_value = HOME;
+        if($new === False){
+            $text = SAVE_OLD;
+            $action_value .= "?id_comment=".$id_comment;
+        }
         $form =
           '<form method="post" action="'.$action_value.'">
               <label for="comment">Comment:</label><br>
