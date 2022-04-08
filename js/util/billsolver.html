@@ -7,6 +7,7 @@
       body{
           font-size: 110%;
           padding: 10px;
+          background-color: #fff2ff;
       }
       table{
           border-collapse: collapse;
@@ -17,11 +18,26 @@
           padding: 5px;
           font-size: 100%;
       }
+
+      button#del1, button#add1{
+          padding: 3px 9px 3px 9px;
+          font-size: 120%;
+      }
+
       th, td{
           border: 1px solid black;
           text-align: center;
       }
-      #persons th, #persons td{
+      table#settings th, table#settings td{
+          border: none;
+          text-align: left;
+      }
+
+      table#settings td{
+          padding: 7px 5px 7px 0px;
+      }
+
+      #persons th, #persons td, .tip{
           padding: 5px;
       }
       input{
@@ -394,12 +410,17 @@
 
           }
           remove_empty_person(){
-              this.vues.get_elem("persons_table").deleteRow(-1);
-              numb_of_all--;
+              if(numb_of_all < 2){
+                  alert("At least 1 person is needed!");
+              }
+              else{
+                  this.vues.get_elem("persons_table").deleteRow(-1);
+                  numb_of_all--;
 
-              // Must change the selected option. Here creates a new select elem.
-              this.vues.get_elem("select_participants").innerHTML =
-                  this.vues.make_select_participants(numb_of_all);
+                  // Must change the selected option. Here creates a new select elem.
+                  this.vues.get_elem("select_participants").innerHTML =
+                      this.vues.make_select_participants(numb_of_all);
+              }
           }
       }
       class Views{
@@ -442,8 +463,7 @@
           }
 
           make_select_participants(selected){
-              let html = '<label for="numb_of_all">How many participants? </label>';
-              html += '<select id="numb_of_all" '+
+              let html = '<select id="numb_of_all" '+
                   ' onchange="controller.vues.show_table(this.value)">';
 
               html += this.create_option_elems(100, selected);
@@ -500,40 +520,47 @@
   <body onload="init()">
     <h1>Bill Solver</h1>
     <p id="guide">This application makes it easy to know how much each ows who.
-      No information is saved (reload clears all fields!).</p>
-    <p id="question_number">
-      <div id="select_participants" class="inline">
-          <script>
-              // Seems this runs before onload, that's why the check.
-              if(controller === UNKNOWN){
-                  controller = new Controller();
-              }
-              document.write(controller.vues.make_select_participants(3));
-          </script>
-      </div>
-      <button onclick="controller.add_person()">+</button>
-      <button onclick="controller.remove_empty_person()">−</button>
-    </p>
-    <p id="question_minimum">
-      <label for="minimum">The smallest amount to pay:</label>
-      <select id="minimum" onchange="controller.set_minimum(this.value)">
-        <option value="0.01">0.01</option>
-        <option value="0.1">0.1</option>
-        <option value="1" selected="selected">1</option>
-        <option value="10">10</option>
-        <option value="100">100</option>
-      </select>
-    </p>
-    <p id="question_round">
-      <label for="rounding">Round to nearest:</label>
-      <select id="rounding" onchange="controller.set_rounding(this.value)">
-        <option value="2">0.01</option>
-        <option value="1">0.1</option>
-        <option value="0" selected="selected">1</option>
-        <option value="-1">10</option>
-        <option value="-2">100</option>
-      </select>
-    </p>
+      No information is saved (reload clears/resets all fields!).</p>
+
+    <table id="settings">
+      <tr id="question_number">
+        <td><label for="numb_of_all">How many participants? </label></td>
+        <td>
+          <div id="select_participants" class="inline">
+            <script>
+                // Seems this runs before onload, that's why the check.
+                if(controller === UNKNOWN){
+                    controller = new Controller();
+                }
+                document.write(controller.vues.make_select_participants(3));
+            </script>
+          </div>
+          <button id="add1" onclick="controller.add_person()">+</button>
+          <button id="del1" onclick="controller.remove_empty_person()">−</button>
+        </td>
+      </tr>
+
+      <tr id="question_minimum">
+        <td><label for="minimum">The smallest amount to pay:</label></td>
+        <td><select id="minimum" onchange="controller.set_minimum(this.value)">
+          <option value="0.01">0.01</option>
+          <option value="0.1">0.1</option>
+          <option value="1" selected="selected">1</option>
+          <option value="10">10</option>
+          <option value="100">100</option>
+        </select></td>
+      </tr>
+      <tr id="question_round">
+        <td><label for="rounding">Round to the nearest:</label></td>
+        <td><select id="rounding" onchange="controller.set_rounding(this.value)">
+          <option value="2">0.01</option>
+          <option value="1">0.1</option>
+          <option value="0" selected="selected">1</option>
+          <option value="-1">10</option>
+          <option value="-2">100</option>
+        </select></td>
+      </tr>
+    </table>
     <p><button onclick="controller.calculate()">Solve it</button></p>
     <div id="persons"></div>
     <div id="result"></div>
