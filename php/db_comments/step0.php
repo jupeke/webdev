@@ -1,11 +1,11 @@
 <?php
-    require 'links.php';
+    require '../links.php';
     // Constants. Syntax: define(name, value, case-insensitive)
     // These are for button texts.
     define("SAVE_NEW", "Save new comment", false);
 
     // The home view of this application:
-    define("HOME","persistent_step0.php",false);
+    define("HOME","step0.php",false);
 
     // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";

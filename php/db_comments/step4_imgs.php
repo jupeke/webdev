@@ -1,14 +1,15 @@
 <?php
-    require 'links.php';
+    require '../links.php';
     // Constants. Syntax: define(name, value, case-insensitive)
     // These are for button texts.
     define("SAVE_NEW", "Save new comment", false);
     define("SAVE_OLD", "Save changes", false);
     define("DELETE_COMMENT", "Delete", false);
     define("EDIT_COMMENT", "Edit", false);
+    define("ADD_IMG", "Add Image", false);
 
     // The home view of this application:
-    define("HOME","persistent_step3.php",false);
+    define("HOME","step4_imgs.php",false);
 
     // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
@@ -75,6 +76,19 @@
             }
             $comment = "";  // No need to show in the text field now.
         }
+        else if($user_action === ADD_IMG){
+            if(empty($comment)){
+                $message = 'Comment is empty! Write something, please!';
+                $new = False;   // For the new trial.
+            } else{
+                if(comment_update($id_comment, $comment, $conn)){
+                    $message = 'Image saved successfully';
+                } else{
+                    $message = 'Error in saving image: '.$conn->error;
+                }
+            }
+            $comment = "";  // No need to show in the text field now.
+        }
     }
     // If message is not set,
     if (empty($message)){
@@ -122,20 +136,31 @@
     function comments_get_all($connection){
         $sql = "SELECT * FROM comments";
         $result = $connection->query($sql);
-        $output = "<table><tr><th>Saved comments</th><th>Actions</th></tr>";
+        $output = "<table><tr><th>Saved comments</th><th>Images</th><th>Actions</th></tr>";
         if ($result->num_rows > 0) {
             // Extract the comments:
             while($row = $result->fetch_assoc()) {
                 $id = $row["id"];
-                $output .= '<tr><td>'.$row["comment"].'</td>'.
-                '<td>'.
-                  create_button($id, DELETE_COMMENT, HOME).
-                  create_button($id, EDIT_COMMENT, HOME).
-                '</td></tr>';
+                $output .=
+                    '<tr><td>'.$row["comment"].'</td>'.
+                    '<td>'.get_images_of_a_comment($id).'</td>'.
+                    '<td>'.
+                      create_button($id, DELETE_COMMENT, HOME).
+                      create_button($id, EDIT_COMMENT, HOME).
+                    '</td></tr>';
             }
         }
         $output .= "</table>";
         return $output;
+    }
+    // Decodes the image:
+    function decode_image($raw_img){
+        $content = base64_encode($raw_img);
+        return '<img src="data:image/jpg;charset=utf8;base64,'.$content.'"';
+    }
+
+    function get_images_of_a_comment($id_comment){
+
     }
 
     // Retrieve the comment with the id_comment given.
@@ -173,6 +198,40 @@
         }
     }
 
+    // Insert an image to the database:
+    // Based on https://www.codexworld.com/store-retrieve-image-from-database-mysql-php/
+    function image_insert($id_comment){
+        $response = "ok";
+        if(!empty($_FILES["image"]["name"])) {
+            // Get file info
+            $fileName = basename($_FILES["image"]["name"]);
+            $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+            // Allow certain file formats
+            $allowTypes = array('jpg','png','jpeg','gif');
+            if(in_array($fileType, $allowTypes)){
+                $image = $_FILES['image']['tmp_name'];
+                $imgContent = addslashes(file_get_contents($image));
+
+                // Insert image content into database
+                $time = now();
+                $q = "INSERT into images (image, ,id_comment,created)
+                    VALUES ('$imgContent',$id_comment, $time)";
+                $insert = $db->query($q);
+
+                if($insert){
+                    $response = "File uploaded successfully.";
+                }else{
+                    $response = "File upload failed, please try again.";
+                }
+            }else{
+                $response = 'Sorry, only JPG, JPEG, PNG or GIF files are allowed.';
+            }
+        } else{
+            $response = 'Please select an image to upload.';
+        }
+    }
+
     // Returns the HTML for a submit button in a form.
     function create_button($id_comment, $button_text, $url_to_go){
         $action_value = $url_to_go."?id_comment=".$id_comment;
@@ -180,6 +239,19 @@
           '<form method="post" action="'.$action_value.'">
               <input type="submit" name="user_action" value="'.$button_text.'">
           </form>';
+        return $form;
+    }
+
+    // Returns the HTML for image upload button.
+    function create_upload_img_button($id_comment, $button_text, $url_to_go){
+        $action_value = $url_to_go."?id_comment=".$id_comment;
+        $form =
+            '<form action="'.$action_value.'" method="post" enctype="multipart/form-data">
+                <label>Select Image:</label>
+                <input type="file" name="image">
+                <input type="submit" name="user_action" value="'.$button_text.'">
+            </form>'
+        ;
         return $form;
     }
 

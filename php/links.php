@@ -16,11 +16,11 @@
     <div class="dropdown">
       <a class="dropbtn">Persistent comments</a>
       <div class="dropdown-content">
-        <a href="persistent_step0.php">Starting point</a>
-        <a href="persistent_step1.php">Step 1 - Read and Write</a>
-        <a href="persistent_step2.php">Step 2 - Delete</a>
-        <a href="persistent_step3.php">Step 3 - Update</a>
-        <a href="persistent.php">Final</a>
+        <a href="step0.php">Starting point</a>
+        <a href="step1.php">Step 1 - Read and Write</a>
+        <a href="step2.php">Step 2 - Delete</a>
+        <a href="step3.php">Step 3 - Update</a>
+        <a href="step4_imgs.php">Step 4 - Images</a>
       </div>
     </div>
   </li>

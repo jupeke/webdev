@@ -1,0 +1,105 @@
+input {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+body{
+  background-color: white;
+}
+table{
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+td, th{
+  border: 1px solid #aaa;
+  padding: 5px;
+}
+
+form{
+  margin: 0px;
+}
+
+.message{
+  font-weight: bold;
+  color: green;
+}
+.inline{
+  display: inline;
+}
+.bold{
+  font-weight: bold;
+}
+
+#linkbar{
+  margin: 0;
+  padding: 0;
+}
+
+#linkbar li {
+  list-style-type: none;
+  display: inline;
+}
+
+#linkbar a {
+  text-decoration: none;
+  margin: 0;
+  padding: 10px;
+  color: #444;
+  background-color: #eeeeee;
+}
+#linkbar a.out{
+  background-color: #ddddee;
+}
+#linkbar a:hover {
+  background-color: #dddddd;
+  color: #333;
+}
+#linkbar a.out:hover {
+  background-color: #ddddff;
+  color: #222;
+}
+/*#linkbar a:active {
+    border: 2px solid black;
+} Not workin because page changes..*/
+
+/* Rules for dropdown menus (see https://www.w3schools.com/howto/howto_css_dropdown.asp)*/
+/* Dropdown Button */
+.dropbtn {
+  padding-bottom: 10px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  margin-top: 8px;
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
