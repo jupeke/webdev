@@ -98,7 +98,7 @@
     $body =
         '<body>
             <ul id="linkbar">
-              '.$links_html.'
+              '.links("db_comments").'
             </ul>
             <h1>Persistent comments</h1>
             <p>The comments are saved to a MySQL database (persistent memory).</p>
@@ -146,9 +146,11 @@
         return $output;
     }
     // Decodes the image:
-    function decode_image($raw_img){
+    function decode_image($raw_img, $width, $height){
         $content = base64_encode($raw_img);
-        return '<img src="data:image/jpg;charset=utf8;base64,'.$content.'">';
+        return '<img src="data:'.mime_content_type($raw_img).
+              ';charset=utf8;base64,'.$content.'"
+              width="'.$width.'" height="'.$height.'" >';
     }
 
     // Returns the images of a comment as HTML img elements:
@@ -156,9 +158,11 @@
         $sql = "SELECT image FROM images WHERE id_comment=".$id_comment;
         $result = $connection->query($sql);
         $images = "";
+        $width = 150;
+        $height = 100;
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $images .= decode_image($row["image"]);
+            $images .= decode_image($row["image"], $width, $height);
         } else{
             $images = "No images found";
         }
@@ -216,15 +220,15 @@
                 $imgContent = addslashes(file_get_contents($image));
 
                 // Insert image content into database
-                $time = now();
-                $q = "INSERT into images (image, ,id_comment,created)
-                    VALUES ('$imgContent',$id_comment, $time)";
+                $time = date_create()->format('Y-m-d H:i:s');
+                $q = "INSERT into images (image,id_comment,created_at)
+                    VALUES ('$imgContent',$id_comment, '$time')";
                 $insert = $connection->query($q);
 
                 if($insert){
                     $response = "File uploaded successfully.";
-                }else{
-                    $response = "File upload failed, please try again.";
+                } else{
+                    $response = "File upload failed, please try again. ";
                 }
             }else{
                 $response = 'Sorry, only JPG, JPEG, PNG or GIF files are allowed.';
@@ -232,6 +236,7 @@
         } else{
             $response = 'Please select an image to upload.';
         }
+        return $response;
     }
 
     // Returns the HTML for a submit button in a form.

@@ -45,7 +45,7 @@
     $body =
         '<body>
             <ul id="linkbar">
-              '.$links_html.'
+              '.links("root").'
             </ul>
             <h1>Forms 2 (two text fields)</h1>
             <p>The input is checked by server-side code.

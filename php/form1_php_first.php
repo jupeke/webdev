@@ -29,7 +29,7 @@
     // HTML for the body section:
     $body =
         '<body>
-            <ul id="linkbar">'.$links_html.'</ul>
+            <ul id="linkbar">'.links("root").'</ul>
             <h1>My first form (PHP-first approach)</h1>
             <p>Here the client (browser) sends an HTTP request to the server by
               using the POST method. </p>

@@ -7,7 +7,7 @@
 
   <body>
     <ul id="linkbar">
-      <?php include 'links.php'; echo $links_html;?>
+      <?php include 'links.php'; echo links("root");?>
     </ul>
 
     <h1>Hello!</h1>

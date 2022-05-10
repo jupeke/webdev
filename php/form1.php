@@ -7,7 +7,7 @@
 
   <body>
     <ul id="linkbar">
-      <?php include 'links.php'; echo $links_html; ?>
+      <?php include 'links.php'; echo links("root"); ?>
     </ul>
     <h1>My first form (POST)</h1>
     <p>Here the client (browser) sends an HTTP request to the server by

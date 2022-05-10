@@ -8,7 +8,7 @@
   <body>
     <ul id="linkbar">
       <?php include 'links.php'; ?>
-      <?php echo $links_html; ?>
+      <?php  echo links("root"); ?>
     </ul>
     <h1>My first form (GET)</h1>
     <p>Here the client (browser) sends an HTTP request to the server by
