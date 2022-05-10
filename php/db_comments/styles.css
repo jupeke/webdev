@@ -15,10 +15,15 @@ table{
 td, th{
   border: 1px solid #aaa;
   padding: 5px;
+  max-width: 500px;
 }
 
 form{
   margin: 0px;
+}
+img{
+
+  padding: 5px;
 }
 
 .message{

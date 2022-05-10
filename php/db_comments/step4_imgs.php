@@ -146,23 +146,25 @@
         return $output;
     }
     // Decodes the image:
-    function decode_image($raw_img, $width, $height){
+    function decode_image($raw_img, $filetype, $width, $height){
         $content = base64_encode($raw_img);
-        return '<img src="data:'.mime_content_type($raw_img).
+        return '<img src="data:image/'.$filetype.
               ';charset=utf8;base64,'.$content.'"
               width="'.$width.'" height="'.$height.'" >';
     }
 
     // Returns the images of a comment as HTML img elements:
     function get_images_of_a_comment($id_comment, $connection){
-        $sql = "SELECT image FROM images WHERE id_comment=".$id_comment;
+        $sql = "SELECT * FROM images WHERE id_comment=".$id_comment;
         $result = $connection->query($sql);
         $images = "";
         $width = 150;
         $height = 100;
         if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $images .= decode_image($row["image"], $width, $height);
+            while ($row = $result->fetch_assoc()){
+                $filetype = isset($row["filetype"]) ? $row["filetype"]: "unknown";
+                $images .= decode_image($row["image"], $filetype, $width, $height);
+            }
         } else{
             $images = "No images found";
         }
@@ -221,8 +223,8 @@
 
                 // Insert image content into database
                 $time = date_create()->format('Y-m-d H:i:s');
-                $q = "INSERT into images (image,id_comment,created_at)
-                    VALUES ('$imgContent',$id_comment, '$time')";
+                $q = "INSERT into images (image,filetype,id_comment,created_at)
+                    VALUES ('$imgContent','$fileType',$id_comment, '$time')";
                 $insert = $connection->query($q);
 
                 if($insert){
