@@ -77,16 +77,7 @@
             $comment = "";  // No need to show in the text field now.
         }
         else if($user_action === ADD_IMG){
-            if(empty($comment)){
-                $message = 'Comment is empty! Write something, please!';
-                $new = False;   // For the new trial.
-            } else{
-                if(comment_update($id_comment, $comment, $conn)){
-                    $message = 'Image saved successfully';
-                } else{
-                    $message = 'Error in saving image: '.$conn->error;
-                }
-            }
+            $message = image_insert($id_comment, $conn);
             $comment = "";  // No need to show in the text field now.
         }
     }
@@ -143,10 +134,11 @@
                 $id = $row["id"];
                 $output .=
                     '<tr><td>'.$row["comment"].'</td>'.
-                    '<td>'.get_images_of_a_comment($id).'</td>'.
+                    '<td>'.get_images_of_a_comment($id, $connection).'</td>'.
                     '<td>'.
                       create_button($id, DELETE_COMMENT, HOME).
                       create_button($id, EDIT_COMMENT, HOME).
+                      create_upload_img_button($id, ADD_IMG, HOME).
                     '</td></tr>';
             }
         }
@@ -156,11 +148,21 @@
     // Decodes the image:
     function decode_image($raw_img){
         $content = base64_encode($raw_img);
-        return '<img src="data:image/jpg;charset=utf8;base64,'.$content.'"';
+        return '<img src="data:image/jpg;charset=utf8;base64,'.$content.'">';
     }
 
-    function get_images_of_a_comment($id_comment){
-
+    // Returns the images of a comment as HTML img elements:
+    function get_images_of_a_comment($id_comment, $connection){
+        $sql = "SELECT image FROM images WHERE id_comment=".$id_comment;
+        $result = $connection->query($sql);
+        $images = "";
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $images .= decode_image($row["image"]);
+        } else{
+            $images = "No images found";
+        }
+        return $images;
     }
 
     // Retrieve the comment with the id_comment given.
@@ -200,7 +202,7 @@
 
     // Insert an image to the database:
     // Based on https://www.codexworld.com/store-retrieve-image-from-database-mysql-php/
-    function image_insert($id_comment){
+    function image_insert($id_comment, $connection){
         $response = "ok";
         if(!empty($_FILES["image"]["name"])) {
             // Get file info
@@ -217,7 +219,7 @@
                 $time = now();
                 $q = "INSERT into images (image, ,id_comment,created)
                     VALUES ('$imgContent',$id_comment, $time)";
-                $insert = $db->query($q);
+                $insert = $connection->query($q);
 
                 if($insert){
                     $response = "File uploaded successfully.";
