@@ -6,7 +6,8 @@
     define("SAVE_OLD", "Save changes", false);
     define("DELETE_COMMENT", "Delete", false);
     define("EDIT_COMMENT", "Edit", false);
-    define("ADD_IMG", "Add Image", false);
+    define("SAVE_IMG", "Save", false);
+    define("SELECT_IMG", "Select image", false);
 
     // The home view of this application:
     define("HOME","step4_imgs.php",false);
@@ -76,7 +77,7 @@
             }
             $comment = "";  // No need to show in the text field now.
         }
-        else if($user_action === ADD_IMG){
+        else if($user_action === SAVE_IMG){
             $message = image_insert($id_comment, $conn);
             $comment = "";  // No need to show in the text field now.
         }
@@ -251,14 +252,18 @@
         return $form;
     }
 
-    // Returns the HTML for image upload button.
-    function create_upload_img_button($id_comment, $button_text, $url_to_go){
+    // Returns the HTML for image upload button. Note the not-so-obvious
+    // trick to change the default file button text.
+    function create_upload_img_button($id_comment, $select_button_text,$save_button_text, $url_to_go){
         $action_value = $url_to_go."?id_comment=".$id_comment;
+        $id = "file_button";
         $form =
             '<form action="'.$action_value.'" method="post" enctype="multipart/form-data">
-                <label>Select Image:</label>
-                <input type="file" name="image">
-                <input type="submit" name="user_action" value="'.$button_text.'">
+                <input type="file" name="image" id="file_button" style="display:none">
+                <button type="button" onclick="document.getElementById('.$id.').click();">
+                  '.$select_button_text.'
+                </button>
+                <input type="submit" name="user_action" value="'.$save_button_text.'">
             </form>'
         ;
         return $form;
