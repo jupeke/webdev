@@ -139,7 +139,7 @@
                     '<td>'.
                       create_button($id, DELETE_COMMENT, HOME).
                       create_button($id, EDIT_COMMENT, HOME).
-                      create_upload_img_button($id, ADD_IMG, HOME).
+                      create_upload_img_button($id, SELECT_IMG,SAVE_IMG, HOME).
                     '</td></tr>';
             }
         }
@@ -257,14 +257,15 @@
     function create_upload_img_button($id_comment, $select_button_text,$save_button_text, $url_to_go){
         $action_value = $url_to_go."?id_comment=".$id_comment;
         $id = "file_button";
-        $form =
-            '<form action="'.$action_value.'" method="post" enctype="multipart/form-data">
+        $form = <<< EOF
+            <form action="@{$action_value}" method="post" enctype="multipart/form-data">
                 <input type="file" name="image" id="file_button" style="display:none">
-                <button type="button" onclick="document.getElementById('.$id.').click();">
+                <button type="button" onclick="document.getElementById('@{$id}').click();">
                   '.$select_button_text.'
                 </button>
                 <input type="submit" name="user_action" value="'.$save_button_text.'">
-            </form>'
+            </form>
+        EOF
         ;
         return $form;
     }
