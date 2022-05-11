@@ -30,6 +30,7 @@
                 <a href="'.$prefix_db_comments.'step2.php">Step 2 - Delete</a>
                 <a href="'.$prefix_db_comments.'step3.php">Step 3 - Update</a>
                 <a href="'.$prefix_db_comments.'step4_imgs.php">Step 4 - Images</a>
+                <a href="'.$prefix_db_comments.'step4_imgs_with_js.php">Step 5 - Images & JS</a>
               </div>
             </div>
           </li>

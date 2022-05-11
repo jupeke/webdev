@@ -7,10 +7,10 @@
     define("DELETE_COMMENT", "Delete", false);
     define("EDIT_COMMENT", "Edit", false);
     define("SAVE_IMG", "Save", false);
-    define("SELECT_IMG", "Select Image", false);
+    define("SELECT_IMG", "New Image", false);
 
     // The home view of this application:
-    define("HOME","step4_imgs.php",false);
+    define("HOME","step4_imgs_with_js.php",false);
 
     // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
@@ -94,6 +94,7 @@
             <title>PHP Home</title>
             <meta charset="UTF-8">
             <link rel="stylesheet" href="styles.css">
+            <script src="javascript.js"></script>
         </head>';
 
     $body =
@@ -257,17 +258,26 @@
     function create_upload_img_button($id_comment, $select_button_text,
                                       $save_button_text, $url_to_go){
         $action_value = $url_to_go."?id_comment=".$id_comment;
+        $id_btn_select = "file_button_".$id_comment;   // Unique id!
+        $id_btn_save = "save_button_".$id_comment;   // Unique id!
+        $id_selections = "selections_".$id_comment;
 
         // Note the way to avoid problems with nested quotes (a bit over-kill here..).
         $form = <<< EOF
             <form action="{$action_value}" method="post" enctype="multipart/form-data">
-                <input type="file" name="image">
-                <input type="submit" name="user_action"
-                    value="{$save_button_text}" >
+                <input type="file" name="image" id="{$id_btn_select}"
+                    style="display:none" onchange="saveImage({$id_comment})">
+                <button type="button"
+                    onclick="document.getElementById('{$id_btn_select}').click();">
+                  {$select_button_text}
+                </button>
+                <input type="submit" name="user_action" id="{$id_btn_save}"
+                    value="{$save_button_text}" style="display:none">
             </form>
+            <span id="{$id_selections}"></span>
 EOF
         ;
-        // Note: The closing text EOF must be in the beginning of the line!
+        // Note: The text EOF must be in the beginning of the line!
         return $form;
     }
 
