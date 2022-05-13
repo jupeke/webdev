@@ -37,6 +37,14 @@ img{
   font-weight: bold;
 }
 
+.image{
+  display: inline-block;
+  background-color: pink;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px;
+}
+
 #linkbar{
   margin: 0;
   padding: 0;
