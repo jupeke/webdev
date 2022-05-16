@@ -5,9 +5,9 @@
     define("SAVE_NEW", "Save new comment", false);
     define("SAVE_OLD", "Save changes", false);
     define("DELETE_COMMENT", "Delete", false);
-    define("DELETE_IMG", "Delete image", false);
     define("EDIT_COMMENT", "Edit", false);
     define("SAVE_IMG", "Save", false);
+    define("DELETE_IMG", "Delete image", false);
     define("SELECT_IMG", "New Image", false);
 
     // The home view of this application:
@@ -16,8 +16,8 @@
     // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
     $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
-    $id_image = isset($_GET["id_image"]) ? $_GET["id_image"]: -1;
     $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
+    $id_image = isset($_GET["id_image"]) ? $_GET["id_image"]: -1;
 
     // Common variables:
     $message = "";
@@ -51,7 +51,7 @@
                 }
             }
         }
-        // Delete comment:
+        // Delete:
         else if($user_action === DELETE_COMMENT){
             if(comment_delete($id_comment, $conn)){
                 $message = 'Comment deleted successfully';
@@ -157,12 +157,32 @@
         $output .= "</table>";
         return $output;
     }
-    // Decodes the image:
-    function decode_image($raw_img, $filetype, $width, $height){
+    // Encodes and creates HTML for the image:
+    function show_image($raw_img, $filetype, $width, $height){
         $content = base64_encode($raw_img);
+        //$filetype = get_image_file_type($raw_img); Does not like raw_img
         return '<img src="data:image/'.$filetype.
               ';charset=utf8;base64,'.$content.'"
               width="'.$width.'" height="'.$height.'" >';
+    }
+
+    // Return type of image file or false if wrong type. This should be quick.
+    // The return value is in text format like "png".
+    // NOTE: May require a change of PHP conf: enable extension=php_exif.dll.
+    // AND WHAT KND OF FILE GOOD??
+    function get_image_file_type($file){
+        $type = false;
+        $detected = exif_imagetype($file);
+
+        // If a good type detected:
+        if($detected === IMAGETYPE_GIF){
+            $type = "gif";
+        } else if ($detected === IMAGETYPE_JPEG){
+            $type = "jpg";
+        } else if($detected === IMAGETYPE_PNG){
+            $type = "png";
+        }
+        return $type;
     }
 
     // Returns the images of a comment as HTML img elements:
@@ -177,7 +197,7 @@
                 $filetype = isset($row["filetype"]) ? $row["filetype"]: "unknown";
                 $id = $row["id"];
                 $images .= "<div class='image'>".
-                    decode_image($row["image"], $filetype, $width, $height);
+                    show_image($row["image"], $filetype, $width, $height);
                 $images .= create_image_button($id, DELETE_IMG, HOME);
                 $images .= "</div>";
             }
@@ -231,6 +251,9 @@
             $fileName = basename($_FILES["image"]["name"]);
             $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
+            // More secure:
+            $fileType = get_image_file_type($filename);
+
             // Allow certain file formats
             $allowTypes = array('jpg','png','jpeg','gif');
             if(in_array($fileType, $allowTypes)){
@@ -268,19 +291,18 @@
         }
     }
 
-    // Returns the HTML for a button image.
-    function create_image_button($id_image, $button_text, $url_to_go){
-        $action_value = $url_to_go."?id_image=".$id_image;
+    // Returns the HTML for a submit button in a form.
+    function create_button($id_comment, $button_text, $url_to_go){
+        $action_value = $url_to_go."?id_comment=".$id_comment;
         $form =
           '<form method="post" action="'.$action_value.'">
               <input type="submit" name="user_action" value="'.$button_text.'">
           </form>';
         return $form;
     }
-
-    // Returns the HTML for a submit button in a form.
-    function create_button($id_comment, $button_text, $url_to_go){
-        $action_value = $url_to_go."?id_comment=".$id_comment;
+    // Returns the HTML for a button related to images.
+    function create_image_button($id_image, $button_text, $url_to_go){
+        $action_value = $url_to_go."?id_image=".$id_image;
         $form =
           '<form method="post" action="'.$action_value.'">
               <input type="submit" name="user_action" value="'.$button_text.'">
