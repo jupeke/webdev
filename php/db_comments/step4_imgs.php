@@ -5,6 +5,7 @@
     define("SAVE_NEW", "Save new comment", false);
     define("SAVE_OLD", "Save changes", false);
     define("DELETE_COMMENT", "Delete", false);
+    define("DELETE_IMG", "Delete image", false);
     define("EDIT_COMMENT", "Edit", false);
     define("SAVE_IMG", "Save", false);
     define("SELECT_IMG", "Select Image", false);
@@ -15,6 +16,7 @@
     // Get the eventual values from the client:
     $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
     $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
+    $id_image = isset($_GET["id_image"]) ? $_GET["id_image"]: -1;
     $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
 
     // Common variables:
@@ -80,6 +82,14 @@
         else if($user_action === SAVE_IMG){
             $message = image_insert($id_comment, $conn);
             $comment = "";  // No need to show in the text field now.
+        }
+        // Delete image:
+        else if($user_action === DELETE_IMG){
+            if(image_delete($id_image, $conn)){
+                $message = 'Image deleted successfully';
+            } else{
+                $message = 'Error in deleting an image. '.$conn->error;
+            }
         }
     }
     // If message is not set,
@@ -164,7 +174,11 @@
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()){
                 $filetype = isset($row["filetype"]) ? $row["filetype"]: "unknown";
-                $images .= decode_image($row["image"], $filetype, $width, $height);
+                $id = $row["id"];
+                $images .= "<div class='image'>".
+                    decode_image($row["image"], $filetype, $width, $height);
+                $images .= create_image_button($id, DELETE_IMG, HOME);
+                $images .= "</div>";
             }
         } else{
             $images = "No images found";
@@ -242,9 +256,30 @@
         return $response;
     }
 
+    // Delete an image with id=$id_image. Return True or false
+    // based on success
+    function image_delete($id_image, $connection){
+        $sql = "DELETE FROM images WHERE id=".$id_image;
+        if ($connection->query($sql) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Returns the HTML for a submit button in a form.
     function create_button($id_comment, $button_text, $url_to_go){
         $action_value = $url_to_go."?id_comment=".$id_comment;
+        $form =
+          '<form method="post" action="'.$action_value.'">
+              <input type="submit" name="user_action" value="'.$button_text.'">
+          </form>';
+        return $form;
+    }
+
+    // Returns the HTML for a button related to images.
+    function create_image_button($id_image, $button_text, $url_to_go){
+        $action_value = $url_to_go."?id_image=".$id_image;
         $form =
           '<form method="post" action="'.$action_value.'">
               <input type="submit" name="user_action" value="'.$button_text.'">
