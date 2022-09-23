@@ -7,14 +7,16 @@ urls = (
 )
 class Login:
     def GET(self):
-        name = "John Smith"
-        return render.home(name)   # home is the template name
+        return render.login()   # home is the template name
 
-class Hobbies:
+class Check:
     def GET(self):
-        main_hobby = "programming"
-        second_hobby = "hiking"
-        return render.hobbies(main_hobby, second_hobby)    
+        content = "OK"
+        success = True
+        if(success):
+            return render.success(content)    
+        else:
+            return render.failure(content)
 
 if __name__ == "__main__":
     myapp = web.application(urls, globals())
