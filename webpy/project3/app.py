@@ -1,30 +1,20 @@
 import web
 render = web.template.render('templates/')
 urls = (
-    '/(\w*)', 'Home',
-    '/studies/(\w*)','Studies',
-    '/details/.*','Details',
-
+    '/', 'Login',
+    '/success/','Check',
+    '/failure/','Check',
 )
-class Home:
-    def GET(self, name):
-        return render.index(name)   # index is the template name
-
-class Studies:
-    def GET(self, name):
-        return render.studies(name)  
-
-# How to manage multiple url attributes written like
-# /details/?name=Elsa&age=22&lang=French:
-class Details:
+class Login:
     def GET(self):
-        # Set default values for variables.
-        data = web.input(name='Default', age='0', lang='Finnish')
-        # Get the eventual values:
-        name = data.name
-        age = data.age
-        lang = data.lang 
-        return render.details(name, age,lang)  
+        name = "John Smith"
+        return render.home(name)   # home is the template name
+
+class Hobbies:
+    def GET(self):
+        main_hobby = "programming"
+        second_hobby = "hiking"
+        return render.hobbies(main_hobby, second_hobby)    
 
 if __name__ == "__main__":
     myapp = web.application(urls, globals())
