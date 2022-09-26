@@ -1,35 +1,41 @@
-from os import uname
 import web
 render = web.template.render('templates/')
 urls = (
     '/', 'Login',
-    '/success/','Success',
-    '/failure/','Failure',
+    '/success','Success',
+    '/failure','Failure',
 )
 class Login:
     def GET(self):
         return render.login()   # home is the template name
     def POST(self):
         user_input = web.input()
-        username = user_input.username
-        password = user_input.password
-        success = True
-        if(success):
-            return render.success(content)    
-        else:
-            return render.failure(content)
+        uname = user_input.uname
+        pword = user_input.pword
+        content = "Username = "+uname+" and password = "+pword
+        if(check(uname,pword)):
 
-class Success:
-    def GET(self):
-        content = "OK"
-        return render.success(content) 
+            # Redirect to the success page. Note that you
+            # can add "?.." here even if not defined in the urls!
+            raise web.seeother("/success?content="+content)   
+        else:
+            raise web.seeother("/failure?content="+content)   
 
 class Failure:
     def GET(self):
-        content = "Failure"
-        return render.failure(content) 
-        
+        i = web.input(content=None)
+        return render.failure(i.content)
+class Success:
+    def GET(self):
+        i = web.input(content=None)
+        return render.success(i.content)
 
 if __name__ == "__main__":
     myapp = web.application(urls, globals())
     myapp.run() 
+
+def check(uname, pword):
+    if(uname == "jp" and pword == "salane"):
+        return True
+    else:
+        return False
