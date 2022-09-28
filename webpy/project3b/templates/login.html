@@ -1,0 +1,31 @@
+$def with (content, login_ok)
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+
+  <body>
+    $if content == "":
+      <h1>Login</h1>
+      <form action="/" method="post">
+        <p>
+          <label for="uname">Username:</label>
+          <input type="text" id="uname" name="uname">
+        </p>
+        <p>
+          <label for="pword">Password:</label>
+          <input type="password" id="pword" name="pword">
+        </p>
+        <input type="submit" value="Submit">
+      </form>
+    $else:
+      $if login_ok:
+        <h1>Login ok!</h1>
+        <p>$content</p> 
+      $else:
+        <h1>Login failed!</h1>
+        <p>$content</p>
+  </body>
+</html>
+
+
