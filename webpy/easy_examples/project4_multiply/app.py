@@ -1,4 +1,5 @@
 from random import randint
+from sys import orig_argv
 import web
 render = web.template.render('templates/')
 urls = (
@@ -6,22 +7,33 @@ urls = (
     '/success','Success',
     '/failure','Failure',
 )
-class Login:
+class Home:
     def GET(self):
-        n1 = randint(10)
-        n2 = randint(10)
-        return render.home()   # the template name
+        n1 = randint(0,10)
+        n2 = randint(0,10)
+        return render.home(n1,n2)   # the template name
     def POST(self):
+        bad_answer = False
         i = web.input()
-        answer = i.answer
-        n1 = i.number1
-        n2 = i.number2
-        if n1 * n2 == answer:
-            fback = "Correct! "+n1+" times "+n2+" = "+answer
+        orig_answer = i.answer
+        try:
+            answer = int(orig_answer)
+        except ValueError:
+            bad_answer = True
+        n1 = int(i.number1)
+        n2 = int(i.number2)
+        answer_correct = n1*n2
+        if bad_answer:
+            fback = "Not a number! Your answer: '{}'".\
+                format(orig_answer)
+            raise web.seeother("/failure?feedback="+fback)
+        elif n1 * n2 == answer:
+            fback = "Correct! {} times {} = {}".format(n1,n2,answer)
             raise web.seeother("/success?feedback="+fback) 
         else:
-            fback = "Wrong! "+n1+" times "+n2+" = "+n1*n2+" but"\
-                " you answered '"+answer+"'."
+            fback = "Wrong! {} times {} = {} but"\
+                " your answer was {}.".\
+                format(n1,n2,answer_correct,orig_answer)
             raise web.seeother("/failure?feedback="+fback)   
 
 class Failure:

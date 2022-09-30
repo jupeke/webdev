@@ -1,3 +1,4 @@
+$def with (n1, n2)
 <html>
   <head>
     <title>Login</title>
@@ -5,14 +6,10 @@
 
   <body>
     <h1>Answer and submit</h1>
-    <form action="/" method="post">
+    <form action="/?number1=$n1&number2=$n2" method="post">
       <p>
-        <label for="uname">Username:</label>
-        <input type="text" id="uname" name="uname">
-      </p>
-      <p>
-        <label for="pword">Password:</label>
-        <input type="password" id="pword" name="pword">
+        <label for="answer">$n1 times $n2 = </label>
+        <input type="text" name="answer">
       </p>
       <input type="submit" value="Submit">
     </form>
