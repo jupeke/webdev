@@ -1,0 +1,19 @@
+$def with (n1, n2)
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+
+  <body>
+    <h1>Answer and submit</h1>
+    <form action="/?number1=$n1&number2=$n2" method="post">
+      <p>
+        <label for="answer">$n1 times $n2 = </label>
+        <input type="text" name="answer">
+      </p>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
+
+
