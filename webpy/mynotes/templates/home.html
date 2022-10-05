@@ -1,4 +1,4 @@
-$def with (n1, n2)
+$def with (notes)
 <html>
   <head>
     <title>My notes</title>
@@ -6,10 +6,15 @@ $def with (n1, n2)
 
   <body>
     <h1>My Notes</h1>
-    <form action="/?number1=$n1&number2=$n2" method="post">
+    <ul>
+      $for note in notes:
+        <li id="note$note.id">$note.content</li>
+    </ul>
+
+    <form action="/" method="post">
       <p>
-        <label for="answer">$n1 times $n2 = </label>
-        <input type="text" name="answer">
+        <label for="note">Note: </label>
+        <input type="text" id="note" name="note">
       </p>
       <input type="submit" value="Submit">
     </form>

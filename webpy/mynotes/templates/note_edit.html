@@ -1,13 +1,19 @@
-$def with (feedback)
+$def with (note)
 <html>
   <head>
-    <title>Home</title>
+    <title>My notes</title>
   </head>
 
   <body>
-    <h1>Great!</h1>
-    <p>$feedback</p>
-    <p><a href="/">One more</a></p>
+    <h1>Edit Note</h1>
+
+    <form action="/" method="post">
+      <p>
+        <label for="note">Note: </label>
+        <input type="text" id="note" \
+          name="note" value="#note.content">
+      </p>
+      <input type="submit" value="Submit">
+    </form>
   </body>
 </html>
-

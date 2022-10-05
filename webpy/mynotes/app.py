@@ -4,12 +4,21 @@ render = web.template.render('templates/')
 urls = (
     '/', 'Home',
 )
+
+# Connect to db:
+db = web.database(
+    dbn='mysql',
+    host='127.0.0.1',
+    port=8080,
+    user='root',
+    pw='',
+    db='db_mynotes',
+)
+
 class Home:
     def GET(self):
-        n1 = randint(0,10)
-        n2 = randint(0,10)
-        return render.home(n1,n2)   # the template name
-
+        notes = db.select('notes')
+        return render.home(notes)   # the template name
 
 if __name__ == "__main__":
     myapp = web.application(urls, globals())
