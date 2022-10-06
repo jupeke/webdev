@@ -7,21 +7,20 @@ urls = (
 )
 class Home:
     def GET(self):
-        return render.home   # the template name
+        return render.home()   # the template name
     def POST(self):
         not_number = False
-        i = web.input()
-        input = i.number
+        input = web.input().number
         try:
             number = int(input)
         except ValueError:
-            bad_number = True
+            not_number = True
         
         # Create feedback:
         if not_number:
             fback = "'{}' is NOT a number!".format(input)
         else:
-            fback = "Your number is {} ".format(number)
+            fback = "Your number is {} ".format(input)
              
         raise web.seeother("/target?feedback="+fback)  
 
