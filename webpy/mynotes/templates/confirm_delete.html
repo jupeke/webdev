@@ -1,0 +1,21 @@
+$def with (note)
+<html>
+  <head>
+    <title>Delete</title>
+  </head>
+
+  <body>
+    <h1>Confirm delete</h1>
+
+    <p>Are you sure you want to delete the 
+      note "$note.content"?
+    </p>
+
+    <form action="/confirm_delete" method="post">
+      <input type="submit" value="Confirm">
+    </form>
+    <form action="/" method="post">
+      <input type="submit" value="Cancel">
+    </form>
+  </body>
+</html>

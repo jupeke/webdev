@@ -2,13 +2,21 @@ $def with (notes)
 <html>
   <head>
     <title>My notes</title>
+    <style>
+
+    </style>
   </head>
 
   <body>
     <h1>My Notes</h1>
     <ul>
       $for note in notes:
-        <li id="note$note.id">$note.content</li>
+        <li id="note$note.id">
+          $note.content
+          <form action="/confirm_delete.html?note_id=$note.id" method="get">
+            <input type="submit" id="delete" value="Delete">
+          </form>
+        </li>
     </ul>
 
     <form action="/" method="post">
