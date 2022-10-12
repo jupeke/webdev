@@ -1,0 +1,14 @@
+body{
+    background-color:aquamarine;
+    font-size: 200%;
+    color: blue;
+}
+.important{
+    font-weight: bold;
+    color: grey
+}
+#secret{
+    font-style: italic;
+    font-size: 30%;
+    color: red;
+}
