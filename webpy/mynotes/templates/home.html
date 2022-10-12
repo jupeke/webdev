@@ -1,30 +1,49 @@
 $def with (notes)
+<!DOCTYPE html>
 <html>
   <head>
     <title>My notes</title>
     <style>
-
+      table{
+        border-collapse: collapse;
+      }
+      td{
+        border: 1px solid grey;
+        padding: 0 10px;
+        
+      }
+      input{
+        padding: 3px;
+        margin: 3px;
+      }
     </style>
   </head>
 
   <body>
     <h1>My Notes</h1>
-    <ul>
+    <table>
       $for note in notes:
-        <li id="note$note.id">
-          $note.content
-          <form action="/confirm_delete.html?note_id=$note.id" method="get">
-            <input type="submit" id="delete" value="Delete">
-          </form>
-        </li>
-    </ul>
+        <tr>
+          <td id="note$note.id">
+            $note.content
+          </td>
+          <td>
+            <form action="/?note_id=$note.id&todo=update" method="post">
+              <input type="submit" id="delete" value="Edit">
+            </form>
+            <form action="/?note_id=$note.id&todo=delete" method="post">
+              <input type="submit" id="delete" value="Delete">
+            </form>
+          </td>
+        </tr>
+    </table>
 
-    <form action="/" method="post">
+    <form action="/?todo=save_new" method="post">
       <p>
-        <label for="note">Note: </label>
-        <input type="text" id="note" name="note">
+        <label for="note">New note: </label>
+        <input type="text" id="content" name="content">
       </p>
-      <input type="submit" value="Submit">
+      <input type="submit" value="Save new">
     </form>
   </body>
 </html>
