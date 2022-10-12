@@ -2,20 +2,18 @@
 <html>
   <head>
     <style>
-      body {font-size:200%;}
-      input {font-size:100%;}
-      button {font-size: 100%}
+      body {font-size:140%;}
+      input, button {font-size:100%;}
       #result {font-weight: bold; color: red}
     </style>
 
     <script>
-      function repeatMe(){
+      function myFunction(){
+          // Get the text in the text field:
+          var myText = document.getElementById("textField1").value;
 
-        // Gets the value of the text field:
-        var text = document.getElementById('textField').value;
-
-        // Writes the comment in the span with id "result":
-        document.getElementById('result').innerHTML = text;
+          // Write into an element:
+          document.getElementById("result").innerHTML = myText;
       }
     </script>
   </head>
@@ -25,8 +23,8 @@
     <h1>Input and output</h1>
     <p> Write something in the text field and click the button.</p>
 
-    <input type="text" id="textField">
-    <button type="button" onclick="repeatMe()">Click me!</button>
+    <input type="text" id="textField1">
+    <button type="button" onclick="myFunction()">I am a button</button>
 
     <p>You typed: <span id="result"></span></p>
   </body>
