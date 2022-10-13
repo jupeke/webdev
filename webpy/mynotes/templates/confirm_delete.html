@@ -11,11 +11,9 @@ $def with (note)
       note "$note.content"?
     </p>
 
-    <form action="/confirm_delete" method="post">
+    <form action="/confirm_delete?note_id=$note.id" method="post">
       <input type="submit" value="Confirm">
     </form>
-    <form action="/" method="post">
-      <input type="submit" value="Cancel">
-    </form>
+    <a href="/">Cancel</a>
   </body>
 </html>

@@ -4,6 +4,7 @@ render = web.template.render('templates/')
 urls = (
     '/', 'Home',
     '/confirm_delete', 'Confirm_delete',
+    '/edit', 'Edit',
 )
 
 # Connect to db:
@@ -22,18 +23,48 @@ class Home:
         return render.home(notes)   # the template name
     
     def POST(self):
+        i = web.input(todo="show")
+        todo = i.todo
+        if todo == "save_new":
+            db.insert('notes', content=i.content)
+            raise web.seeother('/') 
+        elif todo == "delete":
+            note_id = i.note_id
+            raise web.seeother('/confirm_delete?note_id='+note_id)
+        elif todo == "update":
+            note_id = i.note_id
+            raise web.seeother('/edit?note_id='+note_id)
+        elif todo == "show":    # Default
+            raise web.seeother('/') 
+            
+class Edit:
+    def GET(self):
         i = web.input()
-        n = db.insert('notes', content=i.note)
-        raise web.seeother('/')
+        note_id = i.note_id
+        myvar = dict(id=note_id)    # To prevent SQL injection attacks.
+        notes = db.select('notes', vars=myvar, where="id=$id")
+        return render.note_edit(notes[0])
+    def POST(self):
+        i = web.input()
+        note_id = i.note_id
+        cont = i.content
+        myvar = dict(id=note_id)    
+        n=db.update('notes', vars=myvar, where="id=$id", content=cont)
+        raise web.seeother('/?updated_rows=')
 
 class Confirm_delete:
     def GET(self):
         i = web.input()
         note_id = i.note_id
-        note = db.select('notes', where="id=$note_id")
-        return render.confirm_delete(note)
-
-
+        myvar = dict(id=note_id)
+        notes = db.select('notes', vars=myvar, where="id=$id")
+        return render.confirm_delete(notes[0])
+    def POST(self):
+        i = web.input()
+        note_id = i.note_id
+        myvar = dict(id=note_id)
+        db.delete('notes', vars=myvar, where="id=$id")
+        raise web.seeother('/')
 
 if __name__ == "__main__":
     myapp = web.application(urls, globals())

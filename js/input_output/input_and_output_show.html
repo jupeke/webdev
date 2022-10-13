@@ -8,23 +8,22 @@
     </style>
 
     <script>
-      function repeatMe(){
-          // Read the user input:
-          var u_input = document.getElementById("textField").value;
-          
-          // Write to the element with id="result":
-          document.getElementById("result").innerHTML = u_input;
+      function myFunction(){
+          // Get the text in the text field:
+          var myText = document.getElementById("textField1").value;
+
+          // Write into an element:
+          document.getElementById("result").innerHTML = myText;
       }
     </script>
   </head>
 
   <body>
-
     <h1>Input and output</h1>
     <p> Write something in the text field and click the button.</p>
 
-    <input type="text" id="textField">
-    <button type="button" onclick="repeatMe()">Click me!</button>
+    <input type="text" id="textField1">
+    <button type="button" onclick="myFunction()">I am a button</button>
 
     <p id="result"></p>
   </body>
