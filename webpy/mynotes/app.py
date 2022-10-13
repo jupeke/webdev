@@ -26,9 +26,7 @@ class Home:
     def POST(self):
         i = web.input(todo="show")
         todo = i.todo
-        if todo == "save_new":
-            raise web.seeother('/') 
-        elif todo == "delete":
+        if todo == "delete":
             note_id = i.note_id
             raise web.seeother('/confirm_delete?note_id='+note_id)
         elif todo == "update":
