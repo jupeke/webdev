@@ -4,6 +4,7 @@ render = web.template.render('templates/')
 urls = (
     '/', 'Home',
     '/confirm_delete', 'Confirm_delete',
+    '/new','Newnote',
     '/edit', 'Edit',
 )
 
@@ -26,7 +27,6 @@ class Home:
         i = web.input(todo="show")
         todo = i.todo
         if todo == "save_new":
-            db.insert('notes', content=i.content)
             raise web.seeother('/') 
         elif todo == "delete":
             note_id = i.note_id
@@ -37,6 +37,14 @@ class Home:
         elif todo == "show":    # Default
             raise web.seeother('/') 
             
+class Newnote:
+    def GET(self):
+        return render.note_new()
+    def POST(self):
+        i = web.input()
+        n=db.insert('notes', content=i.content)
+        raise web.seeother('/')
+
 class Edit:
     def GET(self):
         i = web.input()
@@ -50,7 +58,7 @@ class Edit:
         cont = i.content
         myvar = dict(id=note_id)    
         n=db.update('notes', vars=myvar, where="id=$id", content=cont)
-        raise web.seeother('/?updated_rows=')
+        raise web.seeother('/')
 
 class Confirm_delete:
     def GET(self):

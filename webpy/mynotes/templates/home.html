@@ -21,6 +21,7 @@ $def with (notes)
 
   <body>
     <h1>My Notes</h1>
+    <p><a href="/new">Add new note</a></p>
     <table>
       $for note in notes:
         <tr>
@@ -38,13 +39,6 @@ $def with (notes)
         </tr>
     </table>
 
-    <form action="/?todo=save_new" method="post">
-      <p>
-        <label for="note">New note: </label>
-        <input type="text" id="content" name="content">
-      </p>
-      <input type="submit" value="Save new">
-    </form>
   </body>
 </html>
 
