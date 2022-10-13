@@ -1,14 +1,14 @@
 body{
     background-color:aquamarine;
     font-size: 200%;
-    color: blue;
+    color: darkgreen;
 }
-.important{
+.nice{
     font-weight: bold;
-    color: grey
+    color: pink
 }
-#secret{
+#Emma{
     font-style: italic;
-    font-size: 30%;
+    font-size: 130%;
     color: red;
 }
