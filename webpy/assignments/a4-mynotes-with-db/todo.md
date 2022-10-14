@@ -1,6 +1,6 @@
 # To do (students): 
 1. **Pull** this repository (or the latest changes) to your computer. 
-2. Create a database *db_mynotes* with tables *id* (int, primary key, autoincrement) and *content* (text): use **EasyPHP -> PhpMyAdmin** 
+2. Create a **database** *db_mynotes* and a new table *notes* with fields *id* (int, primary key, autoincrement) and *content* (text): use **EasyPHP -> PhpMyAdmin** 
 3. Implement CRUD operations (partially together with the teacher). 
 
     * **Create** and **Read**: together with teacher
