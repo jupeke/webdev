@@ -1,0 +1,52 @@
+$def with (notes, message)
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My notes</title>
+    <meta charset="utf-8">
+    <style>
+      table{
+        border-collapse: collapse;
+      }
+      td{
+        border: 1px solid grey;
+        padding: 0 10px;
+        
+      }
+      input{
+        padding: 3px;
+        margin: 3px;
+      }
+      #message{
+        color: green;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>My Notes</h1>
+    <p><a href="/new">Add new note</a></p>
+    <p><a href="/signup">Sign up</a></p>
+    <p id="message">$:message</p>
+    <table>
+      $for note in notes:
+        <tr>
+          <td id="note$note.id">
+            $note.content
+          </td>
+          <td>
+            <form action="/?note_id=$note.id&todo=update" method="post">
+              <input type="submit" id="delete" value="Edit">
+            </form>
+            <form action="/?note_id=$note.id&todo=delete" method="post">
+              <input type="submit" id="delete" value="Delete">
+            </form>
+          </td>
+        </tr>
+    </table>
+
+  </body>
+</html>
+
+
