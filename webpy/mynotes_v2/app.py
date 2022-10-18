@@ -1,6 +1,7 @@
 from random import randint
 import web
 render = web.template.render('templates/')
+web.config.debug = False # To make sessions work
 urls = (
     '/', 'Home',
     '/confirm_delete', 'Confirm_delete',
@@ -81,7 +82,7 @@ class Signup:
     def POST(self):
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
-            password=i.pword)
+            password=i.pword, permission=i.permission)
         raise web.seeother('/?message=New user "{}" created'.format(i.name))
 
 if __name__ == "__main__":
