@@ -82,7 +82,7 @@ class Signup:
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
             password=i.pword)
-        raise web.seeother('/?message=user {} created'.format(i.name))
+        raise web.seeother('/?message=New user "{}" created'.format(i.name))
 
 if __name__ == "__main__":
     myapp = web.application(urls, globals())
