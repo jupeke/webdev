@@ -1,4 +1,4 @@
-$def with (notes, message)
+$def with (user, notes, message)
 <!DOCTYPE html>
 <html>
   <head>
@@ -28,9 +28,16 @@ $def with (notes, message)
   </head>
 
   <body>
+    <div id="user">
+      $if user == "none":
+        <p><a href="/login">Login</a></p>
+        <p><a href="/signup">Signup</a></p>
+      $else:
+        Logged in: $user
+    </div>
     <h1>My Notes</h1>
     <p><a href="/new">Add new note</a></p>
-    <p><a href="/signup">Sign up</a></p>
+    
     <p id="message">$:message</p>
     <table>
       $for note in notes:

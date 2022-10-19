@@ -1,13 +1,14 @@
 from random import randint
 import web
 render = web.template.render('templates/')
-web.config.debug = False # To make sessions work
+#web.config.debug = False # To make sessions work
 urls = (
     '/', 'Home',
     '/confirm_delete', 'Confirm_delete',
     '/new','Newnote',
     '/edit', 'Edit',
-    '/signup', 'Signup'
+    '/login','Login',
+    '/signup', 'Signup',
 )
 
 # Connect to db:
@@ -20,12 +21,32 @@ db = web.database(
     db='db_mynotes',
 )
 
+myapp = web.application(urls, globals())
+
+# Session:
+store = web.session.DBStore(db, 'sessions')
+session = web.session.Session(myapp, store)
+
+# Configuration:
+web.config.session_parameters['cookie_name'] = 'webpy_session_id'
+web.config.session_parameters['cookie_domain'] = None
+web.config.session_parameters['cookie_path'] = None
+web.config.session_parameters['timeout'] = 600  # in seconds
+web.config.session_parameters['ignore_expiry'] = False
+web.config.session_parameters['ignore_change_ip'] = True
+web.config.session_parameters['secret_key'] = 'fLjUfxqXtfNoIlPiip'
+web.config.session_parameters['expired_message'] = 'Session expired'
+
 class Home:
     def GET(self):
         notes = db.select('notes')
         i = web.input(message="")
         message = i.message
-        return render.home(notes, message)   # the template name
+        if session.get('logged_in', False):
+            user = session.username
+        else:
+            user = "none"
+        return render.home(user, notes, message)   # the template name
     
     def POST(self):
         i = web.input(todo="show")
@@ -76,6 +97,31 @@ class Confirm_delete:
         db.delete('notes', vars=myvar, where="id=$id")
         raise web.seeother('/')
 
+class Login:
+    def GET(self):
+        i = web.input(message="")
+        message = i.message
+        return render.login(message)
+    def POST(self):
+        i = web.input()
+        if self.login_ok(i.uname, i.pword):
+            session.logged_in = True
+            session.username = i.uname
+            raise web.seeother('/?message=Welcome {}!'.format(i.uname))
+        else:
+            session.logged_in = False
+            return render.login('Bad username or password. Please retry!')
+        
+    def login_ok(self, uname, pword):
+        success = False
+        myvar = dict(un=uname,pw=pword)
+        matches = db.query(
+            "SELECT * FROM users WHERE username=$un AND password=$pw", 
+            vars=myvar)
+        if len(matches) > 0:
+            success = True
+        return success
+
 class Signup:
     def GET(self):
         return render.signup()
@@ -86,5 +132,4 @@ class Signup:
         raise web.seeother('/?message=New user "{}" created'.format(i.name))
 
 if __name__ == "__main__":
-    myapp = web.application(urls, globals())
     myapp.run() 
