@@ -25,13 +25,13 @@ myapp = web.application(urls, globals())
 
 # Session:
 store = web.session.DBStore(db, 'sessions')
-session = web.session.Session(myapp, store)
+session = web.session.Session(myapp, store, initializer={"logged_in": False})
 
 # Configuration:
 web.config.session_parameters['cookie_name'] = 'webpy_session_id'
 web.config.session_parameters['cookie_domain'] = None
 web.config.session_parameters['cookie_path'] = None
-web.config.session_parameters['timeout'] = 600  # in seconds
+web.config.session_parameters['timeout'] = 3600  # in seconds
 web.config.session_parameters['ignore_expiry'] = False
 web.config.session_parameters['ignore_change_ip'] = True
 web.config.session_parameters['secret_key'] = 'fLjUfxqXtfNoIlPiip'
