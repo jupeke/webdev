@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Function</title>
+
+<script>
+  // Returns a string containing all the elements in the array (if
+  // the elements are simple values like strings or numbers)
+  function printMyArray(myArray){
+    var i = 0;
+    var result = "";
+    for(i=0; i < myArray.length; i++){
+      result += myArray[i]+" ";
+    }
+    return result+"<br>";
+  }
+</script>
+</head>
+
+<body>
+<h2>How to use an array:</h2>
+
+<script>
+    document.write("Creating an array with three colors:<br><br>");
+    var myArray = ["blue", "pink", "white"];
+    document.write(myArray[1]+"<br>");
+
+    // Print the content of the array:
+    document.write(printMyArray(myArray));
+
+    // Adds an element to the end of the array:
+    myArray.push("<b>black</b>");
+    document.write(printMyArray(myArray));  
+
+    // Removes the last element:
+    myArray.pop()
+    document.write(printMyArray(myArray)); 
+
+    // Change the 2nd element:
+    myArray[1] = "David";
+    document.write(printMyArray(myArray)); 
+</script>
+
+</body>
+</html>

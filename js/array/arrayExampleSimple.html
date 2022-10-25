@@ -4,17 +4,17 @@
 <title>Function</title>
 
 <script>
-// Returns a string containing all the elements in the array (provided
-// the elements are simple values like strings or numbers)
-function printMyArray(myArray){
-  var i = 0;
-  var result = "";
+  // Returns a string containing all the elements in the array (provided
+  // the elements are simple values like strings or numbers)
+  function printMyArray(myArray){
+    var i = 0;
+    var result = "";
 
-  for(i=0; i < myArray.length; i++){
-    result += myArray[i] + "<br>";
+    for(i=0; i < myArray.length; i++){
+      result += myArray[i] + "<br>";
+    }
+    return result+"<br><br>";
   }
-  return result+"<br><br>";
-}
 </script>
 </head>
 
@@ -22,24 +22,24 @@ function printMyArray(myArray){
 <h2>How to use an array:</h2>
 
 <script>
-document.write("Creating an array with three colors:<br><br>");
-var myArray = ["blue", "pink", "white"];
-document.write(printMyArray(myArray));  // Prints the elements to the screen.
+  document.write("Creating an array with three colors:<br><br>");
+  var myArray = ["blue", "pink", "white"];
+  document.write(printMyArray(myArray));  // Prints the elements to the screen.
 
-// Adds an element to the end of the array:
-document.write("Adding an element to the end of the array: push() <br><br>");
-myArray.push("<b>black</b>");
-document.write(printMyArray(myArray));
+  // Adds an element to the end of the array:
+  document.write("Adding an element to the end of the array: push() <br><br>");
+  myArray.push("<b>black</b>");
+  document.write(printMyArray(myArray));
 
-// Removes the last element:
-document.write("Removing the last element of the array: pop() <br><br>");
-myArray.pop();
-document.write(printMyArray(myArray));
+  // Removes the last element:
+  document.write("Removing the last element of the array: pop() <br><br>");
+  myArray.pop();
+  document.write(printMyArray(myArray));
 
-// Change the 2nd element:
-document.write("Changing the 2nd element of the array:<br><br>");
-myArray[1]="<b>a totally new color!</b>";
-document.write(printMyArray(myArray));
+  // Change the 2nd element:
+  document.write("Changing the 2nd element of the array:<br><br>");
+  myArray[1]="<b>a totally new color!</b>";
+  document.write(printMyArray(myArray));
 </script>
 
 </body>
