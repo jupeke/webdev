@@ -1,13 +1,14 @@
 from random import randint
 import web
 render = web.template.render('templates/')
-#web.config.debug = False # To make sessions work
+web.config.debug = False # To make sessions work
 urls = (
     '/', 'Home',
     '/confirm_delete', 'Confirm_delete',
     '/new','Newnote',
     '/edit', 'Edit',
     '/login','Login',
+    '/logout','Logout',
     '/signup', 'Signup',
 )
 
@@ -121,6 +122,14 @@ class Login:
         if len(matches) > 0:
             success = True
         return success
+
+class Logout:
+    def GET(self):
+        # Restarts the session, initializes logged_in as "no"
+        session.logged_in = False
+        n=session.get_id()
+        n="e"
+        return render.logout("See you again, {}!".format(n))
 
 class Signup:
     def GET(self):
