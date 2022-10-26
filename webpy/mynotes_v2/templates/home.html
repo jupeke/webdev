@@ -24,17 +24,20 @@ $def with (user, notes, message)
       .important{
         font-weight: bold;
       }
+      #user{
+        color: red;
+        font-weight: bold;
+      }
     </style>
   </head>
 
   <body>
-    <div id="user">
+    <div id="login">
       $if user == "none":
         <p><a href="/login">Login</a></p>
         <p><a href="/signup">Signup</a></p>
-        <p><a href="/logout">Logout</a></p>
       $else:
-        <p>Logged in: $user</p>
+        <p>Logged in: <span id="user">$user</span></p>
         <p><a href="/logout">Logout</a></p>
       
     </div>

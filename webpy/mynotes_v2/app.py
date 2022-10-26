@@ -50,6 +50,10 @@ class Home:
         return render.home(user, notes, message)   # the template name
     
     def POST(self):
+        if session.get('logged_in', False):
+            user = session.username
+        else:
+            user = "none"
         i = web.input(todo="show")
         todo = i.todo
         if todo == "delete":
@@ -108,7 +112,7 @@ class Login:
         if self.login_ok(i.uname, i.pword):
             session.logged_in = True
             session.username = i.uname
-            raise web.seeother('/?message=Welcome {}!'.format(i.uname))
+            raise web.seeother('/?message=Welcome {}!'.format(session.username))
         else:
             session.logged_in = False
             return render.login('Bad username or password. Please retry!')
@@ -125,10 +129,8 @@ class Login:
 
 class Logout:
     def GET(self):
-        # Restarts the session, initializes logged_in as "no"
-        session.logged_in = False
-        n=session.get_id()
-        n="e"
+        n = session.username
+        session.kill()
         return render.logout("See you again, {}!".format(n))
 
 class Signup:
@@ -138,7 +140,7 @@ class Signup:
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
             password=i.pword, permission=i.permission)
-        raise web.seeother('/?message=New user "{}" created'.format(i.name))
+        raise web.seeother('/login?message=New user "{}" created'.format(i.name))
 
 if __name__ == "__main__":
     myapp.run() 
