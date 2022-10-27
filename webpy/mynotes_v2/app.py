@@ -1,3 +1,4 @@
+# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\mynotes_v2
 from random import randint
 import web
 render = web.template.render('templates/')
