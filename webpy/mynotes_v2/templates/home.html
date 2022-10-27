@@ -5,13 +5,17 @@ $def with (user, notes, message)
     <title>My notes</title>
     <meta charset="utf-8">
     <style>
+      body{
+        padding: 0 0 0 5px;
+        margin: 0;
+        border-left: 1cm solid rgb(186, 245, 186);
+      }
       table{
         border-collapse: collapse;
       }
       td{
         border: 1px solid grey;
         padding: 0 10px;
-        
       }
       input{
         padding: 3px;
@@ -24,16 +28,21 @@ $def with (user, notes, message)
       .important{
         font-weight: bold;
       }
+      #user{
+        color: red;
+        font-weight: bold;
+      }
     </style>
   </head>
 
   <body>
-    <div id="user">
+    <div id="login">
       $if user == "none":
         <p><a href="/login">Login</a></p>
         <p><a href="/signup">Signup</a></p>
       $else:
-        <p>Logged in: $user</p>
+        <p>Logged in: <span id="user">$user</span></p>
+        <p><a href="/logout">Logout</a></p>
       
     </div>
     <h1>My Notes</h1>
