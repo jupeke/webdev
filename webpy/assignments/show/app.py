@@ -3,6 +3,7 @@ import web
 render = web.template.render('templates/')
 urls = (
     '/', 'Home',
+    '/new','Newnote',
 )
 
 # Connect to db:
