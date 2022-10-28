@@ -26,7 +26,7 @@
     * login (sessions)
     * logout (sessions)
 
-    Make sure the logged in user stays logged in also if you add a note or reload a page.
+    Make sure the logged in user stays logged in also if she adds a note or reloads a page.
 
 
 5. Take four screenshots of the following situations: 
