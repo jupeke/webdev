@@ -1,0 +1,41 @@
+$def with (notes)
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My notes</title>
+    <style>
+      table{
+        border-collapse: collapse;
+      }
+      td{
+        border: 1px solid grey;
+        padding: 0 10px;
+      }
+      input{
+        padding: 3px;
+        margin: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>My Notes</h1>
+    <p><a href="/new">Add new note</a></p>
+    <table>
+      $for note in notes:
+        <tr>
+          <td id="note$note.id">
+            $note.content
+          </td>
+          <td>
+            <form action="/?note_id=$note.id&todo=update" method="post">
+              <input type="submit" id="delete" value="Edit">
+            </form>
+          </td>
+        </tr>
+    </table>
+
+  </body>
+</html>
+
+
