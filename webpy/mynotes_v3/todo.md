@@ -1,20 +1,20 @@
 # To do (students): 
 1. **Pull** this repository (or the latest changes) to your computer. 
-2. Add two new tables **users** and **sessions** to the db *db_mynotes* in *EasyPHP -> PhpMyAdmin*. To make it easy use the SQL queries in **schema.sql** 
+2. Add two new tables **users** and **sessions** to the db *db_mynotes* in *EasyPHP -> PhpMyAdmin*. To make it easy use the SQL queries in **schema.sql**
 
 3. Implement the following features:
     * sign up (saving a new user to the db)
     * login (sessions)
     * logout (sessions)
 
-    Make sure the logged in user stays logged in also if she adds a note or reloads a page. Use sessions (stored in db) to make work. For help read [this](https://webpy.org/cookbook/sessions).
+    Make sure the logged in user stays logged in also if she adds a note or reloads a page.
 
 
 4. Take four screenshots of the following situations: 
-    * The signup form
-    * After successfull signup
-    * After successfull login
-    * After logout
+    * a
+    * b
+    * c
+    * d
 
     Save them to the **images** folder and **add image links** to the end of this document.
 

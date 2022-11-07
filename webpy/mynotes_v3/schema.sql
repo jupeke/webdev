@@ -21,3 +21,12 @@ CREATE TABLE `sessions` (
     `data` text COLLATE utf8mb4_unicode_ci, 
     UNIQUE KEY session_id (`session_id`) 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+
+
+CREATE TABLE `imagedetails` ( 
+    `id` int(11) NOT NULL AUTO_INCREMENT, 
+    `id_note` int(11) NOT NULL, 
+    `filename` tinytext COLLATE utf8mb4_unicode_ci NOT NULL, 
+    `type` tinytext COLLATE utf8mb4_unicode_ci NOT NULL, 
+    PRIMARY KEY (`id`) 
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci

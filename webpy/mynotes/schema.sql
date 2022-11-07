@@ -1,0 +1,5 @@
+CREATE TABLE `notes` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `content` text COLLATE utf8mb4_unicode_520_ci NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci ROW_FORMAT=COMPACT
