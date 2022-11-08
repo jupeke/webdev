@@ -24,7 +24,9 @@ class Upload:
             extension=filename.split('.')[-1] 
             web.debug(filename)
             web.debug(extension)
-            fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
+            # creates the file where the uploaded file should be stored. Note:
+            # the 'wb' is a must! Gives you write bytes permissions, I suppose.
+            fout = open(filedir +'/'+ filename,'wb') 
             fout.write(x.myfile.file.read()) # writes the uploaded file to the newly created file.
             fout.close() # closes the file, upload complete.
         raise web.seeother('/upload')

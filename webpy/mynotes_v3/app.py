@@ -11,6 +11,7 @@ urls = (
     '/login','Login',
     '/logout','Logout',
     '/signup', 'Signup',
+    '/upload', 'Upload'
 )
 
 # Connect to db:
@@ -79,7 +80,7 @@ class Home:
                 extension=filename.split('.')[-1] 
 
                 if extension in ["jpg", "jpeg", "png", "gif"]:
-                    fout = open(filedir +'/'+ filename,'w') # creates the file where the uploaded file should be stored
+                    fout = open(filedir +'/'+ filename,'wb') # creates the file where the uploaded file should be stored
                     fout.write(x.myfile.file.read()) # writes the uploaded file to the newly created file.
                     fout.close() # closes the file, upload complete.'''
 
@@ -158,12 +159,21 @@ class Logout:
 
 class Signup:
     def GET(self):
-        return render.signup()
+        raise web.seeother()
     def POST(self):
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
             password=i.pword, permission=i.permission)
         raise web.seeother('/login?message=New user "{}" created'.format(i.name))
+
+class Upload:
+    def GET(self):
+        return render.signup()
+    def POST(self):
+        i = web.input()
+        id=db.insert('users', name=i.name, username=i.uname, \
+            password=i.pword, permission=i.permission)
+        raise web.seeother('/')
 
 if __name__ == "__main__":
     myapp.run() 
