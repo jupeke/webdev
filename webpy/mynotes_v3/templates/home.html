@@ -28,7 +28,8 @@ $def with (user, notes, message)
       $for note in notes:
         <tr>
           <td id="note$note.id">
-            $note.content
+            <p>$note.content</p>
+            <p>$:note.imagehtml</p>
           </td>
           <td>
             <form action="/?note_id=$note.id&todo=update" method="post">

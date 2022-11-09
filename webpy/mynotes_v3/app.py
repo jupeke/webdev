@@ -41,8 +41,15 @@ web.config.session_parameters['secret_key'] = 'fLjUfxqXtfNoIlPiip'
 web.config.session_parameters['expired_message'] = 'Session expired'
 
 class Home:
+    filedir = 'static/images' # the directory to store the file in.
     def GET(self):
-        notes = db.select('notes')
+        dbnotes = db.select('notes')
+        notes = []
+        for dbnote in dbnotes:
+            note = Note(dbnote.id, dbnote.content, \
+                self.get_images_of_a_note(dbnote.id))
+            notes.append(note)
+
         i = web.input(message="")
         message = i.message
         if session.get('logged_in', False):
@@ -56,38 +63,46 @@ class Home:
             user = session.username
         else:
             user = "none"
-        i = web.input(todo="show")
+        i = web.input(todo="show",myfile={})
         todo = i.todo
+        note_id = i.note_id
         if todo == "delete":
-            note_id = i.note_id
+            note = "piip"
             raise web.seeother('/confirm_delete?note_id='+note_id)
         elif todo == "update":
-            note_id = i.note_id
             raise web.seeother('/edit?note_id='+note_id)
         elif todo == "addimg":
-            '''
-            https://webpy.org/cookbook/fileupload:
-            A default value is needed (the myfile={} part) if you want it 
-            to be imported as a CGI FieldStorage object. If you don’t 
-            specify the default value, the file will be passed as a 
-            string – this works, but you lose the filename attribute.
-            
-            x = web.input(myfile={})
-            filedir = '/images' #  Path to store the file in.
-            if 'myfile' in x: # to check if the file-object is created
-                filepath=x.myfile.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
-                filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
-                extension=filename.split('.')[-1] 
-
-                if extension in ["jpg", "jpeg", "png", "gif"]:
-                    fout = open(filedir +'/'+ filename,'wb') # creates the file where the uploaded file should be stored
-                    fout.write(x.myfile.file.read()) # writes the uploaded file to the newly created file.
-                    fout.close() # closes the file, upload complete.'''
-
+            self.saveimage(i)
             raise web.seeother('/')
-
         else:    # Default todo == "show"
             raise web.seeother('/') 
+
+    def saveimage(self, wi):
+        if 'myfile' in wi: # to check if the file-object is created
+            filepath = wi.myfile.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
+            filename = filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+            extension = filename.split('.')[-1] 
+            if extension in ["jpg", "jpeg", "png", "gif"]:
+                # creates the file where the uploaded file should be stored. Note:
+                # the 'wb' is a must! Gives you write bytes permissions, I suppose.
+                fout = open(self.filedir +'/'+ filename,'wb') 
+                fout.write(wi.myfile.file.read()) # writes the uploaded file to the newly created file.
+                fout.close() # closes the file, upload complete.
+                # Save details into db:
+                id=db.insert('imagedetails', id_note=wi.note_id, \
+                    filename=filename)
+                
+    def get_images_of_a_note(self, id_note):
+        imagehtml = ""
+        w = 150
+        h = 100
+        myvar = dict(id=id_note)    # To prevent SQL injection attacks.
+        images = db.select('imagedetails', vars=myvar, where="id_note=$id")
+        for image in images:
+            imgsrc = self.filedir+"/"+image.filename
+            imagehtml += "<img src='{}' width='{}px' height='{}px'>".\
+                format(imgsrc,w,h)
+        return imagehtml
             
 class Newnote:
     def GET(self):
@@ -166,14 +181,12 @@ class Signup:
             password=i.pword, permission=i.permission)
         raise web.seeother('/login?message=New user "{}" created'.format(i.name))
 
-class Upload:
-    def GET(self):
-        return render.signup()
-    def POST(self):
-        i = web.input()
-        id=db.insert('users', name=i.name, username=i.uname, \
-            password=i.pword, permission=i.permission)
-        raise web.seeother('/')
+class Note:
+    def __init__(self, id, content, imagehtml):
+        self.id = id
+        self.content = content
+        self.imagehtml = imagehtml
+    
 
 if __name__ == "__main__":
     myapp.run() 
