@@ -1,0 +1,21 @@
+$def with (note)
+<html>
+  <head>
+    <title>My notes</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+  </head>
+
+  <body>
+    <h1>Edit Note</h1>
+
+    <form action="/edit?note_id=$note.id" method="post">
+      <p>
+        <label for="note">Edit note: </label>
+        <input type="text" id="content"
+          name="content" value="$note.content">
+      </p>
+      <input type="submit" value="Save">
+    </form>
+    <a href="/">Cancel</a>
+  </body>
+</html>
