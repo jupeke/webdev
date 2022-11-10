@@ -4,7 +4,7 @@
 
 3. Create a new folder **static** in project folder. Go into the new folder and create there another folder **images**. That will be the location for saved images.
 
-3. Implement CRUD for images:
+3. Implement CRUD for images (help: [file upload](https://webpy.org/cookbook/fileupload) and [save file](https://webpy.org/cookbook/storeupload)):
     * save image (the file to the *images* folder, the details to the db)
     * show images in the notes table (in the same cell with the content). To do this nicely, create a class *Note* in app.py with properties *id*, *content* and *imagehtml*. A list of notes is then sent to the home.html template. 
     * add *Edit* and *Delete* buttons for each image and make them work. Ask for confirmation before deletion!
