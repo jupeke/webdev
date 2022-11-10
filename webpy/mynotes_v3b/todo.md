@@ -11,7 +11,7 @@
 3. Implement CRUD for images (help: [file upload](https://webpy.org/cookbook/fileupload) and [save file](https://webpy.org/cookbook/storeupload)):
     * save image (the file to the *images* folder, the details to the db)
     * show images in the notes table (in the same cell with the content). To do this nicely, create a class *Note* in app.py with properties *id*, *content* and *imagehtml*. A list of notes is then sent to the home.html template. 
-    * add *Edit* and *Delete* buttons for each image and make them work. Ask for confirmation before deletion!
+    * add an *Delete* buttons for each image and make them work. Ask for confirmation before deletion!
 
 4. Take two screenshots of the following situations: 
     * home view after inserting two small images

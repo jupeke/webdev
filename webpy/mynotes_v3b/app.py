@@ -43,6 +43,8 @@ web.config.session_parameters['expired_message'] = 'Session expired'
 
 class Home:
     filedir = 'static/images' # the directory to store the file in.
+    imgmaxwidth = 150
+    imgmaxheight = 150
     def GET(self):
         dbnotes = db.select('notes')
         notes = []
@@ -97,26 +99,34 @@ class Home:
                     filename=filename)
 
                 # Resizing by using Image class (PIL):
-                try:
-                    img = Image.open(imgpath) 
-                    
-                    #In-place modification, preserves the orig ratio
-                    img.thumbnail((150, 150)) 
-                    
-                    img.save(imgpath)
-                except IOError:
-                    pass
+                self.img_resize(self.imgmaxwidth, self.imgmaxheight, imgpath)
+
+    # Resizing by using Image class (PIL):
+    def img_resize(self, maxw, maxh, imgpath):
+        try:
+            img = Image.open(imgpath) 
+            #In-place modification, preserves the orig ratio
+            img.thumbnail((maxw, maxh)) 
+            img.save(imgpath)
+        except IOError:
+            pass
                 
     def get_images_of_a_note(self, id_note):
         imagehtml = ""
-        w = 150
-        h = 100
         myvar = dict(id=id_note)    # To prevent SQL injection attacks.
         images = db.select('imagedetails', vars=myvar, where="id_note=$id")
         for image in images:
             imgsrc = self.filedir+"/"+image.filename
-            imagehtml += "<img src='{}' width='{}px' height='{}px'>".\
-                format(imgsrc,w,h)
+            #------------------------------------------------------------------
+            # Resize if too big:
+            '''try:
+                img = Image.open(imgsrc)
+                if (img.width > self.imgmaxwidth or img.height > self.imgmaxheight):
+                    self.img_resize(self.imgmaxwidth, self.imgmaxheight, imgsrc)
+            except IOError:
+                pass'''
+            #------------------------------------------------------------------
+            imagehtml += "<img src='{}'>".format(imgsrc)
         return imagehtml
             
 class Newnote:
