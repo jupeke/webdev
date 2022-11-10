@@ -1,4 +1,4 @@
-# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\mynotes_v3
+# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\mynotes_v3b
 from random import randint
 from PIL import Image
 import web
