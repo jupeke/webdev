@@ -12,7 +12,8 @@ urls = (
     '/login','Login',
     '/logout','Logout',
     '/signup', 'Signup',
-    '/upload', 'Upload'
+    '/upload', 'Upload',
+    '/image','Imagesave',
 )
 
 # Connect to db:
@@ -62,54 +63,7 @@ class Home:
         return render.home(user, notes, message)   # the template name
     
     def POST(self):
-        if session.get('logged_in', False):
-            user = session.username
-        else:
-            user = "none"
-        i = web.input(todo="show",myfile={})
-        todo = i.todo
-        note_id = i.note_id
-        if todo == "delete":
-            note = "piip"
-            raise web.seeother('/confirm_delete?note_id='+note_id)
-        elif todo == "update":
-            raise web.seeother('/edit?note_id='+note_id)
-        elif todo == "addimg":
-            self.saveimage(i)
-            raise web.seeother('/')
-        else:    # Default todo == "show"
-            raise web.seeother('/') 
-
-    # Saves the image file, resizes it to max 200px and saves the
-    # details to db:
-    def saveimage(self, wi):
-        if 'myfile' in wi: # to check if the file-object is created
-            filepath = wi.myfile.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
-            filename = filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
-            extension = filename.split('.')[-1] 
-            if extension in ["jpg", "jpeg", "png", "gif"]:
-                imgpath = self.filedir +'/'+ filename
-                # creates the file where the uploaded file should be stored. Note:
-                # the 'wb' is a must! Gives you write bytes permissions, I suppose.
-                fout = open(imgpath,'wb') 
-                fout.write(wi.myfile.file.read()) # writes the uploaded file to the newly created file.
-                fout.close() # closes the file, upload complete.
-                # Save details into db:
-                id=db.insert('imagedetails', id_note=wi.note_id, \
-                    filename=filename)
-
-                # Resizing by using Image class (PIL):
-                self.img_resize(self.imgmaxwidth, self.imgmaxheight, imgpath)
-
-    # Resizing by using Image class (PIL):
-    def img_resize(self, maxw, maxh, imgpath):
-        try:
-            img = Image.open(imgpath) 
-            #In-place modification, preserves the orig ratio
-            img.thumbnail((maxw, maxh)) 
-            img.save(imgpath)
-        except IOError:
-            pass
+        raise web.seeother('/') 
                 
     def get_images_of_a_note(self, id_note):
         imagehtml = ""
@@ -119,17 +73,17 @@ class Home:
             imgsrc = self.filedir+"/"+image.filename
             #------------------------------------------------------------------
             # Resize if too big:
-            try:
+            '''try:
                 img = Image.open(imgsrc)
                 if (img.width > self.imgmaxwidth or img.height > self.imgmaxheight):
                     self.img_resize(self.imgmaxwidth, self.imgmaxheight, imgsrc)
             except IOError:
-                pass
+                pass'''
             #------------------------------------------------------------------
             imagehtml += "<img src='{}'>".format(imgsrc)
         return imagehtml
         
-class Image:
+class Imagesave:
     filedir = 'static/images' # the directory to store the file in.
     def POST(self):
         i = web.input(myfile={})
@@ -155,7 +109,7 @@ class Image:
                     filename=filename)
 
                 # Resizing by using Image class (PIL):
-                self.img_resize(self.imgmaxwidth, self.imgmaxheight, imgpath)
+                self.img_resize(Home.imgmaxwidth, Home.imgmaxheight, imgpath)
 
     # Resizing by using Image class (PIL):
     def img_resize(self, maxw, maxh, imgpath):
@@ -202,6 +156,9 @@ class Confirm_delete:
         note_id = i.note_id
         myvar = dict(id=note_id)
         db.delete('notes', vars=myvar, where="id=$id")
+
+        #Delete images, too!
+
         raise web.seeother('/')
 
 class Login:
@@ -237,7 +194,7 @@ class Logout:
 
 class Signup:
     def GET(self):
-        raise web.seeother()
+        return render.signup()
     def POST(self):
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \

@@ -166,7 +166,7 @@ class Logout:
 
 class Signup:
     def GET(self):
-        raise web.seeother()
+        return render.signup()
     def POST(self):
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
