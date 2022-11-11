@@ -26,3 +26,18 @@ body{
     color: red;
     font-weight: bold;
   }
+  a {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    padding: 0px 5px 0px 5px;
+    margin: 2px;
+    text-rendering: auto;
+    border-radius: 3px;
+    border: 1px solid black;
+    background-color: buttonface;
+    font-family:Calibri, 'Trebuchet MS', sans-serif;
+  }
+  a:hover{
+    background-color: rgb(250, 250, 250);
+  }

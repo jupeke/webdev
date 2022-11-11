@@ -119,16 +119,54 @@ class Home:
             imgsrc = self.filedir+"/"+image.filename
             #------------------------------------------------------------------
             # Resize if too big:
-            '''try:
+            try:
                 img = Image.open(imgsrc)
                 if (img.width > self.imgmaxwidth or img.height > self.imgmaxheight):
                     self.img_resize(self.imgmaxwidth, self.imgmaxheight, imgsrc)
             except IOError:
-                pass'''
+                pass
             #------------------------------------------------------------------
             imagehtml += "<img src='{}'>".format(imgsrc)
         return imagehtml
-            
+        
+class Image:
+    filedir = 'static/images' # the directory to store the file in.
+    def POST(self):
+        i = web.input(myfile={})
+        self.saveimage(i)
+        raise web.seeother('/')
+
+    # Saves the image file, resizes it to max 200px and saves the
+    # details to db:
+    def saveimage(self, wi):
+        if 'myfile' in wi: # to check if the file-object is created
+            filepath = wi.myfile.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
+            filename = filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+            extension = filename.split('.')[-1] 
+            if extension in ["jpg", "jpeg", "png", "gif"]:
+                imgpath = self.filedir +'/'+ filename
+                # creates the file where the uploaded file should be stored. Note:
+                # the 'wb' is a must! Gives you write bytes permissions, I suppose.
+                fout = open(imgpath,'wb') 
+                fout.write(wi.myfile.file.read()) # writes the uploaded file to the newly created file.
+                fout.close() # closes the file, upload complete.
+                # Save details into db:
+                id=db.insert('imagedetails', id_note=wi.note_id, \
+                    filename=filename)
+
+                # Resizing by using Image class (PIL):
+                self.img_resize(self.imgmaxwidth, self.imgmaxheight, imgpath)
+
+    # Resizing by using Image class (PIL):
+    def img_resize(self, maxw, maxh, imgpath):
+        try:
+            img = Image.open(imgpath) 
+            #In-place modification, preserves the orig ratio
+            img.thumbnail((maxw, maxh)) 
+            img.save(imgpath)
+        except IOError:
+            pass
+        
 class Newnote:
     def GET(self):
         return render.note_new()

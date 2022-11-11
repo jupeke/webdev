@@ -11,7 +11,8 @@ urls = (
     '/login','Login',
     '/logout','Logout',
     '/signup', 'Signup',
-    '/upload', 'Upload'
+    '/upload', 'Upload',
+    '/image','Image',
 )
 
 # Connect to db:
@@ -59,23 +60,26 @@ class Home:
         return render.home(user, notes, message)   # the template name
     
     def POST(self):
-        if session.get('logged_in', False):
-            user = session.username
-        else:
-            user = "none"
-        i = web.input(todo="show",myfile={})
-        todo = i.todo
-        note_id = i.note_id
-        if todo == "delete":
-            note = "piip"
-            raise web.seeother('/confirm_delete?note_id='+note_id)
-        elif todo == "update":
-            raise web.seeother('/edit?note_id='+note_id)
-        elif todo == "addimg":
-            self.saveimage(i)
-            raise web.seeother('/')
-        else:    # Default todo == "show"
-            raise web.seeother('/') 
+        raise web.seeother('/') 
+    
+    def get_images_of_a_note(self, id_note):
+        imagehtml = ""
+        w = 150
+        h = 100
+        myvar = dict(id=id_note)    # To prevent SQL injection attacks.
+        images = db.select('imagedetails', vars=myvar, where="id_note=$id")
+        for image in images:
+            imgsrc = self.filedir+"/"+image.filename
+            imagehtml += "<img src='{}' width='{}px' height='{}px'>".\
+                format(imgsrc,w,h)
+        return imagehtml
+            
+class Image:
+    filedir = 'static/images' # the directory to store the file in.
+    def POST(self):
+        i = web.input(myfile={})
+        self.saveimage(i)
+        raise web.seeother('/')
 
     def saveimage(self, wi):
         if 'myfile' in wi: # to check if the file-object is created
@@ -91,19 +95,7 @@ class Home:
                 # Save details into db:
                 id=db.insert('imagedetails', id_note=wi.note_id, \
                     filename=filename)
-                
-    def get_images_of_a_note(self, id_note):
-        imagehtml = ""
-        w = 150
-        h = 100
-        myvar = dict(id=id_note)    # To prevent SQL injection attacks.
-        images = db.select('imagedetails', vars=myvar, where="id_note=$id")
-        for image in images:
-            imgsrc = self.filedir+"/"+image.filename
-            imagehtml += "<img src='{}' width='{}px' height='{}px'>".\
-                format(imgsrc,w,h)
-        return imagehtml
-            
+        
 class Newnote:
     def GET(self):
         return render.note_new()
