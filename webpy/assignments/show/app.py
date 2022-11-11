@@ -1,9 +1,9 @@
+# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\assignments\show
 from random import randint
 import web
 render = web.template.render('templates/')
 urls = (
     '/', 'Home',
-    '/new','Newnote',
 )
 
 # Connect to db:
@@ -29,12 +29,6 @@ class Home:
 class Newnote:
     def GET(self):
         return render.note_new()
-    '''
-    def POST(self):
-        i = web.input()
-        n=db.insert('notes', content=i.content)
-        raise web.seeother('/')
-    '''
 
 
 if __name__ == "__main__":
