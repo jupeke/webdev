@@ -6,8 +6,15 @@ $def with (note)
 
   <body>
     <h1>Edit Note</h1>
-
-    
+    <form action="/edit?note_id=$note.id" 
+      method="post">
+      <p>
+        <label for="note">Edit note:</label>
+        <input type="text" id="note" 
+        name="content" value="$note.content">
+      </p>
+      <input type="submit" value="Save">
+    </form>
     <a href="/">Cancel</a>
   </body>
 </html>

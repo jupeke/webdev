@@ -28,8 +28,8 @@ $def with (notes)
             $note.content
           </td>
           <td>
-            <form action="/?note_id=$note.id&todo=update" method="post">
-              <input type="submit" id="delete" value="Edit">
+            <form action="/edit?note_id=$note.id" method="post">
+              <input type="submit" value="Edit">
             </form>
           </td>
         </tr>
