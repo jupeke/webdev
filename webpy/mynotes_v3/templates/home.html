@@ -31,13 +31,11 @@ $def with (user, notes, message)
             <p>$note.content</p>
             <p>$:note.imagehtml</p>
           </td>
+          <td id="note$note.id">$note.content</td>
           <td>
-            <form action="/?note_id=$note.id&todo=update" method="post">
-              <input type="submit" id="delete" value="Edit">
-            </form>
-            <form action="/?note_id=$note.id&todo=delete" method="post">
-              <input type="submit" id="delete" value="Delete">
-            </form>
+            <a href="/edit?note_id=$note.id">Edit</a>
+            <a href="/confirm_delete?note_id=$note.id">Delete</a></td>
+          <td>
             <form action="/?note_id=$note.id&todo=addimg" method="post"
               enctype="multipart/form-data">
               <input type="file" name="myfile">

@@ -21,8 +21,7 @@ class Home:
         return render.home(notes)   # the template name
     
     def POST(self):
-        i = web.input(todo="show")
-        todo = i.todo
+        i = web.input()
         # etc ...
             
 class Newnote:

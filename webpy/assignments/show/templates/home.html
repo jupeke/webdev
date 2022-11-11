@@ -14,6 +14,21 @@ $def with (notes)
       input{
         padding: 3px;
         margin: 3px;
+      } 
+      a {
+        display: inline-block;
+        text-decoration: none;
+        color: black;
+        padding: 0px 5px 0px 5px;
+        margin: 2px;
+        text-rendering: auto;
+        border-radius: 3px;
+        border: 1px solid black;
+        background-color: buttonface;
+        font-family:Calibri, 'Trebuchet MS', sans-serif;
+      }
+      a:hover{
+        background-color: rgb(250, 250, 250);
       }
     </style>
   </head>
@@ -24,14 +39,8 @@ $def with (notes)
     <table>
       $for note in notes:
         <tr>
-          <td id="note$note.id">
-            $note.content
-          </td>
-          <td>
-            <form action="/edit?note_id=$note.id" method="post">
-              <input type="submit" value="Edit">
-            </form>
-          </td>
+          <td id="note$note.id">$note.content</td>
+          <td><a href="/edit?note_id=$note.id">Edit</a></td>
         </tr>
     </table>
 

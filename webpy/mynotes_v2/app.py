@@ -51,20 +51,7 @@ class Home:
         return render.home(user, notes, message)   # the template name
     
     def POST(self):
-        if session.get('logged_in', False):
-            user = session.username
-        else:
-            user = "none"
-        i = web.input(todo="show")
-        todo = i.todo
-        if todo == "delete":
-            note_id = i.note_id
-            raise web.seeother('/confirm_delete?note_id='+note_id)
-        elif todo == "update":
-            note_id = i.note_id
-            raise web.seeother('/edit?note_id='+note_id)
-        elif todo == "show":    # Default
-            raise web.seeother('/') 
+        raise web.seeother('/') 
             
 class Newnote:
     def GET(self):
