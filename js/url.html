@@ -14,12 +14,17 @@
         want to update the state object or URL of the current history 
         entry in response to some user action.
         
-        replaceState(stateObj, unused, url)
-        stateObj can be null, unused is traditionally left "" (it's not
+        replaceState(stateObj, title, url)
+        stateObj can be null, title is traditionally left "" (it's not
         in use at the moment) and url is the new url.
 
+        // This is the same but creates a new history entry instead of 
+        // replacing an old one.
+        pushState(stateObj, title, url)
+
+
         This does not redirect.
-        Needs a http server to work, it seems!
+        Needs a http server to work, it seems! GitHub Pages ok, for instance.
         */
         function changeUrl(){
             let urlCurrent = window.location.href;

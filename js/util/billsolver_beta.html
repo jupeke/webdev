@@ -125,7 +125,6 @@
             }
             // Initate array with the right sizes and empty values:
             initiate(cols,rows){
-                //alert("(cols,rows)=("+this.cols+","+this.rows+")");
                 let table = new Array(rows);
                 for(let i = 0; i < table.length; i++){
                     table[i] = new Array(cols);
@@ -377,6 +376,15 @@
                     numb_of_figures = this.vues.get_elem("rounding").value;
                 }
             }
+
+            set_numb_of_all(){
+                numb_of_all = 3;    // Global variable
+                if (this.persons.length > 0){
+                    numb_of_all = this.persons.length;
+                }
+                return numb_of_all;
+            }
+
             // Adds a person row to the table at the last position.
             add_person(){
                 let table = this.vues.get_elem("persons_table");
@@ -564,10 +572,11 @@
             if(controller === UNKNOWN){
                 controller = new Controller();
             }
+            controller.persons = controller.urler.get_persons_in_url();
             controller.set_minimum();
             controller.set_rounding();
+            let numb = controller.set_numb_of_all();
             let vues = controller.vues;
-            let numb = numb_of_all;
             let tbl = vues.make_infotable(numb);
             vues.set_content("persons",tbl);
         }
