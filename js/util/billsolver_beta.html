@@ -549,16 +549,24 @@
                 let parts = rawurl.split("?");  // Splits in two if ? existx
                 if (parts.length > 1){
                     let infostring = parts[1];
+                    alert(infostring);
                     let personstrings = infostring.split("&");
                     personstrings.forEach(element => {
                         let personparts = element.split("=")
                         let pnumber = personparts[0].substring(1);
+                        let paid = 1;
+                        let pname = "-";
+                        let weight = 1;
+                        alert(pnumber)
                         let infoparts = personparts[1].split("_");
                         if (infoparts.length === 3){
-                            let pname = infoparts[0];
-                            let paid = infoparts[1];
-                            let weight = infoparts[2];
+                            pname = infoparts[0];
+                            paid = infoparts[1];                            
+                            weight = infoparts[2];
                         }
+                        alert(pname);    
+                        alert(paid);    
+                        alert(weight);
                         let person = new Person(pnumber, pname, paid, weight);
                         persons.push(person);
                     });
@@ -605,7 +613,7 @@
   </head>
   <body onload="init()">
     <a class="home" href="../../index.html">Home</a>
-    <h1>Bill Solver 2</h1>
+    <h1>Bill Solver 3</h1>
     <p id="guide">This application makes it easy to know how much each owes whom.
       No information is saved (reload clears/resets all fields!).</p>
 
