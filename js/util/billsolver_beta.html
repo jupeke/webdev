@@ -178,6 +178,7 @@
                 this.total = 0;
                 this.weights_total = 0;
                 this.vues = new Views();
+                this.urler = new UrlHandler;
             }
             // Reads the personal details and returns an array of person objects.
             // If a value cell (paid/weight) is empty, breaks the loop, gives an
@@ -525,9 +526,11 @@
                         let personparts = element.split("=")
                         let pnumber = personparts[0].substring(1);
                         let infoparts = personparts[1].split("_");
-                        let name = infoparts[0];
-                        let paid = infoparts[1];
-                        let weight = infoparts[2];
+                        if (intoparts.length === 3){
+                            let name = infoparts[0];
+                            let paid = infoparts[1];
+                            let weight = infoparts[2];
+                        }
                         let person = new Person(pnumber, name, paid, weight);
                         persons.push(person);
                     });
@@ -535,19 +538,25 @@
                 return persons;
             }
             // Adds the person details to the url without redirecting:
-            set_url_with_person_info(persons){
-                let urlCurrent = window.location.href;
+            set_url_with_person_info(persons_arr){
+                let url_current = window.location.href;
                 // If there is an info part already, remove it:
-                let
+                let url_parts = urlCurrent.split("?");
+                let url_base = url_parts[0];
+                let url_new = url_base + "?";
 
-                persons.forEach(p => {
+                for(let i = 0; i < persons_arr.length; i++){
+                    url_new += persons_arr[i].make_url_string();
+                    if (i < persons_arr.length-1){
+                        url_new += "&";
+                    }
+                }
+                const title = '';      // Usually not in use.
+                const state = null;    // Not needed.
 
-                });
-                let nextURL = urlCurrent+'?p1=Jaakko_10_1&p2=Eila_20_2';
-                const nextTitle = '';      // Usually not in use.
-                const nextState = null;
-                // This will create a new entry in the browser's history, without reloading
-                window.history.pushState(nextState, nextTitle, nextURL);
+                // This will create a new entry in the browser's history, 
+                // without reloading. Changes the visible url, too.
+                window.history.pushState(state, title, url_new);
             }
         }
 
