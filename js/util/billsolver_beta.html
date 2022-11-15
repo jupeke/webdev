@@ -615,6 +615,7 @@
       All the given values are written into the URL, so you can save it by
         bookmarking the page. The browser usually saves the URL to its history, 
         so empty it if you don't want to leave any traces.</p>
+        <p>The details are not saved in any other way.</p>
 
     <table id="settings">
       <tr id="question_number">
@@ -623,10 +624,14 @@
           <div id="select_participants" class="inline">
             <script>
                 // Seems this runs before onload, that's why the check.
+                let numb = 3;
                 if(controller === UNKNOWN){
                     controller = new Controller();
                 }
-                document.write(controller.vues.make_select_participants(3));
+                if (controller.persons.length > 0){
+                    numb = controller.persons.length;
+                }
+                document.write(controller.vues.make_select_participants(numb));
             </script>
           </div>
           <button id="add1" onclick="controller.add_person()">+</button>
