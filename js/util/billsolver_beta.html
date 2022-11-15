@@ -545,7 +545,7 @@
             // url. The url is of form "?p1=Jaakko_10_1&p2=Eila_20_2"
             get_persons_in_url(){
                 let persons = [];
-                let rawurl = this.get_url();
+                let rawurl = decodeURI(this.get_url());
                 let parts = rawurl.split("?");  // Splits in two if ? existx
                 if (parts.length > 1){
                     let infostring = parts[1];
