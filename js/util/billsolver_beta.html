@@ -343,6 +343,7 @@
                     this.payments.set("<span class='tip'>Blue pays to green</span>",1,1);
                     this.write_names_to_table();
                     this.vues.set_content("result", this.payments.toHTML());
+                    this.urler.set_url_with_person_info();
                 }
             }
             // Add the names to the payments table (the rich row 1, the poor column 1)
@@ -441,7 +442,9 @@
             constructor(){
 
             }
-            make_infotable(numb){
+            // Returns the HTML table markup. If persons is not empty, its 
+            // size is used instead of numb. Otherwise numb.
+            make_infotable(numb, persons){
                 let html = "<table id='persons_table'>";
                 html += "<tr><th></th><th>Name (optional)</th>"+
                     "<th title='How much the person has paid? No unit"+
@@ -449,19 +452,36 @@
                     "<th title='Any number, only meaningfull when compared to others'>"+
                     "Weight</th></tr>";
                 let index = 0;
+
+                let persons_found = false;
+                if (persons.length > 0){
+                    numb = persons.length;
+                    persons_found = true;
+                }
+
                 for(var i = 0; i < numb; i++){
                     index++;
+                    let paidval = i+3;
+                    let nameval = "";
+                    let weightval = "1";
+                    let person = null;
+                    if (persons_found){
+                        person = persons[i];
+                        paidval = person.paid;
+                        nameval = person.name;
+                        weightval = person.weight;
+                    }
                     html += "<tr><td>Person "+index+"</td>"+
                         "<td class='nopadding'>"+
                             "<input class='wide_input' "+
-                            "id='name_"+index+"' type='text'>"+
+                            "id='name_"+index+"' type='text' value='"+nameval+"'>"+
                         "</td>"+
                         "<td class='nopadding'>"+
-                            "<input id='paid_"+index+"' type='text' value='"+(i+3)+
+                            "<input id='paid_"+index+"' type='text' value='"+paidval+
                             "' class='centered'>"+
                         "</td>"+
                         "<td class='nopadding'>"+
-                            "<input id='weight_"+index+"' type='text' value='1'"+
+                            "<input id='weight_"+index+"' type='text' value='"+weightval+"'"+
                             " class='centered'>"+
                         "</td>"+
                         "</tr>";
@@ -472,13 +492,13 @@
             show_table(){
                 let numb = this.get_elem("numb_of_all").value;
                 numb_of_all = numb;
-                let tbl = this.make_infotable(numb);
+                let tbl = this.make_infotable(numb, []);
                 this.set_content("persons",tbl);
             }
 
             make_select_participants(selected){
                 let html = '<select id="numb_of_all" '+
-                    ' onchange="controller.vues.show_table(this.value)">';
+                    ' onchange="controller.vues.show_table(this.value, [])">';
 
                 html += this.create_option_elems(100, selected);
 
@@ -535,11 +555,11 @@
                         let pnumber = personparts[0].substring(1);
                         let infoparts = personparts[1].split("_");
                         if (intoparts.length === 3){
-                            let name = infoparts[0];
+                            let pname = infoparts[0];
                             let paid = infoparts[1];
                             let weight = infoparts[2];
                         }
-                        let person = new Person(pnumber, name, paid, weight);
+                        let person = new Person(pnumber, pname, paid, weight);
                         persons.push(person);
                     });
                 } 
@@ -577,7 +597,7 @@
             controller.set_rounding();
             let numb = controller.set_numb_of_all();
             let vues = controller.vues;
-            let tbl = vues.make_infotable(numb);
+            let tbl = vues.make_infotable(numb, controller.persons);
             vues.set_content("persons",tbl);
         }
 
