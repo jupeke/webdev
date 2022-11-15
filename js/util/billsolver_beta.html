@@ -343,7 +343,7 @@
                     this.payments.set("<span class='tip'>Blue pays to green</span>",1,1);
                     this.write_names_to_table();
                     this.vues.set_content("result", this.payments.toHTML());
-                    this.urler.set_url_with_person_info();
+                    this.urler.set_url_with_person_info(this.persons);
                 }
             }
             // Add the names to the payments table (the rich row 1, the poor column 1)
