@@ -1,0 +1,14 @@
+body {
+    background-color: rgb(218, 163, 91);
+    font-size: 150%;
+    color:rgb(88, 78, 64)
+  }
+  h1 {
+    color: red;
+  }
+  p {
+    background-color: aquamarine;
+    padding: 20px;
+    border-radius: 30px;
+    border: red solid 5px;
+  }
