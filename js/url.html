@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <p>This page is to test how to get and set the url with JS.</p>
+    <script>
+        /*
+        The History.replaceState() method modifies the current history 
+        entry, replacing it with the state object and URL passed in the 
+        method parameters. This method is particularly useful when you 
+        want to update the state object or URL of the current history 
+        entry in response to some user action.
+        
+        replaceState(stateObj, unused, url)
+        stateObj can be null, unused is traditionally left "" (it's not
+        in use at the moment) and url is the new url.
+
+        This does not redirect.
+        Needs a http server to work, it seems!
+        */
+        function changeUrl(){
+            let urlCurrent = window.location.href;
+            let nextURL = urlCurrent+'?p1=Jaakko_10_1&p2=Eila_20_2';
+            const nextTitle = 'My new page title';      // Usually not in use.
+            const nextState = { additionalInformation: 'URL with JS' };
+            // This will create a new entry in the browser's history, without reloading
+            window.history.pushState(nextState, nextTitle, nextURL);
+        }
+
+        // This redirects, too:
+        function changeUrl2(){
+            var newUrl = "www.opinnot.net";
+            window.location.href = newUrl;
+        }
+    </script>
+    <button onclick="changeUrl()">Click</button>
+</body>
+</html>
