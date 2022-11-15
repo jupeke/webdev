@@ -603,6 +603,7 @@
             let vues = controller.vues;
             let tbl = vues.make_infotable(numb, controller.persons);
             vues.set_content("persons",tbl);
+            vues.set_content("select_participants", vues.make_select_participants(numb));
         }
 
     </script>
@@ -622,7 +623,7 @@
         <td>
           <div id="select_participants" class="inline">
             <script>
-                let numb = 3;   // Default
+                /*let numb = 3;   // Default
                 // Seems this runs before onload, that's why the check.
                 if(controller === UNKNOWN){
                     controller = new Controller();
@@ -631,7 +632,7 @@
                     numb = controller.persons.length;
                     alert("persons: "+numb)
                 }
-                document.write(controller.vues.make_select_participants(numb));
+                document.write(controller.vues.make_select_participants(numb));*/
             </script>
           </div>
           <button id="add1" onclick="controller.add_person()">+</button>
