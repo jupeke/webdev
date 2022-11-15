@@ -545,11 +545,10 @@
             // url. The url is of form "?p1=Jaakko_10_1&p2=Eila_20_2"
             get_persons_in_url(){
                 let persons = [];
-                let rawurl = this.get_url()
+                let rawurl = this.get_url();
                 let parts = rawurl.split("?");  // Splits in two if ? existx
                 if (parts.length > 1){
                     let infostring = parts[1];
-                    alert(infostring);
                     let personstrings = infostring.split("&");
                     personstrings.forEach(element => {
                         let personparts = element.split("=")
@@ -557,16 +556,12 @@
                         let paid = 1;
                         let pname = "-";
                         let weight = 1;
-                        alert(pnumber)
                         let infoparts = personparts[1].split("_");
                         if (infoparts.length === 3){
                             pname = infoparts[0];
                             paid = infoparts[1];                            
                             weight = infoparts[2];
                         }
-                        alert(pname);    
-                        alert(paid);    
-                        alert(weight);
                         let person = new Person(pnumber, pname, paid, weight);
                         persons.push(person);
                     });
