@@ -73,6 +73,17 @@
       .inline{
           display: inline;
       }
+      a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 5px;
+        margin: 2px;
+        border-radius: 5px;
+        background-color: #eee;
+      }
+      a:hover{
+        background-color: #ddd;
+      }
     </style>
     <script>
         const UNKNOWN = -123456;
@@ -552,7 +563,8 @@
                 return window.location.href;
             }
             // Returns an array with Person objects retrieved from the
-            // url. The url is of form "?p1=Jaakko_10_1&p2=Eila_20_2"
+            // url. The url is of the following format:
+            // "?min=0.1&round=0.1&p1=Jaakko_10_1&p2=Eila_20_2"
             get_persons_in_url(){
                 let persons = [];
                 let rawurl = decodeURI(this.get_url());
@@ -560,7 +572,11 @@
                 if (parts.length > 1){
                     let infostring = parts[1];
                     let personstrings = infostring.split("&");
-                    personstrings.forEach(element => {
+                    let numb = personstrings.length;
+
+                    // Persons begin at the 3rd element:
+                    for (let i = 2; i < numb; i++){
+                        let element = personstrings[i];
                         let personparts = element.split("=")
                         let pnumber = personparts[0].substring(1);
                         let paid = 1;
@@ -574,7 +590,7 @@
                         }
                         let person = new Person(pnumber, pname, paid, weight);
                         persons.push(person);
-                    });
+                    }
                 } 
                 return persons;
             }
@@ -623,7 +639,7 @@
     <h1>Bill Solver</h1>
     <p id="guide">This application makes it easy to know how much each owes whom.
       All the given values are written into the URL, so you can save it by
-        bookmarking the page. The browser usually saves the URL to its history, 
+        bookmarking the page. The browser usually saves the URL history, 
         so empty it if you don't want to leave any traces.</p>
         <p id="guide">The details are not saved in any other way.</p>
 

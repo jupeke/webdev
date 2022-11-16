@@ -63,6 +63,10 @@ class CodeFormatter {
     // After this the code contains a lot of html markup which makes
     // it more difficult to go on. Probably a different approuch needed.
     //formattedCode = this.formatOperators(formattedCode);
+    /**
+     * Above does not work because in the code there might be
+     * code like x < 10. These "<" signs should
+     */
 
     return formattedCode;
   }
