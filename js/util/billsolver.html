@@ -89,10 +89,13 @@
         const UNKNOWN = -123456;
         const EMPTY = "empty";
         const ERROR = "error";
-        var numb_of_all = 3;  // Defaults
+        const DEFAULT_NUMB_PERSONS = 3;
+        const DEFAULT_MIN_PAYMENT = 1;
+        const DEFAULT_ROUNDING = 0; 
+        var numb_of_all = DEFAULT_NUMB_PERSONS;
         var controller = UNKNOWN;
-        var min_payment = 1;
-        var numb_of_figures = 1;
+        var min_payment = DEFAULT_MIN_PAYMENT;
+        var numb_of_figures = DEFAULT_ROUNDING;
 
         // A 2d array, works as a cols times rows table
         class Table{
@@ -360,7 +363,8 @@
                     this.payments.set("<span class='tip'>Blue pays to green</span>",1,1);
                     this.write_names_to_table();
                     this.vues.set_content("result", this.payments.toHTML());
-                    this.urler.set_url_with_person_info(this.persons);
+                    this.urler.set_url_with_data(
+                        min_payment, numb_of_figures, this.persons);
                 }
             }
             // Add the names to the payments table (the rich row 1, the poor column 1)
@@ -386,6 +390,7 @@
                 } else{
                     min_payment = this.vues.get_elem("minimum").value;
                 }
+                this.calculate();
             }
             set_rounding(number){
                 if(number){
@@ -393,10 +398,11 @@
                 } else{
                     numb_of_figures = this.vues.get_elem("rounding").value;
                 }
+                this.calculate();
             }
 
             set_numb_of_all(){
-                numb_of_all = 3;    // Global variable
+                numb_of_all = DEFAULT_NUMB_PERSONS;    // Global variable
                 if (this.persons.length > 0){
                     numb_of_all = this.persons.length;
                 }
@@ -527,6 +533,48 @@
                 return html;
             }
 
+            /**
+             * Returns the HTML for a select element for minimum payment.
+             */ 
+            make_select_minimum(selected_value){
+                let html = '<select id="minimum" '+
+                    ' onchange="controller.set_minimum(this.value)">';
+                let values = ["0.01","0.1","1","10","100"];
+                let contents = values;
+                html += this.create_option_elems_with_value_arrays(
+                    values, contents, selected_value);
+
+                html += '</select>';
+                return html;
+            }
+
+            /**
+             * Returns the HTML for a select element for rounding.
+             */ 
+            make_select_rounding(selected_value){
+                let html = '<select id="rounding" '+
+                    ' onchange="controller.set_rounding(this.value)">';
+                let values = ["2","1","0","-1","-2"];
+                let contents = ["0.01","0.1","1","10","100"];
+                html += this.create_option_elems_with_value_arrays(
+                    values, contents, selected_value);
+
+                html += '</select>';
+                return html;
+            }   
+
+            /**
+             * Sets the selected item of an select element. Give the id of the 
+             * select element and the expected value (of an item) as parameters.
+             * Thanks: https://alvarotrigo.com/blog/javascript-select-option/
+             */
+            set_selected(id_select, value_item){
+                let elem = document.querySelector('#'+id_select);
+                if (elem){
+                    $select.value = value_item;
+                }
+            }
+
             // General help methods to handle HTML and DOM
             get_elem(id){
                 return document.getElementById(id);
@@ -540,19 +588,32 @@
                 }
             }
             // Helps with many similar options:
-            add_option_elem(val, def){
+            add_option_elem(val, content, selected_value){
                 var selected = "";
-                if (val === def){
+                if (val == selected_value){
                     selected = 'selected="selected"';
                 }
-                return '<option value="'+val+'" '+selected+'>'+val+'</option>';
+                return '<option value="'+val+'" '+selected+'>'+content+'</option>';
             }
 
             // Options with numbers 1-number:
-            create_option_elems(number, def){
+            create_option_elems(number, selected_value){
                 var options_html = "";
                 for(var i = 0; i < number; i++){
-                    options_html += this.add_option_elem(i+1,def);
+                    options_html += this.add_option_elem(i+1,i+1,selected_value);
+                }
+                return options_html;
+            }
+            create_option_elems_with_value_arrays(values, contents, selected_value){
+                var options_html = "";
+                let numb = values.length;
+                for (let i = 0; i < numb; i++){
+                    let val = values[i];
+                    let content = "unknown";
+                    if(contents[i]){
+                        content = contents[i];
+                    }
+                    options_html += this.add_option_elem(val,content,selected_value);
                 }
                 return options_html;
             }
@@ -562,15 +623,77 @@
             get_url(){
                 return window.location.href;
             }
-            // Returns an array with Person objects retrieved from the
-            // url. The url is of the following format:
-            // "?min=0.1&round=0.1&p1=Jaakko_10_1&p2=Eila_20_2"
+
+            /**
+             * Returns the part of URL after "?". If not found, returns
+             * an empty string.
+             */
+            get_infostring(){
+                let infostring = "";
+                let rawurl = decodeURI(this.get_url());
+                let parts = rawurl.split("?");  // Splits in two if ? exists
+                if (parts.length > 1){
+                    infostring = parts[1];
+                }
+                return infostring;
+            }
+            /**
+             * Returns the minimum payable amount retrieved from the
+             * url. The parameter part of a url is of the following format:
+             * "min=0.1&round=0.1&p1=Jaakko_10_1&p2=Eila_20_2"
+             * 
+             * If not found, a default value is given instead (1).
+             */
+             get_min_in_url(){
+                let infostring = this.get_infostring();
+                let min = DEFAULT_MIN_PAYMENT;    // Default
+                if (infostring != ""){
+                    let datastrings = infostring.split("&");
+                    if(datastrings[0]){
+                        let min_cand = datastrings[0].substring(4);  //
+                        let good_values = ["0.01","0.1","1","10","100"];
+
+                        // If the candidate is good:
+                        if (good_values.indexOf(min_cand) > -1){
+                            min = min_cand;
+                        }
+                    }
+                }
+                return min;
+            }
+            /**
+             * Returns the type of rounding retrieved from the
+             * url. The parameter part of a url is of the following format:
+             * "min=0.1&round=0.1&p1=Jaakko_10_1&p2=Eila_20_2"
+             * 
+             * If not found, a default value is given instead (0).
+             */
+             get_roundto_in_url(){
+                let infostring = this.get_infostring();
+                let roundto = DEFAULT_ROUNDING;    // Default
+                if (infostring != ""){
+                    let datastrings = infostring.split("&");
+                    if(datastrings[1]){
+                        let roundto_cand = datastrings[1].substring(6);  //
+                        let good_values = ["-2","-1","0","1","2"];
+
+                        // If the candidate is good:
+                        if (good_values.indexOf(roundto_cand) > -1){
+                            roundto = roundto_cand;
+                        }
+                    }
+                } 
+                return roundto;
+            }
+            /**
+             * Returns an array with Person objects retrieved from the
+             * url. The parameter part of a url is of the following format:
+             * "?min=0.1&round=0.1&p1=Jaakko_10_1&p2=Eila_20_2"
+             */
             get_persons_in_url(){
                 let persons = [];
-                let rawurl = decodeURI(this.get_url());
-                let parts = rawurl.split("?");  // Splits in two if ? existx
-                if (parts.length > 1){
-                    let infostring = parts[1];
+                let infostring = this.get_infostring();
+                if (infostring != ""){
                     let personstrings = infostring.split("&");
                     let numb = personstrings.length;
 
@@ -594,13 +717,17 @@
                 } 
                 return persons;
             }
-            // Adds the person details to the url without redirecting:
-            set_url_with_person_info(persons_arr){
+            // Adds the person details etc to the url without redirecting:
+            set_url_with_data(min, roundto, persons_arr){
                 let url_current = window.location.href;
                 // If there is an info part already, remove it:
                 let url_parts = url_current.split("?");
                 let url_base = url_parts[0];
                 let url_new = url_base + "?";
+
+                // First the minimum and roundto values:
+                url_new += "min="+min+"&";
+                url_new += "round="+roundto+"&";
 
                 for(let i = 0; i < persons_arr.length; i++){
                     url_new += persons_arr[i].make_url_string();
@@ -622,13 +749,15 @@
                 controller = new Controller();
             }
             controller.persons = controller.urler.get_persons_in_url();
-            controller.set_minimum();
-            controller.set_rounding();
+            min_payment = controller.urler.get_min_in_url();
+            numb_of_figures = controller.urler.get_roundto_in_url();
             let numb = controller.set_numb_of_all();
             let vues = controller.vues;
             let tbl = vues.make_infotable(numb, controller.persons);
             vues.set_content("persons",tbl);
             vues.set_content("select_participants", vues.make_select_participants(numb));
+            vues.set_content("select_minimum", vues.make_select_minimum(min_payment));
+            vues.set_content("select_rounding", vues.make_select_rounding(numb_of_figures));
         }
 
     </script>
@@ -640,7 +769,7 @@
     <p id="guide">This application makes it easy to know how much each owes whom.
       All the given values are written into the URL, so you can save it by
         bookmarking the page. The browser usually saves the URL history, 
-        so empty it if you don't want to leave any traces.</p>
+        so empty it if you don't want to go private.</p>
         <p id="guide">The details are not saved in any other way.</p>
 
     <table id="settings">
@@ -655,23 +784,11 @@
 
       <tr id="question_minimum">
         <td><label for="minimum">The smallest amount to pay:</label></td>
-        <td><select id="minimum" onchange="controller.set_minimum(this.value)">
-          <option value="0.01">0.01</option>
-          <option value="0.1">0.1</option>
-          <option value="1" selected="selected">1</option>
-          <option value="10">10</option>
-          <option value="100">100</option>
-        </select></td>
+        <td id="select_minimum"></td>
       </tr>
       <tr id="question_round">
         <td><label for="rounding">Round to the nearest:</label></td>
-        <td><select id="rounding" onchange="controller.set_rounding(this.value)">
-          <option value="2">0.01</option>
-          <option value="1">0.1</option>
-          <option value="0" selected="selected">1</option>
-          <option value="-1">10</option>
-          <option value="-2">100</option>
-        </select></td>
+        <td id="select_rounding"></td>
       </tr>
     </table>
     <p><button onclick="controller.calculate()" 
