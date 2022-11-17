@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>My notes</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+  </head>
+
+  <body>
+    <h1>New Note</h1>
+
+    <form action="/new" method="post">
+      <p>
+        <label for="note">New note: </label>
+        <input type="text" id="content" name="content">
+      </p>
+      <input type="submit" value="Save new">
+    </form>
+    <a href="/">Cancel</a>
+  </body>
+</html>

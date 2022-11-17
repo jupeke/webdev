@@ -1,0 +1,43 @@
+body{
+    padding: 0 0 0 5px;
+    margin: 0;
+    border-left: 1cm solid rgb(186, 245, 186);
+    border-top: 0.5cm solid rgb(67, 187, 67);
+  }
+  table{
+    border-collapse: collapse;
+  }
+  td{
+    border: 1px solid grey;
+    padding: 0 10px;
+  }
+  input{
+    padding: 3px;
+    margin: 3px;
+  }
+  #message{
+    color: green;
+    font-weight: normal;
+  }
+  .important{
+    font-weight: bold;
+  }
+  #user{
+    color: red;
+    font-weight: bold;
+  }
+  a {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    padding: 0px 5px 0px 5px;
+    margin: 2px;
+    text-rendering: auto;
+    border-radius: 3px;
+    border: 1px solid black;
+    background-color: buttonface;
+    font-family:Calibri, 'Trebuchet MS', sans-serif;
+  }
+  a:hover{
+    background-color: rgb(250, 250, 250);
+  }

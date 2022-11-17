@@ -1,0 +1,38 @@
+$def with (user, notes, message)
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My notes</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+    <style>
+      
+    </style>
+  </head>
+
+  <body>
+    <div id="login">
+      $if user == "none":
+        <p><a href="/login">Login</a></p>
+        <p><a href="/signup">Signup</a></p>
+      $else:
+        <p>Logged in: <span id="user">$user</span></p>
+        <p><a href="/logout">Logout</a></p>
+      
+    </div>
+    <h1>My Notes</h1>
+    <p><a href="/new">Add new note</a></p>
+    
+    <p id="message">$:message</p>
+    <table>
+      $for note in notes:
+        <tr>
+          <td id="note$note.id">$note.content</td>
+          <td><a href="/edit?note_id=$note.id">Edit</a></td>
+          <td><a href="/confirm_delete?note_id=$note.id">Delete</a></td>
+        </tr>
+    </table>
+  </body>
+</html>
+
+

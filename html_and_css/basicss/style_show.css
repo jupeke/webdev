@@ -1,0 +1,13 @@
+table {
+    border-collapse: collapse;
+}
+body {
+    font-size: 150%;
+    background-color: beige;
+}
+h1 {
+    background-color: aquamarine;
+    padding: 30px;
+    border-radius: 20px;
+    border: red solid 10px;
+}

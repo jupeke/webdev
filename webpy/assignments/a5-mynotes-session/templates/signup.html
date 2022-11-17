@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Sign up</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+  </head>
+
+  <body>
+    <h1>Sign up</h1>
+
+    <form action="/signup" method="post">
+      <p>
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name">
+      </p>
+      <p>
+        <label for="uname">Username: </label>
+        <input type="text" id="uname" name="uname">
+      </p>
+      <p>
+        <label for="pword">Password: </label>
+        <input type="password" id="pword" name="pword">
+      </p>
+      <p>
+        <label for="permission">Permission: </label>
+        <select id="permission" name="permission">
+          <option value="1">Basic</option>
+          <option value="10">Admin</option>
+      </p>
+      <input type="submit" value="Save new user">
+    </form>
+    <a href="/">Cancel</a>
+  </body>
+</html>
