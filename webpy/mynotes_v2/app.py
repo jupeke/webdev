@@ -11,6 +11,7 @@ urls = (
     '/login','Login',
     '/logout','Logout',
     '/signup', 'Signup',
+    '/forbidden','Forbidden',
 )
 
 # Connect to db:
@@ -55,41 +56,58 @@ class Home:
             
 class Newnote:
     def GET(self):
-        return render.note_new()
+        if session.logged_in:
+            return render.note_new()
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        n=db.insert('notes', content=i.content)
-        raise web.seeother('/')
+        if session.logged_in:
+            i = web.input()
+            n=db.insert('notes', content=i.content)
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 
 class Edit:
     def GET(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)    # To prevent SQL injection attacks.
-        notes = db.select('notes', vars=myvar, where="id=$id")
-        return render.note_edit(notes[0])
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)    # To prevent SQL injection attacks.
+            notes = db.select('notes', vars=myvar, where="id=$id")
+            return render.note_edit(notes[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        note_id = i.note_id
-        cont = i.content
-        myvar = dict(id=note_id)    
-        n=db.update('notes', vars=myvar, where="id=$id", content=cont)
-        raise web.seeother('/')
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            cont = i.content
+            myvar = dict(id=note_id)    
+            n=db.update('notes', vars=myvar, where="id=$id", content=cont)
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 
 class Confirm_delete:
     def GET(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)
-        notes = db.select('notes', vars=myvar, where="id=$id")
-        return render.confirm_delete(notes[0])
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            notes = db.select('notes', vars=myvar, where="id=$id")
+            return render.confirm_delete(notes[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)
-        db.delete('notes', vars=myvar, where="id=$id")
-        raise web.seeother('/')
-
+        if session.logged_in:   # False also if session killed.
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            db.delete('notes', vars=myvar, where="id=$id")
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 class Login:
     def GET(self):
         i = web.input(message="")
@@ -118,6 +136,7 @@ class Login:
 class Logout:
     def GET(self):
         n = session.username
+        session.logged_in = False # Not really needed
         session.kill()
         return render.logout("See you again, {}!".format(n))
 
@@ -129,6 +148,10 @@ class Signup:
         id=db.insert('users', name=i.name, username=i.uname, \
             password=i.pword, permission=i.permission)
         raise web.seeother('/login?message=New user "{}" created'.format(i.name))
+
+class Forbidden:
+    def GET(self):
+        return render.forbidden()        
 
 if __name__ == "__main__":
     myapp.run() 
