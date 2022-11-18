@@ -5,7 +5,8 @@ render = web.template.render('templates/')
 urls = (
     '/', 'Home',
     '/new','Newnote',
-    '/edit','Edit'
+    '/edit','Edit',
+    '/delete','Delete',
 )
 
 # Connect to db:
@@ -50,6 +51,20 @@ class Edit:
         cont = i.content
         myvar = dict(id=note_id)
         notes = db.update('notes',vars=myvar,where="id=$id",content=cont)
+        raise web.seeother('/')
+
+class Delete:
+    def GET(self):
+        i = web.input()
+        note_id = i.note_id
+        myvar = dict(id=note_id)
+        notes = db.select('notes',vars=myvar,where="id=$id")
+        return render.confirm_delete(notes[0])
+    def POST(self):
+        i = web.input()
+        note_id = i.note_id
+        myvar = dict(id=note_id)
+        notes = db.delete('notes',vars=myvar,where="id=$id")
         raise web.seeother('/')
 
 if __name__ == "__main__":

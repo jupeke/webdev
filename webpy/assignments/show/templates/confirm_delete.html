@@ -13,6 +13,9 @@ $def with (note)
     <!-- Todo: add here a form containing an submit 
       button only. Pay attention to the action attribute!
     -->
+    <form action="/delete?note_id=$note.id" method="post">
+      <input type="submit" value="Confirm">
+    </form>
     <a href="/">Cancel</a>
   </body>
 </html>
