@@ -18,3 +18,5 @@
 Note: if something does not work (despite your best efforts), add a comment about it below.
 
 ## Your screenshots and comments:
+
+image link example: ![home.html](images/a3-home.png)
