@@ -129,6 +129,7 @@ function f5b(){
   }
   return result;
 }
+
 //=========================================================
 function f6a(){
   var result = "";
@@ -153,13 +154,47 @@ function f6b(){
   return result;
 }
 
+//=========================================================
+function f7a(){
+  var result = "";
+  var students = ["Ellen","Lucas","Mark","Elsa","Bob"];
+  var numb = students.length;
+  for (var i = 0; i < numb; i++){
+    result += students[i];
+    if(i < numb-2){  
+      result += ", ";
+    } else if(i < numb-1){
+      result += " and ";
+    }
+  }
+  return result;
+}
+function f7b(){
+  var result = "";
+  var letters = ["v","r","m","i","p","s","e"];
+  result += letters[3];
+  result += letters[2];
+  result += letters[4];
+  result += letters[1];
+  result += letters[6];
+  result += letters[5];
+  result += letters[5];
+  result += letters[3];
+  result += letters[0];
+  result += letters[6];
+  return result;
+}
+
+
+
+
 //============================================================
 //============================================================
 //=============== End of logical tasks ======================
 //============================================================
 
 // If you add a new function above, just add its name in the array below. That's it!
-var functions = [f1a, f1b, f2a, f2b, f3a,f3b, f4a, f4b, f5a,f5b, f6a,f6b];
+var functions = [f1a, f1b, f2a, f2b, f3a,f3b, f4a, f4b, f5a,f5b, f6a,f6b, f7a,f7b];
 var fShow;
 
 function init(){

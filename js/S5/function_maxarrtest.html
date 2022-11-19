@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+    <h1>Function with parameters</h1>
+    <p>Complete the code below to fulfill the requirements.</p>
+    <script>
+        //====================================================
+        /**
+         * Returns the biggest number of the parameter array.
+         * If the parameter is not an array or it's empty or
+         * at least one of the elements is not a number,
+         * returns "bad input".
+         */ 
+        function maxInArray(array){
+            // write the code here.
+            
+            
+        }
+        
+        //====================================================
+        // Do not change this:
+        if (maxInArray([1,0,4,4,5,2,6,4,3,5]) === 6 && 
+            maxInArray([1,-30,4,4.6,5,-332,60,400.0,3,5]) === 400.0 &&
+            maxInArray([-99999999,-999999999]) === -99999999 &&
+            maxInArray([1,2,"a"]) === "bad input" &&
+            maxInArray([]) === "bad input" &&
+            maxInArray(234) === "bad input"){
+
+            document.write("It works!");
+        } 
+        else{
+            document.write("Not yet working!");
+        }
+        
+    </script>
+</body>
+</html>
