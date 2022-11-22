@@ -1,0 +1,23 @@
+#div1 {
+    background-color: aquamarine;
+    padding:0.5cm;
+    margin: 5px;
+    border-radius: 20px;
+    border: 2px solid black;
+}
+#span1{
+    background-color: greenyellow;
+    padding:0.5cm;
+    margin: 5px;
+    border-radius: 20px;
+    border: 2px solid black;
+    display: block;
+}
+.element{
+    font-weight: bold;
+    color: brown;
+}
+.attrs{
+    font-weight: bold;
+    color: green;
+}
