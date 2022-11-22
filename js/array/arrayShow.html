@@ -4,12 +4,11 @@
 <title>Function</title>
 
 <script>
-  // Returns a string containing all the elements in the array (if
-  // the elements are simple values like strings or numbers)
+  // Returns a string containing all the elements in the array, 
+  // separated by an blank space.
   function printMyArray(myArray){
-    var i = 0;
     var result = "";
-    for(i=0; i < myArray.length; i++){
+    for(var i = 0; i < myArray.length; i++){
       result += myArray[i]+" ";
     }
     return result+"<br>";
