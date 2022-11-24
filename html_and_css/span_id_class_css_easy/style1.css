@@ -1,4 +1,3 @@
-
 .important{
   color: red;
   font-weight: bold;
@@ -6,7 +5,7 @@
 #first{
   background-color: lightblue
 }
-
 body{
 	background-color: pink;
+  font-size: 130%;
 }
