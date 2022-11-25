@@ -1,3 +1,4 @@
+$def with (is_admin)
 <html>
   <head>
     <title>Sign up</title>
@@ -24,7 +25,8 @@
         <label for="permission">Permission: </label>
         <select id="permission" name="permission">
           <option value="1">Basic</option>
-          <option value="10">Admin</option>
+          $if is_admin:
+            <option value="10">Admin</option>
       </p>
       <input type="submit" value="Save new user">
     </form>

@@ -1,4 +1,4 @@
-$def with (user, notes, message)
+$def with (user, is_admin, notes, message)
 <!DOCTYPE html>
 <html>
   <head>
@@ -16,8 +16,13 @@ $def with (user, notes, message)
         <p><a href="/login">Login</a></p>
         <p><a href="/signup">Signup</a></p>
       $else:
-        <p>Logged in: <span id="user">$user</span></p>
+        <p>Logged in: <span id="user">$user</span>
+          $if is_admin:
+            (admin)
+        </p>
         <p><a href="/logout">Logout</a></p>
+        $if is_admin:
+          <p><a href="/signup">Create new account</a></p>
       
     </div>
     <h1>My Notes</h1>

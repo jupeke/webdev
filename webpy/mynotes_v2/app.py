@@ -28,7 +28,12 @@ myapp = web.application(urls, globals())
 
 # Session:
 store = web.session.DBStore(db, 'sessions')
-session = web.session.Session(myapp, store, initializer={"logged_in": False})
+session = web.session.Session(
+    myapp, store, initializer={"logged_in": False, "is_admin": False})
+
+# 'Constants' for Permission values in the db.
+ADMIN_USER = 10
+BASIC_USER = 1
 
 # Configuration:
 web.config.session_parameters['cookie_name'] = 'webpy_session_id'
@@ -45,11 +50,11 @@ class Home:
         notes = db.select('notes')
         i = web.input(message="")
         message = i.message
-        if session.get('logged_in', False):
+        if session.logged_in: 
             user = session.username
         else:
             user = "none"
-        return render.home(user, notes, message)   # the template name
+        return render.home(user, session.is_admin, notes, message)  
     
     def POST(self):
         raise web.seeother('/') 
@@ -131,6 +136,8 @@ class Login:
             vars=myvar)
         if len(matches) > 0:
             success = True
+            if matches[0].permission == ADMIN_USER:
+                session.is_admin = True
         return success
 
 class Logout:
@@ -142,7 +149,7 @@ class Logout:
 
 class Signup:
     def GET(self):
-        return render.signup()
+        return render.signup(session.is_admin)
     def POST(self):
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
