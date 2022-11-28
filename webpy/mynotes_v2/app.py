@@ -30,7 +30,7 @@ myapp = web.application(urls, globals())
 # Session:
 store = web.session.DBStore(db, 'sessions')
 session = web.session.Session(
-    myapp, store, initializer={"logged_in": False, "is_admin": False})
+    myapp, store, initializer={"logged_in": False, "is_admin": False, "user_id":-1})
 
 # 'Constants' for Permission values in the db.
 ADMIN_USER = 10
@@ -52,10 +52,10 @@ class Home:
         i = web.input(message="")
         message = i.message
         if session.logged_in: 
-            user = session.username
+            username = session.username
         else:
-            user = "none"
-        return render.home(user, session.is_admin, notes, message)  
+            username = "none"
+        return render.home(username, session.user_id, session.is_admin, notes, message)  
     
     def POST(self):
         raise web.seeother('/') 
@@ -137,9 +137,10 @@ class Login:
             vars=myvar)
         if len(matches) > 0:
             success = True
-            if matches[0].permission == ADMIN_USER:
+            user = matches[0]
+            if user.permission == ADMIN_USER:
                 session.is_admin = True
-            session.user_id = matches[0].id
+            session.user_id = user.id
         return success
 
 class Logout:
@@ -165,7 +166,10 @@ class Details:
             user_id = i.user_id
             myvar = dict(id=user_id)    # To prevent SQL injection attacks.
             users = db.select('users', vars=myvar, where="id=$id")
-            return render.note_edit(session.in_admin, users[0])
+            if len(users) > 0:
+                return render.details_edit(session.is_admin, users[0])
+            else:
+                raise web.seeother('/forbidden')
         else:
             raise web.seeother('/forbidden')
     def POST(self):
@@ -174,10 +178,11 @@ class Details:
             user_id = i.user_id
             myvar = dict(id=user_id) 
             myname = i.name
-            uname = i.username
-            pword = i.password  
+            uname = i.uname
+            pword = i.pword  
             n=db.update('users', vars=myvar, where="id=$id", \
                 name=myname, username=uname, password=pword)
+            session.username = uname
             raise web.seeother('/?message=Person details changed successfully!')
         else:
             raise web.seeother('/forbidden')
@@ -188,8 +193,3 @@ class Forbidden:
 
 if __name__ == "__main__":
     myapp.run() 
-
-class User:
-    def __init__(self, id, username):
-        self.id = id
-        self.username = username

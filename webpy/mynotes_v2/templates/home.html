@@ -1,4 +1,4 @@
-$def with (user, is_admin, notes, message)
+$def with (username, user_id, is_admin, notes, message)
 <!DOCTYPE html>
 <html>
   <head>
@@ -12,22 +12,22 @@ $def with (user, is_admin, notes, message)
 
   <body>
     <div id="login">
-      $if user == "none":
+      $if username == "none":
         <p><a href="/login">Login</a></p>
         <p><a href="/signup">Signup</a></p>
       $else:
-        <p>Logged in: <span id="user">$user</span>
+        <p>Logged in: <span id="user">$username</span>
           $if is_admin:
             (admin)
         </p>
-        <p><a href="/details?user_id=">Change account details</a></p>
+        <p><a href="/details?user_id=$user_id">Change account details</a></p>
         <p><a href="/logout">Logout</a></p>
         $if is_admin:
           <p><a href="/signup">Create new account</a></p>
       
     </div>
     <h1>My Notes</h1>
-    $if user != "none":
+    $if username != "none":
       <p><a href="/new">Add new note</a></p>
     
     <p id="message">$:message</p>
@@ -35,7 +35,7 @@ $def with (user, is_admin, notes, message)
       $for note in notes:
         <tr>
           <td id="note$note.id">$note.content</td>
-          $if user != "none":
+          $if username != "none":
             <td><a href="/edit?note_id=$note.id">Edit</a></td>
             <td><a href="/confirm_delete?note_id=$note.id">Delete</a></td>
         </tr>
