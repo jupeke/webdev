@@ -11,6 +11,7 @@ urls = (
     '/login','Login',
     '/logout','Logout',
     '/signup', 'Signup',
+    '/details','Details',
     '/forbidden','Forbidden',
 )
 
@@ -138,6 +139,7 @@ class Login:
             success = True
             if matches[0].permission == ADMIN_USER:
                 session.is_admin = True
+            session.user_id = matches[0].id
         return success
 
 class Logout:
@@ -156,9 +158,38 @@ class Signup:
             password=i.pword, permission=i.permission)
         raise web.seeother('/login?message=New user "{}" created'.format(i.name))
 
+class Details:
+    def GET(self):
+        if session.logged_in:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id)    # To prevent SQL injection attacks.
+            users = db.select('users', vars=myvar, where="id=$id")
+            return render.note_edit(session.in_admin, users[0])
+        else:
+            raise web.seeother('/forbidden')
+    def POST(self):
+        if session.logged_in:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id) 
+            myname = i.name
+            uname = i.username
+            pword = i.password  
+            n=db.update('users', vars=myvar, where="id=$id", \
+                name=myname, username=uname, password=pword)
+            raise web.seeother('/?message=Person details changed successfully!')
+        else:
+            raise web.seeother('/forbidden')
+
 class Forbidden:
     def GET(self):
         return render.forbidden()        
 
 if __name__ == "__main__":
     myapp.run() 
+
+class User:
+    def __init__(self, id, username):
+        self.id = id
+        self.username = username

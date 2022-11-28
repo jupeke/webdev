@@ -20,6 +20,7 @@ $def with (user, is_admin, notes, message)
           $if is_admin:
             (admin)
         </p>
+        <p><a href="/details?user_id=">Change account details</a></p>
         <p><a href="/logout">Logout</a></p>
         $if is_admin:
           <p><a href="/signup">Create new account</a></p>
