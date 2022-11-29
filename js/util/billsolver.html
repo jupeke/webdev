@@ -758,6 +758,11 @@
             vues.set_content("select_participants", vues.make_select_participants(numb));
             vues.set_content("select_minimum", vues.make_select_minimum(min_payment));
             vues.set_content("select_rounding", vues.make_select_rounding(numb_of_figures));
+
+            // If url contains information, calculate.
+            if(controller.persons.length > 0){
+                controller.calculate();
+            }
         }
 
     </script>
