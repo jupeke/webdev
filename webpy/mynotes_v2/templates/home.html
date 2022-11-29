@@ -13,17 +13,20 @@ $def with (username, user_id, is_admin, notes, message)
   <body>
     <div id="login">
       $if username == "none":
-        <p><a href="/login">Login</a></p>
-        <p><a href="/signup">Signup</a></p>
+        <div><a href="/login">Login</a></div>
+        <div><a href="/signup">Signup</a></div>
       $else:
         <p>Logged in: <span id="user">$username</span>
           $if is_admin:
             (admin)
         </p>
-        <p><a href="/details?user_id=$user_id">Change account details</a></p>
-        <p><a href="/logout">Logout</a></p>
+        <div><a href="/logout">Logout</a></div>
+        <div><a href="/details?user_id=$user_id">
+          Change account details</a>
+        </div>
+        
         $if is_admin:
-          <p><a href="/signup">Create new account</a></p>
+          <div><a href="/signup">Create new account</a></div>
       
     </div>
     <h1>My Notes</h1>

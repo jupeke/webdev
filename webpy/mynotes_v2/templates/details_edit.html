@@ -6,7 +6,7 @@ $def with (is_admin, user)
   </head>
 
   <body>
-    <h1>Sign up</h1>
+    <h1>Modify Account Details</h1>
 
     <form action="/details?user_id=$user.id" method="post">
       <p>
@@ -20,13 +20,6 @@ $def with (is_admin, user)
       <p>
         <label for="pword">Password: </label>
         <input type="password" id="pword" name="pword" value="$user.password">
-      </p>
-      <p>
-        <label for="permission">Permission: </label>
-        <select id="permission" name="permission">
-          <option value="1">Basic</option>
-          $if is_admin:
-            <option value="10">Admin</option>
       </p>
       <input type="submit" value="Save changes">
     </form>
