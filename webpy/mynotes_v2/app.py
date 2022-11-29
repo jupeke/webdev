@@ -13,6 +13,10 @@ urls = (
     '/signup', 'Signup',
     '/details','Details',
     '/forbidden','Forbidden',
+    '/admin','Admin',
+    '/user_new','Admin_user_new',
+    '/user_edit','Admin_user_edit',
+    '/user_delete','Admin_user_delete',
 )
 
 # Connect to db:
@@ -189,7 +193,74 @@ class Details:
 
 class Forbidden:
     def GET(self):
-        return render.forbidden()        
+        return render.forbidden()     
+
+#==================================================================
+class Admin:
+    def GET(self):
+        if session.is_admin:
+            users = db.select('users')
+            i = web.input(message="")
+            message = i.message
+            return render.admin(users, message)  
+        else:
+            raise web.seeother('/forbidden')    
+
+class Admin_user_new:
+    def GET(self):
+        if session.is_admin:
+            return render.register()
+        else:
+            raise web.seeother('/forbidden')
+    def POST(self):
+        if session.is_admin:
+            i = web.input()
+            id=db.insert('users', name=i.name, username=i.uname, \
+                password=i.pword, permission=i.permission)
+            raise web.seeother('/admin?message=New user "{}" created'.format(i.name))
+        else:
+            raise web.seeother('/forbidden')
+
+class Admin_user_edit:
+    def GET(self):
+        if session.is_admin:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id)    # To prevent SQL injection attacks.
+            users = db.select('users', vars=myvar, where="id=$id")
+            return render.user_edit(users[0])
+        else:
+            raise web.seeother('/forbidden')
+    def POST(self):
+        if session.is_admin:
+            i = web.input()
+            note_id = i.note_id korjaa tästä eteenpäin.
+            cont = i.content
+            myvar = dict(id=note_id)    
+            n=db.update('notes', vars=myvar, where="id=$id", content=cont)
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
+
+class Admin_user_delete:
+    def GET(self):
+        if session.is_admin:
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            notes = db.select('notes', vars=myvar, where="id=$id")
+            return render.confirm_delete(notes[0])
+        else:
+            raise web.seeother('/forbidden')
+    def POST(self):
+        if session.is_admin:   # False also if session killed.
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            db.delete('notes', vars=myvar, where="id=$id")
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 
 if __name__ == "__main__":
     myapp.run() 

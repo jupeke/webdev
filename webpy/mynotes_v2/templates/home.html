@@ -19,14 +19,15 @@ $def with (username, user_id, is_admin, notes, message)
         <p>Logged in: <span id="user">$username</span>
           $if is_admin:
             (admin)
-        </p>
+            </p>
+
         <div><a href="/logout">Logout</a></div>
         <div><a href="/details?user_id=$user_id">
           Change account details</a>
         </div>
         
         $if is_admin:
-          <div><a href="/signup">Create new account</a></div>
+          <div><a href="/admin">Administration</a></div>
       
     </div>
     <h1>My Notes</h1>

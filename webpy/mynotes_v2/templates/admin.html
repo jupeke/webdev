@@ -13,19 +13,19 @@ $def with (users, message)
   <body>
     <div id="login">
         <div><a href="/logout">Logout</a></div>
-        <div><a href="/signup">Create new account</a></div>
+        <div><a href="/user_new">Create new account</a></div>
     </div>
     <h1>Admin page</h1>
     <p id="message">$:message</p>
 
     <table>
       <tr>
-        <th>Name</th><th>Username</th><th>Password</th><th>Permission</th>
+        <th>#</th><th>Name</th><th>Username</th><th>Password</th><th>Permission</th>
       </tr> 
       $for user in users:
         <tr>  
-          <td>user.name</td><td>user.username</td>
-          <td>user.password</td><td>user.permission</td>
+          <td>$loop.index</td><td>$user.name</td><td>$user.username</td>
+          <td>$user.password</td><td>$user.permission</td>
           <td><a href="/details_edit?user_id=$user.id">Edit</a></td>
           <td><a href="/user_delete?user_id=$user.id">Delete</a></td>
         </tr>
