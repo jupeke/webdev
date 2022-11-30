@@ -209,7 +209,7 @@ class Admin:
 class Admin_user_new:
     def GET(self):
         if session.is_admin:
-            return render.register()
+            return render.user_new()
         else:
             raise web.seeother('/forbidden')
     def POST(self):
@@ -234,11 +234,15 @@ class Admin_user_edit:
     def POST(self):
         if session.is_admin:
             i = web.input()
-            note_id = i.note_id korjaa tästä eteenpäin.
-            cont = i.content
-            myvar = dict(id=note_id)    
-            n=db.update('notes', vars=myvar, where="id=$id", content=cont)
-            raise web.seeother('/')
+            user_id = i.user_id
+            myvar = dict(id=user_id) 
+            name = i.name
+            uname = i.uname
+            pword = i.pword  
+            n=db.update('users', vars=myvar, where="id=$id", \
+                name=name, username=uname, password=pword)
+            session.username = uname
+            raise web.seeother('/admin?message=Person details changed successfully!')
         else:
             raise web.seeother('/forbidden')
 
@@ -246,19 +250,19 @@ class Admin_user_delete:
     def GET(self):
         if session.is_admin:
             i = web.input()
-            note_id = i.note_id
-            myvar = dict(id=note_id)
-            notes = db.select('notes', vars=myvar, where="id=$id")
-            return render.confirm_delete(notes[0])
+            user_id = i.user_id
+            myvar = dict(id=user_id)
+            users = db.select('users', vars=myvar, where="id=$id")
+            return render.user_delete(users[0])
         else:
             raise web.seeother('/forbidden')
     def POST(self):
         if session.is_admin:   # False also if session killed.
             i = web.input()
-            note_id = i.note_id
-            myvar = dict(id=note_id)
-            db.delete('notes', vars=myvar, where="id=$id")
-            raise web.seeother('/')
+            user_id = i.user_id
+            myvar = dict(id=user_id)
+            db.delete('users', vars=myvar, where="id=$id")
+            raise web.seeother('/admin')
         else:
             raise web.seeother('/forbidden')
 

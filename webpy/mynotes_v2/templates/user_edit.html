@@ -21,8 +21,17 @@ $def with (user)
         <label for="pword">Password: </label>
         <input type="password" id="pword" name="pword" value="$user.password">
       </p>
+      <p>
+        <label for="permission">Permission: </label>
+        <select id="permission" name="permission">
+          <option value="1">Basic</option>
+          <option value="10"
+          $if user.permission == 10:
+            selected = "selected"
+          >Admin</option>
+      </p>
       <input type="submit" value="Save changes">
     </form>
-    <a href="/">Cancel</a>
+    <a href="/admin">Cancel</a>
   </body>
 </html>
