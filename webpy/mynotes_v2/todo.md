@@ -28,12 +28,12 @@
     * Secure admin features: modify *app.py* so that only admin users can open the *admin.html* or do anything there.
 
 
-Note: if something does not work (despite your best efforts), add a comment about it below.
-
 ## Screenshots by teacher:
 
 **admin.html**:
 
 ![admin.html](images/admin.png)
+
+Note: if something does not work (despite your best efforts), add a comment about it below.
 
 ## Your screenshots and comments:
