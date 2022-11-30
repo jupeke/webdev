@@ -12,9 +12,11 @@ $def with (users, message)
 
   <body>
     <div id="login">
-        <div><a href="/logout">Logout</a></div>
-        <div><a href="/user_new">Create new account</a></div>
+      <div><a href="/">Home</a></div>
+      <div><a href="/user_new">New user</a></div>
+      <div><a href="/logout">Logout</a></div>
     </div>
+    
     <h1>Admin page</h1>
     <p id="message">$:message</p>
 
@@ -30,6 +32,5 @@ $def with (users, message)
           <td><a href="/user_delete?user_id=$user.id">Delete</a></td>
         </tr>
     </table>
-
   </body>
 </html>

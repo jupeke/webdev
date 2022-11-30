@@ -160,7 +160,7 @@ class Signup:
     def POST(self):
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
-            password=i.pword, permission=i.permission)
+            password=i.pword, permission=1)
         raise web.seeother('/login?message=New user "{}" created'.format(i.name))
 
 class Details:
@@ -171,7 +171,7 @@ class Details:
             myvar = dict(id=user_id)    # To prevent SQL injection attacks.
             users = db.select('users', vars=myvar, where="id=$id")
             if len(users) > 0:
-                return render.details_edit(session.is_admin, users[0])
+                return render.details_edit(users[0])
             else:
                 raise web.seeother('/forbidden')
         else:
@@ -239,9 +239,9 @@ class Admin_user_edit:
             name = i.name
             uname = i.uname
             pword = i.pword  
+            perm = i.permission
             n=db.update('users', vars=myvar, where="id=$id", \
-                name=name, username=uname, password=pword)
-            session.username = uname
+                name=name, username=uname, password=pword, permission = perm)
             raise web.seeother('/admin?message=Person details changed successfully!')
         else:
             raise web.seeother('/forbidden')

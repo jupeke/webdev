@@ -8,7 +8,7 @@ $def with (user)
   <body>
     <h1>Modify Account Details</h1>
 
-    <form action="/details?user_id=$user.id" method="post">
+    <form action="/user_edit?user_id=$user.id" method="post">
       <p>
         <label for="name">Name: </label>
         <input type="text" id="name" name="name" value="$user.name">
