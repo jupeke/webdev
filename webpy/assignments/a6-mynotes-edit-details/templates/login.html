@@ -1,17 +1,14 @@
+$def with (message)
 <html>
   <head>
-    <title>Sign up</title>
+    <title>Login</title>
     <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
   </head>
 
   <body>
-    <h1>Sign up</h1>
-
-    <form action="/signup" method="post">
-      <p>
-        <label for="name">Name: </label>
-        <input type="text" id="name" name="name">
-      </p>
+    <h1>Login</h1>
+    <p id="message">$message</p>
+    <form action="/login" method="post">
       <p>
         <label for="uname">Username: </label>
         <input type="text" id="uname" name="uname">
@@ -20,7 +17,7 @@
         <label for="pword">Password: </label>
         <input type="password" id="pword" name="pword">
       </p>
-      <input type="submit" value="Save new user">
+      <input type="submit" value="Login">
     </form>
     <a href="/">Cancel</a>
   </body>

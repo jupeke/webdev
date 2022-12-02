@@ -1,5 +1,4 @@
-# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\assignments\a5-mynotes-session
-
+# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\assignments\a6-mynotes-edit-details
 from random import randint
 import web
 render = web.template.render('templates/')
@@ -29,7 +28,15 @@ myapp = web.application(urls, globals())
 
 # Session:
 store = web.session.DBStore(db, 'sessions')
-session = web.session.Session(myapp, store, initializer={"logged_in": False})
+session = web.session.Session(
+    myapp, store, initializer={
+        "logged_in": False, "is_admin": False, "user_id":-1
+    }
+)
+
+# 'Constants' for Permission values in the db.
+ADMIN_USER = 10
+BASIC_USER = 1
 
 # Configuration:
 web.config.session_parameters['cookie_name'] = 'webpy_session_id'
@@ -46,55 +53,69 @@ class Home:
         notes = db.select('notes')
         i = web.input(message="")
         message = i.message
-        if session.get('logged_in', False):
-            user = session.username
+        if session.logged_in: 
+            username = session.username
         else:
-            user = "none"
-        return render.home(user, notes, message)   # the template name
+            username = "none"
+        return render.home(username, session.user_id, session.is_admin, notes, message)  
     
     def POST(self):
         raise web.seeother('/') 
             
 class Newnote:
     def GET(self):
-        return render.note_new()
-       
+        if session.logged_in:
+            return render.note_new()
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        n=db.insert('notes', content=i.content)
-        raise web.seeother('/')   
+        if session.logged_in:
+            i = web.input()
+            n=db.insert('notes', content=i.content)
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 
 class Edit:
     def GET(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)    # To prevent SQL injection attacks.
-        notes = db.select('notes', vars=myvar, where="id=$id")
-        return render.note_edit(notes[0])
-
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)    # To prevent SQL injection attacks.
+            notes = db.select('notes', vars=myvar, where="id=$id")
+            return render.note_edit(notes[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        note_id = i.note_id
-        cont = i.content
-        myvar = dict(id=note_id)    
-        n=db.update('notes', vars=myvar, where="id=$id", content=cont)
-        raise web.seeother('/')
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            cont = i.content
+            myvar = dict(id=note_id)    
+            n=db.update('notes', vars=myvar, where="id=$id", content=cont)
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 
 class Confirm_delete:
     def GET(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)
-        notes = db.select('notes', vars=myvar, where="id=$id")
-        return render.confirm_delete(notes[0])
-        
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            notes = db.select('notes', vars=myvar, where="id=$id")
+            return render.confirm_delete(notes[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)
-        db.delete('notes', vars=myvar, where="id=$id")
-        raise web.seeother('/')
-        
+        if session.logged_in:   # False also if session killed.
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            db.delete('notes', vars=myvar, where="id=$id")
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 class Login:
     def GET(self):
         i = web.input(message="")
@@ -118,12 +139,16 @@ class Login:
             vars=myvar)
         if len(matches) > 0:
             success = True
+            user = matches[0]
+            if user.permission == ADMIN_USER:
+                session.is_admin = True
+            session.user_id = user.id
         return success
 
 class Logout:
     def GET(self):
         n = session.username
-        session.logged_in = False # Not really needed but logical
+        session.logged_in = False # Not really needed
         session.kill()
         return render.logout("See you again, {}!".format(n))
 
@@ -138,7 +163,11 @@ class Signup:
 
 class Forbidden:
     def GET(self):
-        return render.forbidden()        
+        return render.forbidden()     
+
+#======================= Admin:  ================================
+
+#================================================================
 
 if __name__ == "__main__":
     myapp.run() 
