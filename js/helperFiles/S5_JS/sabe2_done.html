@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function check(){
+        var fb = "You need to work more";
+        // Gets the value of the text field:
+        var val = document.getElementById('result').value;
+        if (val > 6){
+          fb = "Well done!";
+        }
+        // Writes the comment in the div with id="result":
+        document.getElementById('feedback').innerHTML = fb;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Test result</h1>
+    <p>
+      <label for="result">Test result 1-10:</label>
+      <input type="text" id="result">
+    </p>
+    <p><button onclick="check()">Check</button></p>
+    <p id="feedback"></p>
+  </body>
+</html>
