@@ -1,0 +1,37 @@
+$def with (user)
+<html>
+  <head>
+    <title>Sign up</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+  </head>
+
+  <body>
+    <h1>Modify Account Details</h1>
+
+    <form action="/user_edit?user_id=$user.id" method="post">
+      <p>
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name" value="$user.name">
+      </p>
+      <p>
+        <label for="uname">Username: </label>
+        <input type="text" id="uname" name="uname" value="$user.username">
+      </p>
+      <p>
+        <label for="pword">Password: </label>
+        <input type="password" id="pword" name="pword" value="$user.password">
+      </p>
+      <p>
+        <label for="permission">Permission: </label>
+        <select id="permission" name="permission">
+          <option value="1">Basic</option>
+          <option value="10"
+          $if user.permission == 10:
+            selected = "selected"
+          >Admin</option>
+      </p>
+      <input type="submit" value="Save changes">
+    </form>
+    <a href="/admin">Cancel</a>
+  </body>
+</html>
