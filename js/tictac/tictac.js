@@ -5,7 +5,7 @@ var board = UNKNOWN;
 
 class Board{
   constructor(){
-    this.table = initiate(BOARD_SIZE,BOARD_SIZE);
+    this.table = this.initiate(BOARD_SIZE,BOARD_SIZE);
   }
 
   get_cols(){
@@ -30,7 +30,7 @@ class Board{
     }
     return success;
   }
-  // Returns the value of cell (x,y).
+  // Returns the value of table element at (x,y), an object of Cell class.
   get(x,y){
     let value = UNKNOWN;
     if(x > this.get_cols() || y > this.get_rows()){
@@ -58,7 +58,7 @@ class Board{
   }
   
   show(){
-    document.querySelector("board").innerHTML = this.toHTML();
+    document.querySelector("#board").innerHTML = this.toHTML();
   }
 
   // Returns an HTML presentation of the board:
@@ -71,7 +71,8 @@ class Board{
 
       // a Row (there are as many cols as the rich);
       for(let k = 1; k <= this.get_cols(); k++){
-          html += "<td>"+this.get(k,i)+"</td>";
+        let cell = this.get(k,i);
+        html += "<td>"+cell.value+"</td>";
       }
       html += "</tr>";
     }
