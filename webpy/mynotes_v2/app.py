@@ -1,5 +1,4 @@
 # cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\mynotes_v2
-from random import randint
 import web
 render = web.template.render('templates/')
 web.config.debug = False # To make sessions work
@@ -50,12 +49,6 @@ web.config.session_parameters['ignore_change_ip'] = True
 web.config.session_parameters['secret_key'] = 'fLjUfxqXtfNoIlPiip'
 web.config.session_parameters['expired_message'] = 'Session expired'
 
-class Logged_in_check:
-    def __init__(self):
-        # session.logged_in == False also if session has been killed.
-        if not session.logged_in: 
-            raise web.seeother('/forbidden') 
-
 class Home:
     def GET(self):
         notes = db.select('notes')
@@ -70,46 +63,60 @@ class Home:
     def POST(self):
         raise web.seeother('/') 
             
-class Newnote(Logged_in_check):
+class Newnote:
     def GET(self):
-        return render.note_new()
-        
+        if session.logged_in:
+            return render.note_new()
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        n=db.insert('notes', content=i.content)
-        raise web.seeother('/')
+        if session.logged_in:
+            i = web.input()
+            n=db.insert('notes', content=i.content)
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 
-class Edit(Logged_in_check):
+class Edit:
     def GET(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)    # To prevent SQL injection attacks.
-        notes = db.select('notes', vars=myvar, where="id=$id")
-        return render.note_edit(notes[0])
-        
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)    # To prevent SQL injection attacks.
+            notes = db.select('notes', vars=myvar, where="id=$id")
+            return render.note_edit(notes[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        note_id = i.note_id
-        cont = i.content
-        myvar = dict(id=note_id)    
-        n=db.update('notes', vars=myvar, where="id=$id", content=cont)
-        raise web.seeother('/')
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            cont = i.content
+            myvar = dict(id=note_id)    
+            n=db.update('notes', vars=myvar, where="id=$id", content=cont)
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 
-class Confirm_delete(Logged_in_check):
+class Confirm_delete:
     def GET(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)
-        notes = db.select('notes', vars=myvar, where="id=$id")
-        return render.confirm_delete(notes[0])
-        
+        if session.logged_in:
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            notes = db.select('notes', vars=myvar, where="id=$id")
+            return render.confirm_delete(notes[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        note_id = i.note_id
-        myvar = dict(id=note_id)
-        db.delete('notes', vars=myvar, where="id=$id")
-        raise web.seeother('/')
-       
+        if session.logged_in:   # False also if session killed.
+            i = web.input()
+            note_id = i.note_id
+            myvar = dict(id=note_id)
+            db.delete('notes', vars=myvar, where="id=$id")
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/forbidden')
 class Login:
     def GET(self):
         i = web.input(message="")
@@ -155,92 +162,108 @@ class Signup:
             password=i.pword, permission=1)
         raise web.seeother('/login?message=New user "{}" created'.format(i.name))
 
-class Details(Logged_in_check):
+class Details:
     def GET(self):
-        i = web.input()
-        user_id = i.user_id
-        myvar = dict(id=user_id)    # To prevent SQL injection attacks.
-        users = db.select('users', vars=myvar, where="id=$id")
-        if len(users) > 0:
-            return render.details_edit(users[0])
+        if session.logged_in:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id)    # To prevent SQL injection attacks.
+            users = db.select('users', vars=myvar, where="id=$id")
+            if len(users) > 0:
+                return render.details_edit(users[0])
+            else:
+                raise web.seeother('/forbidden')
         else:
             raise web.seeother('/forbidden')
-        
     def POST(self):
-        i = web.input()
-        user_id = i.user_id
-        myvar = dict(id=user_id) 
-        myname = i.name
-        uname = i.uname
-        pword = i.pword  
-        n=db.update('users', vars=myvar, where="id=$id", \
-            name=myname, username=uname, password=pword)
-        session.username = uname
-        raise web.seeother('/?message=Person details changed successfully!')
+        if session.logged_in:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id) 
+            myname = i.name
+            uname = i.uname
+            pword = i.pword  
+            n=db.update('users', vars=myvar, where="id=$id", \
+                name=myname, username=uname, password=pword)
+            session.username = uname
+            raise web.seeother('/?message=Person details changed successfully!')
+        else:
+            raise web.seeother('/forbidden')
 
 class Forbidden:
     def GET(self):
         return render.forbidden()     
 
 #==================================================================
-class Admin_check:
-    def __init__(self):
-        # session.is_admin == False also if session has been killed.
-        if not session.is_admin: 
-            raise web.seeother('/forbidden') 
-
-class Admin(Admin_check):
+class Admin:
     def GET(self):
-        users = db.select('users')
-        i = web.input(message="")
-        message = i.message
-        return render.admin(users, message)    
+        if session.is_admin:
+            users = db.select('users')
+            i = web.input(message="")
+            message = i.message
+            return render.admin(users, message)  
+        else:
+            raise web.seeother('/forbidden')    
 
-class Admin_user_new(Admin_check):
+class Admin_user_new:
     def GET(self):
-        return render.user_new()
-        
+        if session.is_admin:
+            return render.user_new()
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        id=db.insert('users', name=i.name, username=i.uname, \
-            password=i.pword, permission=i.permission)
-        raise web.seeother('/admin?message=New user "{}" created'.format(i.name))
-        
+        if session.is_admin:
+            i = web.input()
+            id=db.insert('users', name=i.name, username=i.uname, \
+                password=i.pword, permission=i.permission)
+            raise web.seeother('/admin?message=New user "{}" created'.format(i.name))
+        else:
+            raise web.seeother('/forbidden')
 
-class Admin_user_edit(Admin_check):
+class Admin_user_edit:
     def GET(self):
-        i = web.input()
-        user_id = i.user_id
-        myvar = dict(id=user_id)    # To prevent SQL injection attacks.
-        users = db.select('users', vars=myvar, where="id=$id")
-        return render.user_edit(users[0])
-        
+        if session.is_admin:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id)    # To prevent SQL injection attacks.
+            users = db.select('users', vars=myvar, where="id=$id")
+            return render.user_edit(users[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        user_id = i.user_id
-        myvar = dict(id=user_id) 
-        name = i.name
-        uname = i.uname
-        pword = i.pword  
-        perm = i.permission
-        n=db.update('users', vars=myvar, where="id=$id", \
-            name=name, username=uname, password=pword, permission = perm)
-        raise web.seeother('/admin?message=Person details changed successfully!')
+        if session.is_admin:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id) 
+            name = i.name
+            uname = i.uname
+            pword = i.pword  
+            perm = i.permission
+            n=db.update('users', vars=myvar, where="id=$id", \
+                name=name, username=uname, password=pword, permission = perm)
+            raise web.seeother('/admin?message=Person details changed successfully!')
+        else:
+            raise web.seeother('/forbidden')
 
-class Admin_user_delete(Admin_check):
+class Admin_user_delete:
     def GET(self):
-        i = web.input()
-        user_id = i.user_id
-        myvar = dict(id=user_id)
-        users = db.select('users', vars=myvar, where="id=$id")
-        return render.user_delete(users[0])
-        
+        if session.is_admin:
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id)
+            users = db.select('users', vars=myvar, where="id=$id")
+            return render.user_delete(users[0])
+        else:
+            raise web.seeother('/forbidden')
     def POST(self):
-        i = web.input()
-        user_id = i.user_id
-        myvar = dict(id=user_id)
-        db.delete('users', vars=myvar, where="id=$id")
-        raise web.seeother('/admin')
+        if session.is_admin:   # False also if session killed.
+            i = web.input()
+            user_id = i.user_id
+            myvar = dict(id=user_id)
+            db.delete('users', vars=myvar, where="id=$id")
+            raise web.seeother('/admin')
+        else:
+            raise web.seeother('/forbidden')
 
 if __name__ == "__main__":
     myapp.run() 

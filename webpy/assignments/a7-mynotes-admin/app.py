@@ -1,5 +1,4 @@
-# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\mynotes_v2
-from random import randint
+# cd C:\Users\kerkkaju\Documents\GitHub\webdev\webpy\assignments\a7-mynotes-admin
 import web
 render = web.template.render('templates/')
 web.config.debug = False # To make sessions work
@@ -13,10 +12,6 @@ urls = (
     '/signup', 'Signup',
     '/details','Details',
     '/forbidden','Forbidden',
-    '/admin','Admin',
-    '/user_new','Admin_user_new',
-    '/user_edit','Admin_user_edit',
-    '/user_delete','Admin_user_delete',
 )
 
 # Connect to db:
@@ -193,78 +188,5 @@ class Details:
 
 class Forbidden:
     def GET(self):
-        return render.forbidden()     
-
-#==================================================================
-class Admin:
-    def GET(self):
-        if session.is_admin:
-            users = db.select('users')
-            i = web.input(message="")
-            message = i.message
-            return render.admin(users, message)  
-        else:
-            raise web.seeother('/forbidden')    
-
-class Admin_user_new:
-    def GET(self):
-        if session.is_admin:
-            return render.user_new()
-        else:
-            raise web.seeother('/forbidden')
-    def POST(self):
-        if session.is_admin:
-            i = web.input()
-            id=db.insert('users', name=i.name, username=i.uname, \
-                password=i.pword, permission=i.permission)
-            raise web.seeother('/admin?message=New user "{}" created'.format(i.name))
-        else:
-            raise web.seeother('/forbidden')
-
-class Admin_user_edit:
-    def GET(self):
-        if session.is_admin:
-            i = web.input()
-            user_id = i.user_id
-            myvar = dict(id=user_id)    # To prevent SQL injection attacks.
-            users = db.select('users', vars=myvar, where="id=$id")
-            return render.user_edit(users[0])
-        else:
-            raise web.seeother('/forbidden')
-    def POST(self):
-        if session.is_admin:
-            i = web.input()
-            user_id = i.user_id
-            myvar = dict(id=user_id) 
-            name = i.name
-            uname = i.uname
-            pword = i.pword  
-            perm = i.permission
-            n=db.update('users', vars=myvar, where="id=$id", \
-                name=name, username=uname, password=pword, permission = perm)
-            raise web.seeother('/admin?message=Person details changed successfully!')
-        else:
-            raise web.seeother('/forbidden')
-
-class Admin_user_delete:
-    def GET(self):
-        if session.is_admin:
-            i = web.input()
-            user_id = i.user_id
-            myvar = dict(id=user_id)
-            users = db.select('users', vars=myvar, where="id=$id")
-            return render.user_delete(users[0])
-        else:
-            raise web.seeother('/forbidden')
-    def POST(self):
-        if session.is_admin:   # False also if session killed.
-            i = web.input()
-            user_id = i.user_id
-            myvar = dict(id=user_id)
-            db.delete('users', vars=myvar, where="id=$id")
-            raise web.seeother('/admin')
-        else:
-            raise web.seeother('/forbidden')
-
-if __name__ == "__main__":
-    myapp.run() 
+        return render.forbidden()   
+#============ Admin: =================================
