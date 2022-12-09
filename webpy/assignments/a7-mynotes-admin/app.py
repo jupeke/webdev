@@ -188,5 +188,10 @@ class Details:
 
 class Forbidden:
     def GET(self):
-        return render.forbidden()   
-#============ Admin: =================================
+        return render.forbidden()     
+
+#======== Admin classes  ==============================
+
+#======================================================
+if __name__ == "__main__":
+    myapp.run() 
