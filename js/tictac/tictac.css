@@ -2,5 +2,8 @@ table{
     border-collapse: collapse;
 }
 th, td {
-    border: 1px solic black;
+    border: 1px solid black;
+    padding: 0;
+    height: 30px;
+    width: 30px;
 }

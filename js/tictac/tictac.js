@@ -1,4 +1,4 @@
-const BOARD_SIZE = 20;
+const BOARD_SIZE = 10;
 const EMPTY = "";
 const UNKNOWN = "outo";
 var board = UNKNOWN;
@@ -72,7 +72,13 @@ class Board{
       // a Row (there are as many cols as the rich);
       for(let k = 1; k <= this.get_cols(); k++){
         let cell = this.get(k,i);
-        html += "<td>"+cell.value+"</td>";
+        let id = "cell_"+k+i;
+        html += "<td id='"+id+"'>"+cell.value+"</td>";
+        let elem = getElementById(id);
+        elem.addEventListener("click", function(){
+          tick(cell.x,cell.y);
+          checkSituation();
+        });
       }
       html += "</tr>";
     }
