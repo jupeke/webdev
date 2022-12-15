@@ -30,16 +30,27 @@ class Board{
     }
     return success;
   }
-  // Returns the value of table element at (x,y), an object of Cell class.
+  // Returns the value of cell at (x,y), a string. If not found,
+  // return UNKNOWN.
   get(x,y){
     let value = UNKNOWN;
+    let cell = this.get_cell(x,y);
+    if (cell !== UNKNOWN){
+      value = cell.value;
+    }
+    return value;
+  }
+
+  // Returns the cell object at (x,y), an object of Cell class.
+  // If not found, returns the value UNKNOWN.
+  get_cell(x,y){
+    let cell = UNKNOWN;
     if(x > this.get_cols() || y > this.get_rows()){
         alert("Value too big for the table ("+x+","+y+")!");
     } else{
         cell = this.table[y-1][x-1];
-        value = cell.value;
     }
-    return value;
+    return cell;
   }
 
   // Initate array with the right sizes and empty cells:
@@ -56,11 +67,11 @@ class Board{
   }
   
   show(){
-    document.querySelector("#board").appendChild(this.createBoard);
+    document.querySelector("#board").appendChild(this.createBoard());
   }
 
-  tick(x,y){
-    alert(x+","+y);
+  tick(cell){
+    alert(cell.x+","+cell.y);
   }
   // Enough to check 4 cells all directions
   checkSituation(x,y){
@@ -77,14 +88,11 @@ class Board{
       // a Row:
       for(let k = 1; k <= this.get_cols(); k++){
         let c = row.insertCell(-1); // At the last position
-        let cell = this.get(k,i);
-        let id = document.createAttribute("id");
-        id.value = cell.id;
-        c.setAttribute(id);
-        
-        c.addEventListener("click", function(){
-          tick(cell.id);
-          checkSituation(cell.x, cell.y);
+        let cell = this.get_cell(k,i);
+        c.setAttribute("id",cell.id);
+        c.addEventListener("click", ()=>{ // Preserves the scope of 'this'
+          this.tick(cell);
+          this.checkSituation(cell);
         });
       } 
     }
