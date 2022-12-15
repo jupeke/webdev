@@ -56,42 +56,39 @@ class Board{
   }
   
   show(){
-    document.querySelector("#board").innerHTML = this.toHTML();
+    document.querySelector("#board").appendChild(this.createBoard);
   }
 
   tick(x,y){
     alert(x+","+y);
   }
-  // Returns an HTML presentation of the board:
-  toHTML(){
+  // Enough to check 4 cells all directions
+  checkSituation(x,y){
+    return true;
+  }
+  // Create an HTML presentation of the board. Return a DOM object.
+  createBoard(){
     const table = document.createElement("table");
-    /*
-    var cls3= document.createAttribute("class");
-    cls3.value = "nopadding";
-    c2.setAttributeNode(cls1);
-*/
+  
     // Rows:
     for(let i = 1; i <= this.get_rows(); i++){
       let row = table.insertRow(-1);  // Inserts at the last position
 
-      // a Row (there are as many cols as the rich);
+      // a Row:
       for(let k = 1; k <= this.get_cols(); k++){
-        let c1 = row.insertCell(-1); // At last position
+        let c = row.insertCell(-1); // At the last position
         let cell = this.get(k,i);
-        let id = "cell_"+k+i;
-        html += "<td id='"+id+"'>"+cell.value+"</td>";
-        let elem = document.getElementById(id);
-        if (elem){
-          elem.addEventListener("click", function(){
-            tick(cell.x,cell.y);
-            checkSituation();
-          });
-        }
-      }
-      html += "</tr>";
+        let id = document.createAttribute("id");
+        id.value = cell.id;
+        c.setAttribute(id);
+        
+        c.addEventListener("click", function(){
+          tick(cell.id);
+          checkSituation(cell.x, cell.y);
+        });
+      } 
     }
-    html += "</table>";
-    return html;
+    return table;
   }
 }
 
@@ -100,6 +97,7 @@ class Cell{
     this.x = x;
     this.y = y;
     this.value = "";
+    this.id = "cell_"+x+y;
   }
 }
 
