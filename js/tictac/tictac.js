@@ -25,7 +25,7 @@ class Board{
     if(x > this.get_cols() || y > this.get_rows()){
         alert("Value too big for the table ("+x+","+y+")!");
     } else{
-        this.table[y-1][x-1] = value;
+        this.table[y-1][x-1].value = value;
         success = true;
     }
     return success;
@@ -36,10 +36,8 @@ class Board{
     if(x > this.get_cols() || y > this.get_rows()){
         alert("Value too big for the table ("+x+","+y+")!");
     } else{
-        value = this.table[y-1][x-1];
-        if(value === EMPTY){
-            value = "";
-        }
+        cell = this.table[y-1][x-1];
+        value = cell.value;
     }
     return value;
   }
@@ -61,24 +59,34 @@ class Board{
     document.querySelector("#board").innerHTML = this.toHTML();
   }
 
+  tick(x,y){
+    alert(x+","+y);
+  }
   // Returns an HTML presentation of the board:
   toHTML(){
-    let html = "<table>";
-
+    const table = document.createElement("table");
+    /*
+    var cls3= document.createAttribute("class");
+    cls3.value = "nopadding";
+    c2.setAttributeNode(cls1);
+*/
     // Rows:
     for(let i = 1; i <= this.get_rows(); i++){
-      html += "<tr>";
+      let row = table.insertRow(-1);  // Inserts at the last position
 
       // a Row (there are as many cols as the rich);
       for(let k = 1; k <= this.get_cols(); k++){
+        let c1 = row.insertCell(-1); // At last position
         let cell = this.get(k,i);
         let id = "cell_"+k+i;
         html += "<td id='"+id+"'>"+cell.value+"</td>";
-        let elem = getElementById(id);
-        elem.addEventListener("click", function(){
-          tick(cell.x,cell.y);
-          checkSituation();
-        });
+        let elem = document.getElementById(id);
+        if (elem){
+          elem.addEventListener("click", function(){
+            tick(cell.x,cell.y);
+            checkSituation();
+          });
+        }
       }
       html += "</tr>";
     }
