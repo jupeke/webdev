@@ -90,7 +90,9 @@ class Board{
         let c = row.insertCell(-1); // At the last position
         let cell = this.get_cell(k,i);
         c.setAttribute("id",cell.id);
-        c.addEventListener("click", ()=>{ // Preserves the scope of 'this'
+
+        // So called "arrow function" preserves the scope for 'this'
+        c.addEventListener("click", ()=>{ 
           this.tick(cell);
           this.checkSituation(cell);
         });
