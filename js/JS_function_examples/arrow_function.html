@@ -64,11 +64,17 @@
         });
 
         //A button object calls the function when user clicks the button:
-        document.getElementById("btn").addEventListener("click", function(){
+        // Here in all 3 cases 'this' returns the Window. Seems somehow
+        // the anonymous function call here makes a difference. Hmm...
+        /*document.getElementById("btn").addEventListener("click", function(){
             hello(),
             hello_anonym(),
             hello_arrow()
-        });
+        });*/
+        
+        document.getElementById("btn").addEventListener("click", hello);
+        document.getElementById("btn").addEventListener("click", hello_anonym);
+        document.getElementById("btn").addEventListener("click", hello_arrow);
     </script>
 </body>
 </html>

@@ -7,3 +7,9 @@ th, td {
     height: 30px;
     width: 30px;
 }
+.value_x{
+    background-color: red;
+}
+.value_o{
+    background-color: lightgreen;
+}

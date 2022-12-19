@@ -1,7 +1,11 @@
 const BOARD_SIZE = 10;
 const EMPTY = "";
 const UNKNOWN = "outo";
+const VAL_X = "value_x";
+const VAL_O = "value_o";
 var board = UNKNOWN;
+var winLength = 5;  //Default.
+var turn = VAL_X; // Who is ticking
 
 class Board{
   constructor(){
@@ -19,7 +23,7 @@ class Board{
   // y to row (height) like in the coordinates system. Note:
   // x and y begin at 1. Cell (1,1) is the top left one (like in a
   // spread sheet program).
-  // Return True if success, otherwise False.
+  // Return True if success, otherwise False. 
   set(value, x, y){
     let success = false;
     if(x > this.get_cols() || y > this.get_rows()){
@@ -60,7 +64,7 @@ class Board{
     for(let i = 0; i < table.length; i++){
         table[i] = new Array(cols);
         for(let k=0; k < cols; k++){
-            table[i][k] = new Cell(k,i); // Note the order.
+            table[i][k] = new Cell(k+1,i+1); // Note the order.
         }
     }
     return table;
@@ -71,11 +75,49 @@ class Board{
   }
 
   tick(cell){
-    alert(cell.x+","+cell.y);
+    if (turn === VAL_O){
+      cell.setValue(VAL_O);
+    } else{
+      cell.setValue(VAL_X);
+    }
+    cell.showValue();
   }
-  // Enough to check 4 cells all directions
-  checkSituation(x,y){
+  // Enough to check 4 cells to all 8 directions from the
+  // tick. Means 4 times 9 cell vector that is to be checked.
+  // Return either VAL_O or VAL_X if winner found or UNKNOWN otherwise.
+  checkIfFinished(cell){
+    let winner = UNKNOWN;
+    let counter = 1;
+
     return true;
+  }
+  // Returns the cell that starts the search vector. The
+  // direction and the ticked cell given as parameters.
+  checkGetStartPoint(dir,currCell){
+    if (dir === "vertical"){
+      x = currCell.x;
+      y = max(currCell.y-(winLength-1),1);
+    } else if (dir === "horizontal"){
+      x = max(currCell.x-(winLength-1));
+      y = currCell.y;
+    } else if (dir === "uphill"){
+      let x_cand = currCell.x;
+      let y_cand = currCell.y;
+      for(let i = 1; i < (winLength-1);i++){
+        if(x_cand-1 >= 1 && y_cand+1 <= BOARD_SIZE){
+          
+        }
+      }
+      x = max(currCell.y-(winLength-1),1);
+      y = max(currCell.y-(winLength-1),1);
+    } else if (dir === "downhill"){
+      x = currCell.x;
+      y = max(currCell.y-4,1);
+    } else{
+      x = currCell.x;
+      y = currCell.y;
+    }
+    return this.get_cell(x,y);
   }
   // Create an HTML presentation of the board. Return a DOM object.
   createBoard(){
@@ -106,8 +148,24 @@ class Cell{
   constructor(x, y){
     this.x = x;
     this.y = y;
-    this.value = "";
+    this.value = EMPTY;
     this.id = "cell_"+x+y;
+  }
+  showValue(){
+    let elem = document.getElementById(this.id);
+    elem.setAttribute("class",this.value);
+  }
+  // Possible only once. If set, does nothing.
+  setValue(value){
+    if(this.value === EMPTY){
+      if(value === VAL_O){
+        this.value = VAL_O;
+        turn = VAL_X;
+      } else{
+        this.value = VAL_X;
+        turn = VAL_O;
+      }
+    }
   }
 }
 
