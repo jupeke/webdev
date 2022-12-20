@@ -280,7 +280,8 @@
           // Counts and returns the total to be paid by a person
           personal_total_by_weight(person){
               let pers_total = (this.total / this.weights_total) * person.weight;
-              return this.round_to_decimals(pers_total, 2);
+              //return this.round_to_decimals(pers_total, 2); // Not good here!
+              return pers_total;
           }
 
           // Round to figures figures.
@@ -333,8 +334,10 @@
                                         Math.abs(rich_guy.balance));
                             let payment =
                                 this.round_to_decimals(payment_exact, numb_of_figures);
-                            payer.balance -= payment;
-                            rich_guy.balance += payment;
+                            //payer.balance -= payment;
+                            //rich_guy.balance += payment;
+                            payer.balance -= payment_exact;
+                            rich_guy.balance += payment_exact;
                             this.payments.set(payment,x,y);
                         }
                         // One step to the right: the next rich guy:
