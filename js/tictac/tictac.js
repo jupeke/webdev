@@ -56,6 +56,25 @@ class Board{
     }
     return cell;
   }
+  // Return true if there is a cell next to the one
+  // given as parameter. Otherwise return false. The
+  // direction (dir) must be "east"/ "south" / "northeast" / "southeast". 
+  cellBesideExists(cell, dir){
+    if(dir === "east"){
+      if(cell.x+1 <= BOARD_SIZE){
+        return true;
+      } else{
+        return false;
+      }
+    } else if(dir === "south"){
+    
+    } else if(dir === "northeast"){
+    
+    } else{ // southeast
+
+    }
+  
+  }
 
   // Initate array with the right sizes and empty cells:
   initiate(cols,rows){
@@ -87,8 +106,21 @@ class Board{
   // Return either VAL_O or VAL_X if winner found or UNKNOWN otherwise.
   checkIfFinished(cell){
     let winner = UNKNOWN;
-    let counter = 1;
+    let valueToCheck = cell.value;
+    // Check Horizontal:
+    let counter = 0;
+    let currCell = this.checkGetStartPoint("horizontal", cell);
+    for(var i = 1; i <= (2*winLength-1); i++){
+      if(currCell.value === valueToCheck){
+        counter++;
+      } else{
+        counter = 0;
+      }
 
+    }
+    // Check Vertical:
+    // Check Uphill:
+    // Check downhill:
     return true;
   }
   // Returns the cell that starts the search vector. The
@@ -98,22 +130,31 @@ class Board{
       x = currCell.x;
       y = max(currCell.y-(winLength-1),1);
     } else if (dir === "horizontal"){
-      x = max(currCell.x-(winLength-1));
+      x = max(currCell.x-(winLength-1),1);
       y = currCell.y;
     } else if (dir === "uphill"){
-      let x_cand = currCell.x;
-      let y_cand = currCell.y;
+      let x = currCell.x;
+      let y = currCell.y;
       for(let i = 1; i < (winLength-1);i++){
-        if(x_cand-1 >= 1 && y_cand+1 <= BOARD_SIZE){
-          
+        if(x-1 >= 1 && y+1 <= BOARD_SIZE){
+          x--;
+          y++;
+        } else{
+          break;  // The board side reached.
         }
       }
-      x = max(currCell.y-(winLength-1),1);
-      y = max(currCell.y-(winLength-1),1);
     } else if (dir === "downhill"){
-      x = currCell.x;
-      y = max(currCell.y-4,1);
-    } else{
+      let x = currCell.x;
+      let y = currCell.y;
+      for(let i = 1; i < (winLength-1);i++){
+        if(x-1 >= 1 && y-1 >= 1){
+          x--;
+          y--;
+        } else{
+          break;  // The board side reached.
+        }
+      }
+    } else{ // If no direction given -> the cell itself returned.
       x = currCell.x;
       y = currCell.y;
     }
