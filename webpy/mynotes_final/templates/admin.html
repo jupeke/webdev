@@ -1,0 +1,36 @@
+$def with (users, message)
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+    <style>
+      
+    </style>
+  </head>
+
+  <body>
+    <div id="login">
+      <div><a href="/">Home</a></div>
+      <div><a href="/user_new">New user</a></div>
+      <div><a href="/logout">Logout</a></div>
+    </div>
+    
+    <h1>Admin page</h1>
+    <p id="message">$:message</p>
+
+    <table>
+      <tr>
+        <th>#</th><th>Name</th><th>Username</th><th>Password</th><th>Permission</th>
+      </tr> 
+      $for user in users:
+        <tr>  
+          <td>$loop.index</td><td>$user.name</td><td>$user.username</td>
+          <td>$user.password</td><td>$user.permission</td>
+          <td><a href="/user_edit?user_id=$user.id">Edit</a></td>
+          <td><a href="/user_delete?user_id=$user.id">Delete</a></td>
+        </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+$def with (message)
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+  </head>
+
+  <body>
+    <h1>Login</h1>
+    <p id="message">$message</p>
+    <form action="/login" method="post">
+      <p>
+        <label for="uname">Username: </label>
+        <input type="text" id="uname" name="uname">
+      </p>
+      <p>
+        <label for="pword">Password: </label>
+        <input type="password" id="pword" name="pword">
+      </p>
+      <input type="submit" value="Login">
+    </form>
+    <a href="/">Cancel</a>
+  </body>
+</html>

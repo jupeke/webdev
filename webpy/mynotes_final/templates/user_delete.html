@@ -1,0 +1,20 @@
+$def with (user)
+<html>
+  <head>
+    <title>Delete user</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+  </head>
+
+  <body>
+    <h1>Confirm Delete User</h1>
+
+    <p>Are you sure you want to delete the 
+      user "$user.name"?
+    </p>
+
+    <form action="/user_delete?user_id=$user.id" method="post">
+      <input type="submit" value="Confirm">
+    </form>
+    <a href="/admin">Cancel</a>
+  </body>
+</html>
