@@ -1,0 +1,29 @@
+body {
+    background-color: coral;
+    padding: 40px;
+}
+h1 {
+    padding: 30px;
+    background-color: green;
+    border-radius: 30px;
+    color: white;
+    font-size: 300%;
+}
+p {
+    padding: 30px;
+    border-radius: 10px;
+    font-size: 120%;
+}
+#green{
+    background-color: lightgreen;
+    color: darkgreen;
+}
+#blue{
+    background-color: lightblue;
+    color: darkblue;
+}
+#yellow{
+    background-color: yellow;
+    color:brown;
+    font-weight: bold;
+}
