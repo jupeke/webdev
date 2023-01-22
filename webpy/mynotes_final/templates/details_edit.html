@@ -1,0 +1,28 @@
+$def with (user)
+<html>
+  <head>
+    <title>Details</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/styles.css">
+  </head>
+
+  <body>
+    <h1>Modify Account Details</h1>
+
+    <form action="/details?user_id=$user.id" method="post">
+      <p>
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name" value="$user.name">
+      </p>
+      <p>
+        <label for="uname">Username: </label>
+        <input type="text" id="uname" name="uname" value="$user.username">
+      </p>
+      <p>
+        <label for="pword">Password: </label>
+        <input type="password" id="pword" name="pword" value="$user.password">
+      </p>
+      <input type="submit" value="Save changes">
+    </form>
+    <a href="/">Cancel</a>
+  </body>
+</html>

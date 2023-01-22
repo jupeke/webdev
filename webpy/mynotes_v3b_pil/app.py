@@ -94,15 +94,18 @@ class Imagesave:
     # details to db:
     def saveimage(self, wi):
         if 'myfile' in wi: # to check if the file-object is created
-            filepath = wi.myfile.filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
-            filename = filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+            # replaces the windows-style slashes with linux ones:
+            filepath = wi.myfile.filename.replace('\\','/') 
+            # splits the and chooses the last part (the filename with extension)
+            filename = filepath.split('/')[-1] 
             extension = filename.split('.')[-1] 
             if extension in ["jpg", "jpeg", "png", "gif"]:
                 imgpath = self.filedir +'/'+ filename
                 # creates the file where the uploaded file should be stored. Note:
                 # the 'wb' is a must! Gives you write bytes permissions, I suppose.
                 fout = open(imgpath,'wb') 
-                fout.write(wi.myfile.file.read()) # writes the uploaded file to the newly created file.
+                # writes the uploaded file to the newly created file.
+                fout.write(wi.myfile.file.read()) 
                 fout.close() # closes the file, upload complete.
                 # Save details into db:
                 id=db.insert('imagedetails', id_note=wi.note_id, \

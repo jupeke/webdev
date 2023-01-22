@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function copy(){
+        var result = "";
+        var numb = document.getElementById('number').value;
+        if (numb > 0){
+          
+          // Gets the value of the text field:
+          var text = document.getElementById('text').value;
+
+          for (var i = 0; i < numb; i++){
+            result += text+"<br>";
+          }
+        } else{
+          var result = "Number must be at least 1";
+        }
+        // Writes the comment in the div with id="result":
+        document.getElementById('result').innerHTML = result;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Copy machine</h1>
+    <p>
+      <label for="text">Text to copy:</label>
+      <input type="text" id="text">
+    </p>
+    <p>
+      <label for="number">Number of copies:</label>
+      <input type="text" id="number">
+    </p>
+    <p><button onclick="copy()">Copy</button></p>
+    <p>Result:</p>
+    <p style="color:green" id="result"></p>
+  </body>
+</html>
