@@ -16,7 +16,7 @@ Implement **admin features** (*test each one* before going on):
 
 8. Plain text passwords are not very recommended.. So **hash the password** and make it work in all related features (login, signup, new user). Search the internet for details about hashing. The idea is to only save the hashed form of the password to the database. While logging in the password is hashed before the database query.
 
-**Note:** this assignment partially replaces a **B test**. Each step counts for one point (if it works) -> max 8 points. A small test about this application will cover the rest (2-3 points). 
+**Note:** this assignment replaces the **B test 1**. Each step counts for one point (if it works) -> max 8 points.  
 
 ## Screenshots by teacher:
 
