@@ -7,8 +7,8 @@
 
   <body>
     <ul id="linkbar">
-    </ul>
       <?php include 'links.php'; echo links("root"); ?>
+    </ul>
     <h1>My first form (POST)</h1>
     <p>Here the client (browser) sends an HTTP request to the server by
       using the POST method.</p>
