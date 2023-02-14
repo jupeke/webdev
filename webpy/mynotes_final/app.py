@@ -202,7 +202,7 @@ class Login:
             session.logged_in = False
             return render.login('Bad username or password. Please retry!')
         
-    # Hash all the passwords (once-in-the-lifetime thing)
+    # Hash all the passwords (a once-in-the-lifetime thing)
     def hash_all(self):
         users = db.select('users')
         for user in users:
@@ -263,6 +263,32 @@ class Details(Logged_in_check):
             name=myname, username=uname, password=hash(pword))
         session.username = uname
         raise web.seeother('/?message=Person details changed successfully!')
+
+class Change_password(Logged_in_check):
+    def GET(self):
+        i = web.input()
+        user_id = i.user_id
+        myvar = dict(id=user_id)    # To prevent SQL injection attacks.
+        users = db.select('users', vars=myvar, where="id=$id")
+        return render.change_password(users[0])
+        
+    def POST(self):
+        i = web.input()
+        user_id = i.user_id
+        myvar = dict(id=user_id)
+        pword = hash(i.pword)
+        confirmation = hash(i.pword_confirmation)
+        if(pword == confirmation):
+            n=db.update('users', vars=myvar, where="id=$id", password=pword)
+            if (session.is_admin):
+                raise web.seeother('/admin?message=Password changed successfully!')
+            else:
+                raise web.seeother('/?message=Password changed successfully!')
+        else:
+            users = db.select('users', vars=myvar, where="id=$id")
+            mess = 'Password and confirmation do not match.'
+            return render.change_password(users[0], mess)
+        
 
 class Forbidden:
     def GET(self):
