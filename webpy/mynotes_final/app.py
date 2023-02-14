@@ -2,9 +2,8 @@
 from random import randint
 from PIL import Image # For manipulating images.
 import web
-import logging
 render = web.template.render('templates/')
-web.config.debug = True # To make sessions work
+web.config.debug = False # To make sessions work
 urls = (
     '/', 'Home',
     '/confirm_delete', 'Confirm_delete',
@@ -189,12 +188,12 @@ class Login:
     def GET(self):
         i = web.input(message="")
         message = i.message
+        #self.hash_all()
         return render.login(message)
     def POST(self):
         i = web.input()
         plaintext_pw = i.pword
         hashed_pw = hash(plaintext_pw)
-        logging.debug("hashed pw:",hashed_pw)
         if self.login_ok(i.uname, hashed_pw):
             session.logged_in = True
             session.username = i.uname
@@ -261,7 +260,7 @@ class Details(Logged_in_check):
         uname = i.uname
         pword = i.pword  
         n=db.update('users', vars=myvar, where="id=$id", \
-            name=myname, username=uname, password=pword)
+            name=myname, username=uname, password=hash(pword))
         session.username = uname
         raise web.seeother('/?message=Person details changed successfully!')
 
