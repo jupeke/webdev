@@ -2,8 +2,9 @@
 from random import randint
 from PIL import Image # For manipulating images.
 import web
+import logging
 render = web.template.render('templates/')
-web.config.debug = False # To make sessions work
+web.config.debug = True # To make sessions work
 urls = (
     '/', 'Home',
     '/confirm_delete', 'Confirm_delete',
@@ -191,7 +192,10 @@ class Login:
         return render.login(message)
     def POST(self):
         i = web.input()
-        if self.login_ok(i.uname, i.pword):
+        plaintext_pw = i.pword
+        hashed_pw = hash(plaintext_pw)
+        logging.debug("hashed pw:",hashed_pw)
+        if self.login_ok(i.uname, hashed_pw):
             session.logged_in = True
             session.username = i.uname
             raise web.seeother('/?message=Welcome {}!'.format(session.username))
@@ -199,6 +203,15 @@ class Login:
             session.logged_in = False
             return render.login('Bad username or password. Please retry!')
         
+    # Hash all the passwords (once-in-the-lifetime thing)
+    def hash_all(self):
+        users = db.select('users')
+        for user in users:
+            hashed_pw = hash(user.password)
+            myvar = dict(id=user.id)    
+            n=db.update('users', vars=myvar, \
+                where="id=$id", password=hashed_pw)
+
     def login_ok(self, uname, pword):
         success = False
         myvar = dict(un=uname,pw=pword)
@@ -226,7 +239,7 @@ class Signup:
     def POST(self):
         i = web.input()
         id=db.insert('users', name=i.name, username=i.uname, \
-            password=i.pword, permission=1)
+            password=hash(i.pword), permission=1)
         raise web.seeother('/login?message=New user "{}" created'.format(i.name))
 
 class Details(Logged_in_check):
@@ -276,8 +289,9 @@ class Admin_user_new(Admin_check):
         
     def POST(self):
         i = web.input()
+        hash
         id=db.insert('users', name=i.name, username=i.uname, \
-            password=i.pword, permission=i.permission)
+            password=hash(i.pword), permission=i.permission)
         raise web.seeother('/admin?message=New user "{}" created'.format(i.name))
         
 
@@ -295,7 +309,7 @@ class Admin_user_edit(Admin_check):
         myvar = dict(id=user_id) 
         name = i.name
         uname = i.uname
-        pword = i.pword  
+        pword = hash(i.pword)  
         perm = i.permission
         n=db.update('users', vars=myvar, where="id=$id", \
             name=name, username=uname, password=pword, permission = perm)
