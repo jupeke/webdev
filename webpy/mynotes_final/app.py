@@ -13,6 +13,7 @@ urls = (
     '/logout','Logout',
     '/signup', 'Signup',
     '/details','Details',
+    '/change_password','Change_password',
     '/image','Imagesave',
     '/forbidden','Forbidden',
     '/admin','Admin',
@@ -258,9 +259,8 @@ class Details(Logged_in_check):
         myvar = dict(id=user_id) 
         myname = i.name
         uname = i.uname
-        pword = i.pword  
         n=db.update('users', vars=myvar, where="id=$id", \
-            name=myname, username=uname, password=hash(pword))
+            name=myname, username=uname)
         session.username = uname
         raise web.seeother('/?message=Person details changed successfully!')
 
@@ -270,7 +270,8 @@ class Change_password(Logged_in_check):
         user_id = i.user_id
         myvar = dict(id=user_id)    # To prevent SQL injection attacks.
         users = db.select('users', vars=myvar, where="id=$id")
-        return render.change_password(users[0])
+        message = ""
+        return render.change_password(users[0], message)
         
     def POST(self):
         i = web.input()
@@ -278,16 +279,19 @@ class Change_password(Logged_in_check):
         myvar = dict(id=user_id)
         pword = hash(i.pword)
         confirmation = hash(i.pword_confirmation)
+        users = db.select('users', vars=myvar, where="id=$id")
+        current_user = users[0]
         if(pword == confirmation):
             n=db.update('users', vars=myvar, where="id=$id", password=pword)
             if (session.is_admin):
-                raise web.seeother('/admin?message=Password changed successfully!')
+                m = 'Password changed successfully for'
+                name = current_user.name
+                raise web.seeother('/admin?message={} {}'.format(m, name))
             else:
                 raise web.seeother('/?message=Password changed successfully!')
         else:
-            users = db.select('users', vars=myvar, where="id=$id")
             mess = 'Password and confirmation do not match.'
-            return render.change_password(users[0], mess)
+            return render.change_password(current_user, mess)
         
 
 class Forbidden:
@@ -334,10 +338,9 @@ class Admin_user_edit(Admin_check):
         myvar = dict(id=user_id) 
         name = i.name
         uname = i.uname
-        pword = hash(i.pword)  
         perm = i.permission
         n=db.update('users', vars=myvar, where="id=$id", \
-            name=name, username=uname, password=pword, permission = perm)
+            name=name, username=uname, permission = perm)
         raise web.seeother('/admin?message=Person details changed successfully!')
 
 class Admin_user_delete(Admin_check):

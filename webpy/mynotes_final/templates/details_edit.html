@@ -18,12 +18,13 @@ $def with (user)
         <label for="uname">Username: </label>
         <input type="text" id="uname" name="uname" value="$user.username">
       </p>
-      <p>
-        <label for="pword">Password: </label>
-        <input type="password" id="pword" name="pword" value="$user.password">
-      </p>
+      
       <input type="submit" value="Save changes">
     </form>
+    <p>
+      <label for="pword">Password: </label>
+      <a id="pword" href="/change_password?user_id=$user.id">Change</a>
+    </p>
     <a href="/">Cancel</a>
   </body>
 </html>
