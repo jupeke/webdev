@@ -27,7 +27,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "db1";
+    $dbname = "db_php";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -168,8 +168,9 @@
 
     // Return type of image file or false if wrong type. This should be quick.
     // The return value is in text format like "png".
-    // NOTE: May require a change of PHP conf: enable extension=php_exif.dll.
-    // AND WHAT KND OF FILE GOOD??
+    // NOTE: May require a change of PHP conf: 
+    // enable (delete ";" before) extension=php_exif.dll (line 904 about).
+    // AND WHAT KIND OF FILE GOOD??
     function get_image_file_type($file){
         $type = false;
         $detected = exif_imagetype($file);
@@ -249,10 +250,11 @@
         if(!empty($_FILES["image"]["name"])) {
             // Get file info
             $fileName = basename($_FILES["image"]["name"]);
+            
             $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
-            // More secure:
-            $fileType = get_image_file_type($filename);
+            // More secure but NOT WORKING for unknown reason (2/2023):
+            //$fileType = get_image_file_type($fileName);
 
             // Allow certain file formats
             $allowTypes = array('jpg','png','jpeg','gif');
