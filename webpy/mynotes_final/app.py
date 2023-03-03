@@ -203,7 +203,9 @@ class Login:
             session.logged_in = False
             return render.login('Bad username or password. Please retry!')
         
-    # Hash all the passwords (a once-in-the-lifetime thing)
+    # Hash all the passwords (a once-in-the-lifetime thing). 
+    # Note: hash() returns an integer and hashing an integer
+    # returns the same integer. But: if the
     def hash_all(self):
         users = db.select('users')
         for user in users:
