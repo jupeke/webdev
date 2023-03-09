@@ -10,7 +10,7 @@
     <p>Here the client (browser) sends an HTTP request 
         to the server by using the GET method.</p>
     <?php
-      if (isset($_GET["myname"]) && !empty($_GET["myname"])){
+      if (isset($_GET["fname"]) && !empty($_GET["myname"])){
         $message = "Hello ".$_GET["myname"]."!";
       } else{
         $message = "Nothing yet sent";
