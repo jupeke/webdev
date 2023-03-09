@@ -14,19 +14,20 @@ let totalTime; // The total time of the timer in milliseconds
 // Start the timer
 function startTimer() {
   // Calculate the total time of the timer in milliseconds
-  totalTime = (parseInt(minutesInput.value) * 60 + parseInt(secondsInput.value)) * 1000;
+  /*totalTime = (parseInt(minutesInput.value) * 60 + parseInt(secondsInput.value)) * 1000;
 
   // Set the start and end times
   startTime = Date.now();
   endTime = startTime + totalTime;
 
   // Update the time left every second
-  intervalId = setInterval(updateTime, 1000);
+  intervalId = setInterval(updateTime, 3000);
 
   // Disable the input fields and start button
   minutesInput.disabled = true;
   secondsInput.disabled = true;
-  startButton.disabled = true;
+  startButton.disabled = true;*/
+  alert("Started!");
 }
 
 // Stop the timer
@@ -44,6 +45,7 @@ function stopTimer() {
 function updateTime() {
   // Calculate the time left in milliseconds
   const timeRemaining = endTime - Date.now();
+  alert(Date.now());
 
   // Calculate the minutes and seconds remaining
   const minutesRemaining = Math.floor(timeRemaining / 1000 / 60);
@@ -75,5 +77,14 @@ function updateTime() {
 }
 
 // Add event listeners to the buttons
-startButton.addEventListener("click", startTimer);
-stopButton.addEventListener("click", stopTimer);
+if (startButton){
+  startButton.addEventListener("click", startTimer);
+} else{
+  alert("startButton false");
+}
+if(stopButton){
+  stopButton.addEventListener("click", stopTimer);
+} else{
+  alert("stopButton false");
+}
+
