@@ -51,7 +51,7 @@ function updateTime() {
 
   // Update the time left HTML element
   timeLeft.innerHTML = `${minutesRemaining.toString().padStart(2, "0")}:${secondsRemaining.toString().padStart(2, "0")}`;
-
+  timeLeft.innerHTML = secondsRemaining;
   // Calculate the percentage of time elapsed
   const timeElapsed = totalTime - timeRemaining;
   const percentageElapsed = (timeElapsed / totalTime) * 100;
