@@ -6,63 +6,68 @@ const startBtn = document.getElementById("start-button");
 const pauseBtn = document.getElementById("pause-button");
 const progBarElapsed = document.getElementById("progress-bar-elapsed");
 
-let totalTime = 0;
-let startTime = 0;
+//let totalTime = 0;
+//let startTime = 0;
 
 class Timer{
     constructor(){
-        //this.totalTime = 0;
-        //this.startTime = 0;
+        this.totalTime = 0;
+        this.startTime = 0;
         this.setIntID = -1;
     }
-    
-    start(){
+    // Without the arrow function structure this.run() command
+    // did not work ("this.run is not a function"). Read more at
+    // https://www.w3schools.com/js/js_arrow_function.asp
+    start =()=>{
         // The total time in milliseconds
-        totalTime = 
+        this.totalTime = 
             1000* 
             (
-                parseInt(hours.value) * 60 + 
+                parseInt(hours.value) * 3600 + 
                 parseInt(minutes.value) * 60 + 
                 parseInt(seconds.value)
             );
 
         // The number of milliseconds since January 1, 1970:
         //this.startTime = Date.now(); 
-        startTime = Date.now(); 
-        timeLeftDiv.innerHTML = totalTime/1000;
-        //()=>{
-          //  this.run();
-        //}
-        timer.run();    // Note: this.run() does not work, why?
+        this.startTime = Date.now(); 
+        timeLeftDiv.innerHTML = this.updateTime(this.totalTime/1000);
+        this.run();
         pauseBtn.disabled = false;
         startBtn.disabled = true;
     }
     
     run(){
-        // This thing called arrow function (ES6) works! It
-        // preserves the local scope of "this".
+        // The arrow function preserves the local scope of "this".
         this.setIntID = setTimeout(() => {
-            let endTime = startTime + totalTime;
+            let endTime = this.startTime + this.totalTime;
             let timeLeft = Math.round((endTime-Date.now())/1000);
             if(timeLeft < 0){
                 clearTimeout(this.setIntID);
+                pauseBtn.disabled = true;
+                startBtn.disabled = false;
             } else{
-                timeLeftDiv.innerHTML = timeLeft;
+                this.updateTime(timeLeft);
                 this.run();
             }
         }, 1000);
     }
 
-    updateTime(){
-        let elapsedTime = Date.now()-startTime;
-        let timeLeft = startTime + totalTime - elapsedTime;
-        timeLeft.innerHTML = "hih"+timeLeft;
+    // timeLeft is time in seconds:
+    updateTime(timeLeft){
+        let showTime = "";
+        let hours = Math.floor(timeLeft/3600);
+        let timeLeft2 = timeLeft - hours * 3600; // hours = 0 ok, too!
+        
+        let minutes = Math.floor(timeLeft2 / 60);
+        let seconds = timeLeft2 - minutes * 60; // minutes = 0 ok, too!
 
-        /*if (elapsedTime > this.totalTime){
-            clearInterval(this.setIntID);
-            pauseBtn.disabled = true;
-            startBtn.disabled = false;
-        }*/
+        if(hours > 0){
+
+        }
+        showTime = hours+":"+minutes+":"+seconds;
+        timeLeftDiv.innerHTML = showTime;
+
     }
 
     pause(){
