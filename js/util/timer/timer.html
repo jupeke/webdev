@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer</title>
+    <style>
+        h1{
+            
+        }
+        body {
+            background-color: lightgray;
+            font-size: 120%;
+            text-align: center;
+        }
+        input, label, button{
+            font-size: 120%;
+        }
+        #progress-bar{
+            width: 50%;
+            height: 100px;
+            margin: auto;
+            background-color: green;
+        }
+        #progress-bar-elapsed{
+            background-color: rgb(231, 97, 97);
+            width: 10%;
+            height: 100px;
+        }
+        #settings{
+            margin: 20px;
+        }
+        #time-left{
+            font-size: 400%;
+            margin: 20px 0px 20px 0px;
+            color: rgb(151, 40, 40);
+        }
+        #label-time-left{
+            font-size: 150%;
+            font-weight: bold;
+            margin: 60px 0px 0px 0px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Timer</h1>
+    <div id="settings">
+        <label for="hours">Hours:</label>
+        <input id="hours" type="number" min="0" max="24" size="2" value="0">
+        <label for="minutes">Minutes:</label>
+        <input id="minutes" type="number" min="0" max="59" size="2" value="0">
+        <label for="seconds">Seconds:</label>
+        <input id="seconds" type="number" min="0" max="59" size="2" value="15">
+    </div>
+    <div>
+        <button id="start-button">Start</button>
+        <button id="pause-button">Pause</button>
+    </div>
+    <p id="label-time-left">Time left:</p>
+    <div id="time-left">00:00:00</div>
+    <div id="progress-bar">
+        <div id="progress-bar-elapsed"></div>
+    </div>
+    <script src="mytimer.js"></script>
+</body>
+</html>
