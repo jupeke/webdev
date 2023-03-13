@@ -8,12 +8,47 @@ const pauseBtn = document.getElementById("pause-button");
 const resumeBtn = document.getElementById("resume-button");
 const stopBtn = document.getElementById("stop-button");
 const resetBtn = document.getElementById("reset-button");
+const plus1hBtn = document.getElementById("plus1h-button");
+const plus1minBtn = document.getElementById("plus1min-button");
+const plus5minBtn = document.getElementById("plus5min-button");
+const plus15minBtn = document.getElementById("plus15min-button");
+const plus1secBtn = document.getElementById("plus1sec-button");
+const plus5secBtn = document.getElementById("plus5sec-button");
+const plus15secBtn = document.getElementById("plus15sec-button");
+const minus1hBtn = document.getElementById("minus1h-button");
+const minus1minBtn = document.getElementById("minus1min-button");
+const minus5minBtn = document.getElementById("minus5min-button");
+const minus15minBtn = document.getElementById("minus15min-button");
+const minus1secBtn = document.getElementById("minus1sec-button");
+const minus5secBtn = document.getElementById("minus5sec-button");
+const minus15secBtn = document.getElementById("minus15sec-button");
 const progBarElapsed = document.getElementById("progress-bar-elapsed");
 pauseBtn.disabled = true;
 startBtn.disabled = false;
 resumeBtn.disabled = true;
 stopBtn.disabled = true;
 resetBtn.style.display = "none";
+
+function disableTimeButtons(boolVal){
+    let myVal = false;
+    if(boolVal){
+        myVal = true;
+    }
+    plus1hBtn.disabled = myVal;
+    plus1minBtn.disabled = myVal;
+    plus5minBtn.disabled = myVal;
+    plus15minBtn.disabled = myVal;
+    plus1secBtn.disabled = myVal;
+    plus5secBtn.disabled = myVal;
+    plus15secBtn.disabled = myVal;
+    minus1hBtn.disabled = myVal;
+    minus1minBtn.disabled = myVal;
+    minus5minBtn.disabled = myVal;
+    minus15minBtn.disabled = myVal;
+    minus1secBtn.disabled = myVal;
+    minus5secBtn.disabled = myVal;
+    minus15secBtn.disabled = myVal;
+}
 
 class Timer{
     constructor(){
@@ -45,6 +80,7 @@ class Timer{
         hours.disabled = true;
         minutes.disabled = true;
         seconds.disabled = true;
+        disableTimeButtons(true);
     }
     stop = () => {
         clearTimeout(this.setIntID1);
@@ -91,6 +127,7 @@ class Timer{
         resetBtn.style.display = "none";
         startBtn.style.display = "inline";
         startBtn.disabled = false;
+        disableTimeButtons(false);
     }
 
     // Reads the time set at Hours, Minutes and Seconds and
@@ -223,6 +260,10 @@ class Timer{
     resetProgressBar(){
         progBarElapsed.style.width = "0%";
     }
+
+    setTime(changeSec){
+
+    }
 }
 const timer = new Timer();
 timer.showTimeAtStart();
@@ -234,3 +275,17 @@ stopBtn.addEventListener("click", timer.stop);
 pauseBtn.addEventListener("click", timer.pause);
 resumeBtn.addEventListener("click", timer.resume);
 resetBtn.addEventListener("click", timer.reset);
+plus1hBtn.addEventListener("click", timer.setTimePlus1h);
+plus1minBtn.addEventListener("click", timer.setTimePlus1min);
+plus5minBtn.addEventListener("click", timer.setTimePlus5min);
+plus15minBtn.addEventListener("click", timer.setTimePlus15min);
+plus1secBtn.addEventListener("click", timer.setTimePlus1s);
+plus5secBtn.addEventListener("click", timer.setTimePlus5s);
+plus15secBtn.addEventListener("click", timer.setTimePlus15s);
+minus1hBtn.addEventListener("click", timer.setTimeMinus1h);
+minus1minBtn.addEventListener("click", timer.setTimeMinus1min);
+minus5minBtn.addEventListener("click", timer.setTimeMinus5min);
+minus15minBtn.addEventListener("click", timer.setTimeMinus15min);
+minus1secBtn.addEventListener("click", timer.setTimeMinus1s);
+minus5secBtn.addEventListener("click", timer.setTimeMinus5s);
+minus15secBtn.addEventListener("click", timer.setTimeMinus15s);
