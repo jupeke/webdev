@@ -6,7 +6,7 @@
     <title>Timer</title>
     <style>
         h1{
-            
+
         }
         body {
             background-color: lightgray;
@@ -38,28 +38,31 @@
         #label-time-left{
             font-size: 150%;
             font-weight: bold;
-            margin: 60px 0px 0px 0px;
+            margin: 10px;
         }
-    </style> 
+    </style>
 </head>
 <body>
     <h1>Simple Timer</h1>
+    <p id="label-time-left">Time left:</p>
+    <div id="time-left">00:15</div>
+    <div id="progress-bar">
+        <div id="progress-bar-elapsed"></div>
+    </div>
     <div id="settings">
         <label for="hours">Hours:</label>
         <input id="hours" type="number" min="0" max="24" size="2" value="0">
         <label for="minutes">Minutes:</label>
         <input id="minutes" type="number" min="0" max="59" size="2" value="0">
         <label for="seconds">Seconds:</label>
-        <input id="seconds" type="number" min="0" max="59" size="2" value="15">
+        <input id="seconds" type="number" min="1" max="59" size="2" value="15">
     </div>
     <div>
+        <button id="reset-button">Reset</button>
         <button id="start-button">Start</button>
         <button id="pause-button">Pause</button>
-    </div>
-    <p id="label-time-left">Time left:</p>
-    <div id="time-left">00:00:00</div>
-    <div id="progress-bar">
-        <div id="progress-bar-elapsed"></div>
+        <button id="resume-button">Resume</button>
+        <button id="stop-button">Stop</button>
     </div>
     <script src="mytimer.js"></script>
 </body>
