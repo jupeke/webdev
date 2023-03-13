@@ -23,6 +23,7 @@ const minus1secBtn = document.getElementById("minus1sec-button");
 const minus5secBtn = document.getElementById("minus5sec-button");
 const minus15secBtn = document.getElementById("minus15sec-button");
 const progBarElapsed = document.getElementById("progress-bar-elapsed");
+const defaultBgCol = document.body.style.backgroundColor;
 pauseBtn.disabled = true;
 startBtn.disabled = false;
 resumeBtn.disabled = true;
@@ -128,6 +129,7 @@ class Timer{
         startBtn.style.display = "inline";
         startBtn.disabled = false;
         disableTimeButtons(false);
+        document.body.style.backgroundColor = defaultBgCol;
     }
 
     // Reads the time set at Hours, Minutes and Seconds and
@@ -153,9 +155,9 @@ class Timer{
         timeLeftDiv.innerHTML = this.formatTime(time);
 
         if(time > 3599){
-            timeLeftLabel.innerHTML = "Time left (hh:mm:ss)";
+            timeLeftLabel.innerHTML = "Time left";
         } else{
-            timeLeftLabel.innerHTML = "Time left (mm:ss)";
+            timeLeftLabel.innerHTML = "Time left (min:sec)";
         }
     }
 
@@ -180,6 +182,7 @@ class Timer{
                 seconds.disabled = false;
                 resetBtn.style.display = "inline";
                 startBtn.style.display = "none";
+                document.body.style.backgroundColor = "red";
             } else{
                 this.runTime();
             }
@@ -248,7 +251,6 @@ class Timer{
             }
             showTime = hoursText+minutesText+secondsText;
         }
-
         return showTime;
     }
 
@@ -261,8 +263,68 @@ class Timer{
         progBarElapsed.style.width = "0%";
     }
 
-    setTime(changeSec){
+    // Set time in seconds to the text fields.
+    setTime(newTimeSec){
+        let timeHours = Math.floor(newTimeSec/3600);
+        let newTimeSec2 = newTimeSec - timeHours * 3600; // hours = 0 ok, too!
+        let timeMinutes = Math.floor(newTimeSec2 / 60);
+        let timeSeconds = newTimeSec2 - timeMinutes * 60; // minutes = 0 ok, too!
 
+        hours.value = timeHours;
+        minutes.value = timeMinutes;
+        seconds.value = timeSeconds;
+
+        this.showTimeAtStart();
+    }
+    changeTime(changeSec){
+        let time = this.getTime();
+        let newTime = time+changeSec;
+        if (newTime < 0){
+            newTime = 0;
+        }
+        this.setTime(newTime);
+    }
+    setTimePlus1h = () => {
+        this.changeTime(3600);
+    }
+    setTimePlus15min = () => {
+        this.changeTime(900);
+    }
+    setTimePlus5min = () => {
+        this.changeTime(300);
+    }
+    setTimePlus1min = () => {
+        this.changeTime(60);
+    }
+    setTimePlus15s = () => {
+        this.changeTime(15);
+    }
+    setTimePlus5s = () => {
+        this.changeTime(5);
+    }
+    setTimePlus1s = () => {
+        this.changeTime(1);
+    }
+    setTimeMinus1h = () => {
+        this.changeTime(-3600);
+    }
+    setTimeMinus15min = () => {
+        this.changeTime(-900);
+    }
+    setTimeMinus5min = () => {
+        this.changeTime(-300);
+    }
+    setTimeMinus1min = () => {
+        this.changeTime(-60);
+    }
+    setTimeMinus15s = () => {
+        this.changeTime(-15);
+    }
+    setTimeMinus5s = () => {
+        this.changeTime(-5);
+    }
+    setTimeMinus1s = () => {
+        this.changeTime(-1);
     }
 }
 const timer = new Timer();
