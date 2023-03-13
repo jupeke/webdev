@@ -13,8 +13,8 @@
     <p>Here the client (browser) sends an HTTP request to the server by
       using the POST method.</p>
     <?php
-      if(isset($_POST["name"]) && !empty($_POST["name"])){
-          $message = "Hello ".$_POST["name"]."!";
+      if(isset($_POST["myname"]) && !empty($_POST["myname"])){
+          $message = "Hello ".$_POST["myname"]."!";
       } else{
           $message = "No name given!" ;
       }
@@ -23,7 +23,7 @@
     <p>Write you name in the text field and press the button.</p>
     <form method="post">
       <label for="name">Your name:</label><br>
-      <input type="text" id="name" name="name" value=""><br>
+      <input type="text" id="name" name="myname" value=""><br>
       <input type="submit" value="Submit">
     </form>
 
