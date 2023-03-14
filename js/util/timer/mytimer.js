@@ -60,15 +60,14 @@ class Timer{
         this.setIntID2 = -1;
         this.counter = 0;
     }
-    // The arrow function is must here! 'this' must be a reference
-    // to a timer object, not the calling element.
+    // The arrow function is a must here! 'this' must be a reference
+    // to a timer object, not to the calling element (a button).
     start = () => {
         // The total time in milliseconds
         this.totalTime = 1000 * this.getTime();
         this.timeLeftMilliSec = this.totalTime;
 
         // The number of milliseconds since January 1, 1970:
-        //this.startTime = Date.now();
         this.startTime = Date.now();
         timeLeftDiv.innerHTML = this.formatTime(this.totalTime/1000);
         this.runTime();
@@ -266,9 +265,9 @@ class Timer{
     // Set time in seconds to the text fields.
     setTime(newTimeSec){
         let timeHours = Math.floor(newTimeSec/3600);
-        let newTimeSec2 = newTimeSec - timeHours * 3600; // hours = 0 ok, too!
+        let newTimeSec2 = newTimeSec - timeHours * 3600; // hours = 0 ok
         let timeMinutes = Math.floor(newTimeSec2 / 60);
-        let timeSeconds = newTimeSec2 - timeMinutes * 60; // minutes = 0 ok, too!
+        let timeSeconds = newTimeSec2 - timeMinutes * 60; // minutes = 0 ok
 
         hours.value = timeHours;
         minutes.value = timeMinutes;
@@ -327,27 +326,31 @@ class Timer{
         this.changeTime(-1);
     }
 }
-const timer = new Timer();
-timer.showTimeAtStart();
-hours.addEventListener("change", timer.showTimeAtStart);
-minutes.addEventListener("change", timer.showTimeAtStart);
-seconds.addEventListener("change", timer.showTimeAtStart);
-startBtn.addEventListener("click", timer.start);
-stopBtn.addEventListener("click", timer.stop);
-pauseBtn.addEventListener("click", timer.pause);
-resumeBtn.addEventListener("click", timer.resume);
-resetBtn.addEventListener("click", timer.reset);
-plus1hBtn.addEventListener("click", timer.setTimePlus1h);
-plus1minBtn.addEventListener("click", timer.setTimePlus1min);
-plus5minBtn.addEventListener("click", timer.setTimePlus5min);
-plus15minBtn.addEventListener("click", timer.setTimePlus15min);
-plus1secBtn.addEventListener("click", timer.setTimePlus1s);
-plus5secBtn.addEventListener("click", timer.setTimePlus5s);
-plus15secBtn.addEventListener("click", timer.setTimePlus15s);
-minus1hBtn.addEventListener("click", timer.setTimeMinus1h);
-minus1minBtn.addEventListener("click", timer.setTimeMinus1min);
-minus5minBtn.addEventListener("click", timer.setTimeMinus5min);
-minus15minBtn.addEventListener("click", timer.setTimeMinus15min);
-minus1secBtn.addEventListener("click", timer.setTimeMinus1s);
-minus5secBtn.addEventListener("click", timer.setTimeMinus5s);
-minus15secBtn.addEventListener("click", timer.setTimeMinus15s);
+
+function init(){
+    const timer = new Timer();
+    timer.showTimeAtStart();
+    hours.addEventListener("change", timer.showTimeAtStart);
+    minutes.addEventListener("change", timer.showTimeAtStart);
+    seconds.addEventListener("change", timer.showTimeAtStart);
+    startBtn.addEventListener("click", timer.start);
+    stopBtn.addEventListener("click", timer.stop);
+    pauseBtn.addEventListener("click", timer.pause);
+    resumeBtn.addEventListener("click", timer.resume);
+    resetBtn.addEventListener("click", timer.reset);
+    plus1hBtn.addEventListener("click", timer.setTimePlus1h);
+    plus1minBtn.addEventListener("click", timer.setTimePlus1min);
+    plus5minBtn.addEventListener("click", timer.setTimePlus5min);
+    plus15minBtn.addEventListener("click", timer.setTimePlus15min);
+    plus1secBtn.addEventListener("click", timer.setTimePlus1s);
+    plus5secBtn.addEventListener("click", timer.setTimePlus5s);
+    plus15secBtn.addEventListener("click", timer.setTimePlus15s);
+    minus1hBtn.addEventListener("click", timer.setTimeMinus1h);
+    minus1minBtn.addEventListener("click", timer.setTimeMinus1min);
+    minus5minBtn.addEventListener("click", timer.setTimeMinus5min);
+    minus15minBtn.addEventListener("click", timer.setTimeMinus15min);
+    minus1secBtn.addEventListener("click", timer.setTimeMinus1s);
+    minus5secBtn.addEventListener("click", timer.setTimeMinus5s);
+    minus15secBtn.addEventListener("click", timer.setTimeMinus15s);
+}
+

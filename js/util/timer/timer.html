@@ -19,7 +19,6 @@
         input{
             width: 2em;
         }
-
         #timebuttons1 button, #timebuttons2 button{
             font-size: 90%;
             padding: 2px;
@@ -31,7 +30,6 @@
         #timebuttons2{
             margin-bottom: 20px;
         }
-
         #progress-bar{
             width: 70%;
             max-width: 1000px;
@@ -45,7 +43,7 @@
             height: 100px;
         }
         #settings{
-            margin: 20px;
+            margin: 20px; 
         }
         #time-left{
             font-size: 500%;
@@ -59,7 +57,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="init()">
     <a class="home" href="../../../index.html">Home</a>
     <h1>Easy Timer</h1>
     <p id="label-time-left">Time left:</p>
