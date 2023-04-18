@@ -20,7 +20,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "db_php";
+    $dbname = "db_jp";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -62,7 +62,7 @@
     $body =
         '<body>
             <ul id="linkbar">
-              '.links("db_comments").'
+              '.links().'
             </ul>
             <h1>Persistent comments</h1>
             <p>The comments are saved to a MySQL database (persistent memory).</p>
