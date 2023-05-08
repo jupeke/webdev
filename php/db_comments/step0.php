@@ -69,7 +69,7 @@
     $body =
         '<body>
             <ul id="linkbar">
-              '.links().'
+                '.links("db_comments").'
             </ul>
             <h1>Persistent comments</h1>
             <p>The comments are saved to a MySQL database (persistent memory).</p>
