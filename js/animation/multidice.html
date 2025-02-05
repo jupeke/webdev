@@ -102,7 +102,7 @@
     </style>
   </head>
 
-  <body onload="init(2)">
+  <body onload="init(document.getElementById('number').value)">
     <div id="painikerivi">
       <button onclick="roll()">Roll the dice!</button>
       <label for="number">Number of dice to roll</label>
