@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="charset=UTF-8">
+    <meta name="description" content="arvosanalaskuri - grade calculator">
+    <meta name="author" content="Jukka-Pekka Kerkkänen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Arvosanalaskuri</title>
+    <link rel="stylesheet" type="text/css" href="../kokonaisuudet/tyylit/perusmuotoilut.css" />
+    <link rel="stylesheet" type="text/css" href="../css/yleinentyylit.css" />
+
+    <style type="text/css">
+      .arvosanarivi_osuma{
+          font-weight: bold;
+      }
+    </style>
+
+    <script type="text/javascript">				 
+
+      //globaali muuttuja, jonka avulla lisätään oppilastietotaulukko
+      var onOppilasTietoja = false;	
+      var mainform = 0;	   
+
+      function maxiOk(maxi)
+      { 
+        /* Ensin tarkistetaan, onko kenttään kirjoitettu kokonais- tai desimaalilukuja.
+        * Säännänmukainen lauseke /^\d+([\.\,]\d+)?$/ merkitsee, että merkkijonon
+        * täytyy alkaa numerolla ja siinä voi olla täsmälleen yksi desimaalierotin
+        * (joko pilkku tai piste), jota
+        * seuraa vähintään yksi numero.
+        */
+        if (!maxi.match(/^\d+([\.\,]\d+)?$/))
+        {
+          alert("Maksimikentän arvo puuttuu tai siinä on jokin virhe. Tarkista ja korjaa!");
+          document.forms[mainform].maxikentta.focus();//asettaa virhekentän aktiiviseksi
+          document.forms[mainform].maxikentta.select();//asettaa virhekentän tekstin valituksi
+                      return false;
+        }
+        else
+        {
+          return true;
+        }
+      }
+
+      function lapiOk(lapi)
+      { 
+        /* Ensin tarkistetaan, onko kenttään kirjoitettu kokonais- tai desimaalilukuja.
+        * Säännänmukainen lauseke /^\d+([\.\,]\d+)?$/ merkitsee, että merkkijonon
+        * täytyy alkaa numerolla ja siinä voi olla desimaalierotin (joko pilkku tai piste), jonka
+        * seuraa vähintään yksi numero.
+        */
+        if (!lapi.match(/^\d+([\.\,]\d+)?$/))
+        {
+          alert("Läpi-kentän arvo puuttuu tai siinä on jokin virhe. Tarkista ja korjaa!");
+          document.forms[mainform].lapikentta.focus();//asettaa virhekentän aktiiviseksi
+          document.forms[mainform].lapikentta.select();	//asettaa virhekentän tekstin valituksi
+          return false;
+        }
+        else
+        {
+          return true;
+
+        }
+      }
+      function pisteetOk(pisteet)
+      { 
+        /* Ensin tarkistetaan, onko kenttään kirjoitettu kokonais- tai desimaalilukuja.
+        * Säännänmukainen lauseke /^\d+([\.\,]\d+)?$/ merkitsee, että merkkijonon
+        * täytyy alkaa numerolla ja siinä voi olla desimaalierotin (joko pilkku tai piste), jonka
+        * seuraa vähintään yksi numero, ja merkkijonon täytyy myäs loppua numeroon
+        */
+        if (!pisteet.match(/^\d+([\.\,]\d+)?$/))
+        {
+          alert("Pisteet-kentän arvo puuttuu tai siinä on jokin virhe. Tarkista ja korjaa!");
+          document.forms[mainform].pisteetkentta.focus();//asettaa virhekentän aktiiviseksi
+          document.forms[mainform].pisteetkentta.select();//asettaa virhekentän tekstin valituksi
+          return false;
+        }
+        else
+        {
+          return true;
+        }
+      }
+      function korvaaPilkkuPisteellä(mjono)
+      {
+        var korjattu;
+        korjattu = mjono.replace(/\,/,".");
+        return korjattu;
+      }
+      function korvaaMerkki(mjono)
+      {
+        var korjattu;
+        korjattu = mjono.replace(/\./,",");
+        return korjattu;
+      }
+      function pyoristys(desimLkm, dluku)
+      {
+        var kertoja, apuluku, tulos;
+        kertoja = Math.pow(10,desimLkm);
+        apuluku = dluku*kertoja;
+        tulos = Math.round(apuluku)/kertoja;
+        return tulos;
+      }
+
+      /* Tulostaa listan pisterajoista ja vastaavista arvosanoista */
+      function tulostaArvosanat(maksimi, lapipros, saadutPisteet)
+      {
+        var tiedot = "<div class='keskitys'><table "+
+            "align = 'center' summary='arvosanat' cellspacing ='0' class='arvosanataulukko'"+
+            "border='1'><tr><th>"+
+            "Alaraja</th><th>Arvosana</th></tr>";
+        var pisteet = 0;
+        var pyorPisteet = 0; //pisteet pyäristettynä ja pilkku korvattu pisteellä
+        var arvosanaTarkka = 0;
+        var arvosana = 0;
+        var lapipisteet = lapipros/100*maksimi;
+        var arvosanaLoytyi = false; // Tämä viittaa saatuun arvosanaan.
+
+        var class_maare = "arvosanarivi";
+
+        //lasketaan ja tulostetaan pisterajat ylhäältä alaspäin:
+        for (i = 21; i > -4; i--)
+        {
+          pisteet = lapipisteet + (i)*((maksimi-lapipisteet)/22);
+          pyorPisteet = (pyoristys(2,pisteet));
+
+          //pyorPisteet = korvaaMerkki(pyorPisteet);
+          arvosanaTarkka = 4.75 + i*0.25;
+          arvosana = laskeArvosana(arvosanaTarkka);
+
+          // Varmistetaan, että nollallakin pisteellä saa nelosen:
+          if(arvosanaTarkka < 4.25){
+            pyorPisteet = 0;
+          }
+
+          if((saadutPisteet != "") && 
+            (saadutPisteet >= pyorPisteet) && (arvosanaLoytyi == false)){
+            arvosanaLoytyi = true;
+            document.getElementById("tulos").innerHTML = arvosana;
+            saadutPisteet = "";     // jatkossa ei tulla tähän if-lauseeseen.
+          }
+          else{
+            arvosanaLoytyi = false;
+          }
+
+          // Kirjoitetaan tulos niin, että hylätyt tulevat hiukan eri tavalla.
+          class_maare = "arvosanarivi";
+          if(arvosanaLoytyi){
+            class_maare = "arvosanarivi_osuma";
+          }
+
+          if(arvosanaTarkka < 4.75)
+          {
+            tiedot+= "<tr class='"+class_maare+"'><td><span style='color:red;'>"+
+                pyorPisteet+"</span></td><td>"+
+                "<span style='color:red;'>"+
+                arvosana+"</span></td></tr>";
+          }
+          else
+          {
+            tiedot+= "<tr class='"+class_maare+"'><td>"+
+            pyorPisteet+"</td><td>"+
+            arvosana+"</td></tr>";
+          }
+        }
+        tiedot += "</table></div>";
+
+        document.getElementById("pisterajat").innerHTML = tiedot;
+      }
+
+      function laskeArvosana(tarkkaArvosana)
+      {
+        var arvosana = 0;
+        var lattia = Math.floor(tarkkaArvosana);
+        var desiosa = tarkkaArvosana - lattia;
+      
+        if(desiosa < 0.25) { arvosana = lattia}
+        else if(desiosa < 0.50) { arvosana = lattia+"+";}
+        else if(desiosa < 0.75) { arvosana = lattia+"&frac12";}
+        else { arvosana = lattia+1+"−";}
+      
+        //karsitaan vielä alle neloset ja yli kympit pois:
+        if(tarkkaArvosana >= 10.25) { arvosana = "10";}
+        if(tarkkaArvosana < 4) { arvosana = "4";}
+        //palautetaan arvosana
+        return arvosana;
+      }
+      // leikataan merkkijonon lopusta lkm:n verran merkkejä. 
+      // Palauttaa lyhennetyn merkkijonon (alun)
+      function leikataanLoppu(sana, lkm)
+      {
+        var leikattu;
+        var vika = sana.length-lkm;
+        leikattu = sana.slice(0,vika);
+        return leikattu;
+      }
+
+      //pääohjelma:
+      function tarkistaJaLaske()
+      {
+        var maxi = document.forms[0].maxikentta.value;
+        var lapi = document.forms[0].lapikentta.value;
+        var pisteet = document.forms[0].pisteetkentta.value;
+        var arvosanaTarkka = 0;
+        var arvosana = "";
+        var desiosa = 0;	//arvosanatarkan desimaaliosa
+        var lattia = 0;
+        var testi = "kuorma-auto";
+
+        var pisteetKunnossa = false;
+
+        //Kutsutaan tarkistusfunktiot:
+        if (maxiOk(maxi) && lapiOk(lapi)) //pisteetOk(pisteet)
+        {
+          //korjataan pilkku pisteeksi:
+          maxi = korvaaPilkkuPisteellä(maxi);
+          lapi = korvaaPilkkuPisteellä(lapi);
+
+          if(pisteet != ""){
+            if (pisteetOk(pisteet))
+            {
+              pisteet = korvaaPilkkuPisteellä(pisteet);
+              pisteetKunnossa = true;
+            }
+          }
+
+          //tarkistetaan vielä lukujen järkevyys: 
+          if(lapi > 100){
+            alert("Virhe: läpipääsyprosentti ei ole järjevä! Korjaa luku.");
+            //miinusta luvun eteen ei hyväksytä muutenkaan
+            document.forms[mainform].lapikentta.focus();
+            //asettaa virhekentän aktiiviseksi
+            document.forms[mainform].lapikentta.select();
+            //asettaa virhekentän tekstin valituksi
+          }
+          
+          else if(pisteet > 1.1*maxi*1){ //kumma: maxi+5  tai maxi ei toimi, vaan
+          //tulkitsee ilm. merkkijonona! Kertominen toimii.
+            alert("Virhe: pistemäärässä jotakin outoa! Korjaa luku.");
+            document.forms[mainform].pisteetkentta.focus();//asettaa virhekentän aktiiviseksi
+            document.forms[mainform].pisteetkentta.select();//asettaa virhekentän tekstin valituksi
+          }
+          else
+          {
+            tulostaArvosanat(maxi, lapi, pisteet);
+          }
+        }
+      }
+
+      function naytaTaiPiilotaTeksti()
+      {
+        if(document.getElementById('selitys').innerHTML === ""){
+          document.getElementById('selitys').innerHTML =
+            "<p>Tämä sivu sisältää 'JavaScript'-kielellä kirjoitetun pikku ohjelman, "+
+            "joka laskee kokeen arvosanan ja tulostaa arvosanataulukon ruudun "+
+            " oikeaan reunaan. Laskenta tehdään lineaarisesti, eli yhden numeron nousu "+
+            " vaatii aina saman pistemäärän lisäyksen riippumatta numerosta."+
+            "</p><p>Huomaa, että kymppiin ei tarvita maksimipisteitä, vaan kympin"+
+            " saa sillä pistemäärällä, joka saadaan vähentämällä maksimipisteistä "+
+            "yhden arvosanavälin pistemäärä (nelonen on poikkeus: sen saa "+
+            "nollalla pisteellä).<p/>";
+
+          document.getElementById('tekstinappi').innerHTML = "Piilota selitys";
+        }
+        else
+        {
+          document.getElementById('selitys').innerHTML = ("");
+          document.getElementById('tekstinappi').innerHTML = "Näytä selitys";
+        }
+      }
+
+      function painikefokus(lapikentan_arvo){
+        if(lapikentan_arvo.length > 1){
+            //document.forms[0].painike.focus();//asettaa painikkeen aktiiviseksi
+        }
+      }
+    </script>
+  </head>
+
+  <!--******************* POHJA ***********************************************-->
+
+  <body id="alku">
+    <div id="pohja_kiintea_levea">
+      <!--******************* OTSIKKOPALKKI ***************************************-->
+
+      <div id="otsikkopalkki">
+        <h1>Arvosanalaskuri (kouluarvosana 4-10)</h1>
+      </div>
+
+      <!--******************* LINKKIPALKKI ****************************************-->
+
+      <div id="palkki_vasen">
+        <a href="../index.php">Opintojen etusivulle</a>
+        <a class="yleinen" href="index.php">Sovellukset</a>
+      </div>
+
+      <!--******************* OIKEAPALKKI ****************************************-->
+
+      <div id="palkki_oikea">
+        <div class="keskitys"><b>Arvosanojen pisterajat</b></div>
+        <div class="keskitys" id="pisterajat"></div>
+      </div>
+
+      <!--******************* SISäLTä *********************************************-->
+
+      <div id = "sisalto">
+        <div>
+            <button id="tekstinappi" onclick="naytaTaiPiilotaTeksti();"> 
+                Näytä selitys
+            </button>
+        </div>
+
+        <div id="selitys"></div>
+
+        <form name="kysy" action="">
+          <table class="omataulukko" border = "1" cellpadding="3" align="center">
+          <thead>
+          <tr>
+          <th colspan="2" class="tulosruutu">Kokeen tiedot</th>
+          </tr>
+          </thead>
+
+          <tbody class="">
+          <tr>
+          <td>Maksimipisteet*:</td>
+          <td><input type="text" id="maxikentta" maxlength="6"/></td>
+          </tr>
+
+          <tr>
+          <td>Läpipääsyraja (%)*:</td>
+          <td><input type="text" id="lapikentta" maxlength="6"
+                    onkeyup="painikefokus(this.value);"/></td>
+          </tr>
+
+          <tr>
+          <td>Oppilaan pistemäärä:</td>
+          <td><input type="text" id="pisteetkentta" maxlength="6"></td>
+          </tr>
+
+          <tr>
+          <td><i>Tähdellä (*) merkityt pakollisia</i></td>
+          <td class="centered"><input type="button" name="painike" value="Laske"
+                    onclick="tarkistaJaLaske()"/></td>
+          </tr>
+
+          <tr class="tulosruutu">
+          <td>Arvosana:</td>
+          <td id="tulos"></td>
+          </tr>
+          </tbody>
+          </table>
+        </form>
+      </div> <!-- Sisällän loppu -->
+    </div> <!-- Pohjan loppu -->
+  </body>
+</html>

@@ -4,11 +4,18 @@
     // These are for button texts.
     define("SAVE_NEW", "Save new comment", false);
 
-    // The home view of this application:
+    // The home view of this application (replace step0.php 
+    // with the file name of your application):
     define("HOME","step0.php",false);
 
     // Get the eventual values from the client:
-    $user_action = isset($_POST["user_action"]) ? $_POST["user_action"]: "none";
+    if (isset($_POST["user_action"])){
+        $user_action = $_POST["user_action"];
+    } else{
+        $user_action = "none";  // Default
+    }
+
+    // The same for $id_comment and $comment but with a more concise syntax:
     $id_comment = isset($_GET["id_comment"]) ? $_GET["id_comment"]: -1;
     $comment = isset($_POST["comment"]) ? $_POST["comment"]: "";
 
@@ -20,7 +27,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "db_php";
+    $dbname = "db_jp";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -62,7 +69,7 @@
     $body =
         '<body>
             <ul id="linkbar">
-              '.links("db_comments").'
+                '.links("db_comments").'
             </ul>
             <h1>Persistent comments</h1>
             <p>The comments are saved to a MySQL database (persistent memory).</p>

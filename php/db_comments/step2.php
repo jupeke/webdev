@@ -21,7 +21,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "db_php";
+    $dbname = "db_jp";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
