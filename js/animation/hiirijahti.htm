@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<title>Animointia 3</title>
+
+<style type="text/css">
+h1 {
+  position: absolute;
+	top: 100px;
+	left: 0px;
+}
+</style>
+
+<script type="text/javascript">
+var x_otsikko = 0;
+var y_otsikko = 0;
+var uusi_paikkax = 0;
+var uusi_paikkay = 0;
+var kerroinx = 3;
+var kerroiny = 3;
+var suuntax = 1;		// Tämän avulla voidaan suunta vaihtaa (1-oik, -1-vas)
+var suuntay = 1;		// Tämän avulla voidaan suunta vaihtaa (1-alas, -1-ylös)
+var ajastin;
+
+function haeSuunta(event)
+{
+  x_hiiri = event.clientX;
+	y_hiiri = event.clientY;
+	
+	// hiiren ja otsikon kesk. sijainnille on neljä vaihtoehtoa. Ensin tilanne, 
+	// jossa otsikko on hiirestä katsoen vasemmalla ja ylhäällä:
+	if(x_otsikko < x_hiiri && y_otsikko < y_hiiri)
+	{
+	  suuntax = 1;
+		suuntay = 1;	
+	}
+	
+	// Otsikko on hiirestä katsoen vasemmalla ja alhaalla:
+	else if(x_otsikko < x_hiiri && y_otsikko >= y_hiiri)
+	{
+	  suuntax = 1;
+		suuntay = -1;	
+	}
+	// Otsikko on hiirestä katsoen oikealla ja alhaalla:
+	else if(x_otsikko >= x_hiiri && y_otsikko >= y_hiiri)
+	{
+	  suuntax = -1;
+		suuntay = -1;	
+	}
+	// Otsikko on hiirestä katsoen oikealla ja ylhäällä:
+	else if(x_otsikko >= x_hiiri && y_otsikko < y_hiiri)
+	{
+	  suuntax = -1;
+		suuntay = 1;	
+	}
+	// Lasketaan kertoimet. Varotaan nollalla jakamista!
+	jakajax = (y_otsikko - y_hiiri);
+	if(Math.abs(y_otsikko - y_hiiri) < 1)
+	{
+	  jakajax = 1;
+	}
+	jakajay = (x_otsikko - x_hiiri);
+	if(Math.abs(x_otsikko - x_hiiri) < 1)
+	{
+	  jakajay = 1;
+	}
+  kerroinx = Math.abs(((x_otsikko - x_hiiri))/jakajax);
+	kerroiny = Math.abs(((y_otsikko - y_hiiri))/jakajay);
+	//liikuta_otsikko();
+}
+
+function liikuta_otsikko(event)
+{
+	x_otsikko = Math.round(x_otsikko+suuntax*kerroinx);
+  y_otsikko = Math.round(y_otsikko+suuntay*kerroiny);
+	uusi_paikkax = x_otsikko;
+	uusi_paikkay = y_otsikko;
+  document.getElementById('otsikko').style.left=uusi_paikkax;
+	document.getElementById('otsikko').style.top=uusi_paikkay;
+  ajastin = setTimeout("liikuta_otsikko()",100);
+}
+
+function pysayta_otsikko()
+{
+  clearTimeout(ajastin);
+}
+</script>
+
+</head>
+<body style="background-color:green" onload="liikuta_otsikko()" 
+onmousemove="haeSuunta(event)">
+<h1 id="otsikko">Liikkuva otsikko</h1>
+
+</body>
+</html>
