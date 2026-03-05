@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -26,39 +26,38 @@ h1 {
 
 <script type="text/javascript">
 
-var turvan_lev = 93;
-var turvan_kork = 94;
+const turvan_lev = 93;
+const turvan_kork = 94;
 
 // Turvaneliön koordinaatit
-var turvan_vasen_reuna = 0;   
-var turvan_ylareuna = 0;
-var morko_alussax = 0;
-var morko_alussay = 0;
-var x_morko = 0;
-var y_morko = 0;
+let turvan_vasen_reuna = 0;   
+let turvan_ylareuna = 0;
+let morko_alussax = 0;
+let morko_alussay = 0;
+let x_morko = 0;
+let y_morko = 0;
 
-var vauhti = 1;     //  Mörön palautumisvauhti turvan taakse.
+let vauhti = 1;     //  Mörön palautumisvauhti turvan taakse.
 
-var uusi_paikkax = "0px";			 //Mörön uusi paikka x
-var uusi_paikkay = "0px";			 //Mörön uusi paikka y
-var kerroinx = 1;	 				// Säätelee mörön vauhtia leveyssuunnassa.
-var kerroiny = 1;					 // Säätelee vauhtia korkeussuunnassa.
-var vauhti_indeksi = 1;				 // Yleinen nopeudensäätö eli vaikeusaste.
-var suuntax = 1;		// Tämän avulla voidaan suunta vaihtaa (1-oik, -1-vas)
-var suuntay = 1;		// Tämän avulla voidaan suunta vaihtaa (1-alas, -1-ylös)
-var ajastin;
-var x_hiiri = 500;
-var y_hiiri = 500;
-var peli_loppu = true;
+let uusi_paikkax = "0px";			 //Mörön uusi paikka x
+let uusi_paikkay = "0px";			 //Mörön uusi paikka y
+let kerroinx = 1;	 				// Säätelee mörön vauhtia leveyssuunnassa.
+let kerroiny = 1;					 // Säätelee vauhtia korkeussuunnassa.
+let vauhti_indeksi = 1;				 // Yleinen nopeudensäätö eli vaikeusaste.
+let suuntax = 1;		// Tämän avulla voidaan suunta vaihtaa (1-oik, -1-vas)
+let suuntay = 1;		// Tämän avulla voidaan suunta vaihtaa (1-alas, -1-ylös)
+let ajastin;
+let x_hiiri = 500;
+let y_hiiri = 500;
+let peli_loppu = true;
+let palauttaja;     // Mörön palautinajastin
 
-var palauttaja;     // Mörön palautinajastin
-
-var LOPPUX = 0;
-var LOPPUY = 0;
+let LOPPUX = 0;
+let LOPPUY = 0;
 
 // suun korkeus:
-var suun_kork = 45;
-var suun_lev = 70;
+let suun_kork = 45;
+let suun_lev = 70;
 
 function hae_asetukset()
 {
@@ -509,3 +508,48 @@ style='position: absolute; left: 200; top:100;font-size: 1cm; color: white'>
 
 </body>
 </html>
+
+<!--
+ class Test {
+        constructor(){
+          this.id = 0;
+        }
+        start(){
+          this.id++;
+          document.getElementById("result").innerHTML = this.id;
+
+          // This does not work! Scope thing related to Window.setTimeout() function!
+          //setTimeout(start(), 1000);
+
+          // But this wierdy thing called arrow function (ES6) works! It
+          // preserves the scope of this.
+          setTimeout(() => {
+              // Hey I can access 'this' in here!
+              this.start();
+          }, 1000);
+        }
+
+      }
+      function init() {
+        var test = new Test();
+        test.start();
+      }
+
+      //====================== Test 2 ===================================
+      /**
+      This class is a base class for all moving objects.
+      To add more features extend this class.
+      */
+      class MovingObject {
+        constructor(x,id){
+          this.x = x;
+          this.id = id;
+        }
+      }
+      // SnowEater class (ES6):
+      class SnowEater extends MovingObject{
+        constructor(x,id){
+          super(x,id);
+        }
+
+-->
